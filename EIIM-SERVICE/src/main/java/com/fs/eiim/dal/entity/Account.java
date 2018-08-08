@@ -17,7 +17,7 @@ public interface Account extends org.mx.comps.rbac.dal.entity.Account {
 
     Person getPerson();
 
-    void setPerson(String person);
+    void setPerson(Person person);
 
     String getAvator();
 

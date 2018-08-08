@@ -10,7 +10,7 @@ import java.util.Set;
  * @author john peng
  * Date time 2018/8/8 下午1:19
  */
-public interface Org extends BaseDictTree<Org> {
+public interface Org extends BaseDictTree {
     String getType();
     void setType(String type);
     Person getManager();

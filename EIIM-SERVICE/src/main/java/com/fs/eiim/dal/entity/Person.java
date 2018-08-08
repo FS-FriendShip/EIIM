@@ -10,7 +10,7 @@ import org.mx.comps.rbac.dal.entity.User;
  */
 public interface Person extends User {
     Org getOrganization();
-    void setOriganization(Org org);
+    void setOrganization(Org org);
     String getTitle();
     void setTitle(String title);
     String getPhone();
