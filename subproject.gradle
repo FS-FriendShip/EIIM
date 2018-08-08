@@ -1,8 +1,8 @@
 subprojects { subprj ->
   repositories {
-    maven {
-        url 'http://192.168.2.170:8088/repository/maven-public/'
-    }
+    //maven {
+    //    url 'http://192.168.2.170:8088/repository/maven-public/'
+    //}
     mavenCentral()
     jcenter()
     mavenLocal()

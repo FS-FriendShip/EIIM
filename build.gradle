@@ -2,9 +2,9 @@ plugins {
     id 'com.jfrog.bintray' version '1.8.0'
 }
 
-apply from: '../dependencies.gradle'
+apply from: './dependencies.gradle'
 
-apply from: '../allprojects.gradle'
+apply from: './allprojects.gradle'
 
 project(':EIIM-NOTIFY') {
     version = '1.0.0'
@@ -18,10 +18,10 @@ project(':EIIM-NOTIFY') {
                 libs.'log4j-jcl',
                 libs.'log4j-slf4j-impl',
                 libs.'slf4j-api',
-		libs.'mx-utils',
-		libs.'mx-spring',
-		libs.'mx-service-utils',
-		libs.'mx-notify-server'
+        		libs.'mx-utils',
+		        libs.'mx-spring',
+		        libs.'mx-service-utils',
+		        libs.'mx-notify-server'
         )
     }
 }
@@ -34,7 +34,7 @@ project(':EIIM-SERVICE') {
         compile(
                 project(':EIIM-NOTIFY'),
                 libs.'mx-dal',
-		libs.'mx-rbac-service'
+		        libs.'mx-rbac-service'
         )
     }
 }
@@ -46,9 +46,13 @@ project(':EIIM-MONGODB') {
     dependencies {
         compile(
                 project(':EIIM-SERVICE'),
-                libs.'mx-dal-mongodb',
-                libs.'mx-rbac-service-mongodb'
+                libs.'mx-dal-mongodb'
         )
+        compile(
+                libs.'mx-rbac-service-mongodb'
+        ) {
+            exclude group: 'org.mx'
+        }
 
         testCompile(
                 libs.'mongodb-embed'
@@ -56,4 +60,4 @@ project(':EIIM-MONGODB') {
     }
 }
 
-apply from: '../subproject.gradle'
+apply from: './subproject.gradle'
