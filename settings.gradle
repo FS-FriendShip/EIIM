@@ -1,0 +1,5 @@
+rootProject.name = 'EIIM'
+
+include 'EIIM-NOTIFY'
+include 'EIIM-SERVICE'
+include 'EIIM-MONGODB'

@@ -1,0 +1,155 @@
+subprojects { subprj ->
+  repositories {
+    maven {
+        url 'http://192.168.2.170:8088/repository/maven-public/'
+    }
+    mavenCentral()
+    jcenter()
+    mavenLocal()
+  }
+
+  jar {
+    manifest.attributes provider: 'MX Foundation.'
+    excludes = []
+  }
+
+  task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from "$buildDir/docs/javadoc"
+  }
+
+  task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+  }
+
+  task copyDependencies(type: Copy) {
+    into "$buildDir/dependencies"
+    from configurations.runtime
+  }
+
+  [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
+  artifacts {
+    archives jar
+    archives javadocJar
+    archives sourcesJar
+  }
+/*
+  signing {
+    sign configurations.archives
+  }
+*/
+  configurations {
+    provided
+    deployerJars
+  }
+
+  dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile(
+      libs.'junit'
+    )
+  }
+
+  publishing {
+    publications {
+      mavenJava(MavenPublication) {
+        groupId subprj.group
+        artifactId subprj.name
+        version subprj.version
+ //       packaging 'jar'
+        description subprj.description
+
+        from components.java
+        artifact sourcesJar
+        artifact javadocJar
+
+        pom.withXml {
+          Node root = asNode()
+          root.appendNode('name', subprj.name)
+          root.appendNode('description', subprj.description)
+          root.appendNode('url', POM_URL)
+
+          def issues = root.appendNode('issueManagement')
+          issues.appendNode('system', 'github')
+          issues.appendNode('url', ISSUE_URL)
+
+          def scm = root.appendNode('scm')
+          scm.appendNode('url', POM_SCM_URL)
+          scm.appendNode('connection', POM_SCM_CONNECTION)
+          scm.appendNode('developerConnection', POM_SCM_DEV_CONNECTION)
+
+          def developer = root.appendNode('developers').appendNode('developer')
+          developer.appendNode('name', 'John Peng')
+          developer.appendNode('email', 'josh_73_9@hotmail.com')
+
+          def license = root.appendNode('licenses').appendNode('license')
+          license.appendNode('name', POM_LICENCE_NAME)
+          license.appendNode('url', POM_LICENCE_URL)
+          license.appendNode('distribution', POM_LICENCE_DIST)
+        }
+      }
+    }
+  }
+
+  bintray {
+    user = BINTRAY_USER
+    key = BINTRAY_APIKEY
+    publications = ['mavenJava']
+    dryRun = false
+    publish = true
+    pkg {
+      repo = subprj.group
+      name = subprj.name
+      description = subprj.description
+      websiteUrl = POM_URL
+      issueTrackerUrl = ISSUE_URL
+      vcsUrl = GIT_URL
+      licenses = ['Apache-2.0']
+      labels = ['gradle', 'johnpeng739', 'org.mx']
+      publicDownloadNumbers = true
+      publish = true
+      version {
+        name = subprj.version
+        description = subprj.description
+      }
+    }
+  }
+/*
+  uploadArchives {
+    repositories {
+      mavenDeployer {
+        beforeDeployment {MavenDeployment deployment -> signing.signPom(deployment) }
+        repository(url: "https://oss/sonatype.org/service/local/staging/deploy/maven2/") {
+//          authentication(userName: ossrhUsername, password: ossrhPassword)
+        }
+        pom.project {
+          name subprj.name
+          packaging 'jar'
+          description subprj.description
+          url subprj.url
+          scm {
+            connection subprj.scm
+            developerConnection subprj.scm
+            url subprj.url
+          }
+          licenses {
+            license {
+              name 'The Apache License, Version 2.0'
+              url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            }
+          }
+          developers {
+            developer {
+              id 'john.peng'
+              name 'John Peng'
+              email 'josh_73_9@hotmail.com'
+            }
+          }
+        }
+      }
+    }
+  } 
+*/
+}

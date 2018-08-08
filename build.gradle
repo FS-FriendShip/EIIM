@@ -1,0 +1,59 @@
+plugins {
+    id 'com.jfrog.bintray' version '1.8.0'
+}
+
+apply from: '../dependencies.gradle'
+
+apply from: '../allprojects.gradle'
+
+project(':EIIM-NOTIFY') {
+    version = '1.0.0'
+    description = 'Notify server for EIIM.'
+
+    dependencies {
+        compile(
+                libs.'fastjson',
+                libs.'log4j-api',
+                libs.'log4j-core',
+                libs.'log4j-jcl',
+                libs.'log4j-slf4j-impl',
+                libs.'slf4j-api',
+		libs.'mx-utils',
+		libs.'mx-spring',
+		libs.'mx-service-utils',
+		libs.'mx-notify-server'
+        )
+    }
+}
+
+project(':EIIM-SERVICE') {
+    version = '1.0.0'
+    description = 'Many RESTful service for EIIM, for any mobile app and web app.'
+
+    dependencies {
+        compile(
+                project(':EIIM-NOTIFY'),
+                libs.'mx-dal',
+		libs.'mx-rbac-service'
+        )
+    }
+}
+
+project(':EIIM-MONGODB') {
+    version = '1.0.0'
+    description = 'Many entity persist implementation based on mongodb for EIIM.'
+
+    dependencies {
+        compile(
+                project(':EIIM-SERVICE'),
+                libs.'mx-dal-mongodb',
+                libs.'mx-rbac-service-mongodb'
+        )
+
+        testCompile(
+                libs.'mongodb-embed'
+        )
+    }
+}
+
+apply from: '../subproject.gradle'
