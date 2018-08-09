@@ -1,8 +1,6 @@
 package com.fs.eiim.dal.entity;
 
-import org.mx.dal.entity.BaseDictTree;
-
-import java.util.Set;
+import org.mx.comps.rbac.dal.entity.Department;
 
 /**
  * 描述： 组织单位信息接口定义，为树状字典
@@ -10,11 +8,7 @@ import java.util.Set;
  * @author john peng
  * Date time 2018/8/8 下午1:19
  */
-public interface Org extends BaseDictTree {
+public interface Org extends Department {
     String getType();
     void setType(String type);
-    Person getManager();
-    void setManager(Person manager);
-    Set<Person> getEmployees();
-    void setEmployees(Set<Person> employees);
 }
