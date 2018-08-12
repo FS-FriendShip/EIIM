@@ -42,7 +42,7 @@ public class BaseDataServiceImpl implements BaseDataService {
      *
      * @see BaseDataService#getAllBaseData()
      */
-    @Cacheable(key = "basedata")
+    @Cacheable(key = "'baseData'")
     @Override
     public Map<String, BaseDataItem> getAllBaseData() {
         List<BaseData> baseDatas = accessor.list(BaseData.class, true);
