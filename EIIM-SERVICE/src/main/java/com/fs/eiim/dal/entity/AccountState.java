@@ -13,6 +13,10 @@ public interface AccountState extends Base {
 
     void setAccount(Account account);
 
+    /**
+     * 账户状态：在线(online)、离线(offline)、隐身(hidden)、暂时离开(stepOut)
+     * @return 账户状态
+     */
     String getStatus();
 
     void setStatus(String status);

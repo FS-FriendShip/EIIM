@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document(collection = "account-ext")
 public class AccountEntity extends org.mx.comps.rbac.dal.entity.AccountEntity implements Account {
-    private String eiimCode, nickName, avator;
+    private String eiimCode, nickName, avatar;
     @DBRef
     private Person person;
 
@@ -78,20 +78,20 @@ public class AccountEntity extends org.mx.comps.rbac.dal.entity.AccountEntity im
     /**
      * {@inheritDoc}
      *
-     * @see Account#getAvator()
+     * @see Account#getAvatar()
      */
     @Override
-    public String getAvator() {
-        return avator;
+    public String getAvatar() {
+        return avatar;
     }
 
     /**
      * {@inheritDoc}
      *
-     * @see Account#setAvator(String)
+     * @see Account#setAvatar(String)
      */
     @Override
-    public void setAvator(String avator) {
-        this.avator = avator;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }
