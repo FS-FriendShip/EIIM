@@ -13,6 +13,7 @@ public class OrgFormVO {
     private String id, code, name, type, parentId, managerId;
     private String[] employeeIds;
 
+    @SuppressWarnings("unchecked")
     public Org get() {
         Org org = EntityFactory.createEntity(Org.class);
         org.setId(id);

@@ -14,6 +14,7 @@ public class OrgInfoVO {
     private List<PersonInfoVO> employees;
     private PersonInfoVO manager;
 
+    @SuppressWarnings("unchecked")
     public static OrgInfoVO valueOf(Org org) {
         if (org == null) {
             return null;
