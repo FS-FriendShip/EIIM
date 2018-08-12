@@ -34,7 +34,6 @@ public class UserInterfaceEiimErrorException extends UserInterfaceException {
         ACCOUNT_PASSWORD_STRENGTHEN_LOW("账户密码强度太低。"),
 
         NO_LOGIN_RECORD("指定账户没有登入系统的记录。"),
-        // TODO
 
         EIIM_OTHER_FAIL("未知的EIIM(企业内部即时通信系统)错误。");
 

@@ -1,7 +1,10 @@
 package com.fs.eiim.config;
 
+import com.fs.eiim.task.EiimInitializeTask;
 import org.mx.service.server.config.ServerConfig;
 import org.mx.spring.config.SpringConfig;
+import org.mx.spring.task.TaskFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
@@ -22,7 +25,14 @@ import org.springframework.context.annotation.PropertySource;
 })
 @ComponentScan({
         "com.fs.eiim.service.impl",
+        "com.fs.eiim.task",
         "com.fs.eiim.restful"
 })
 public class EiimServiceConfig {
+    @Bean
+    public TaskFactory eiimTaskFactory(EiimInitializeTask eiimInitializeTask) {
+        TaskFactory taskFactory = new TaskFactory();
+        taskFactory.addSerialTask(eiimInitializeTask).runSerialTasks();
+        return taskFactory;
+    }
 }
