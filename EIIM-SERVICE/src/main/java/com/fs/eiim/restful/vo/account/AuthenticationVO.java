@@ -1,18 +1,18 @@
 package com.fs.eiim.restful.vo.account;
 
 public class AuthenticationVO {
-    private String code, password;
+    private String accountCode, password;
 
-    public String getCode() {
-        return code;
+    public String getAccountCode() {
+        return accountCode;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setAccountCode(String accountCode) {
+        this.accountCode = accountCode;
     }
 
     public void setPassword(String password) {

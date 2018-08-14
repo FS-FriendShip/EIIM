@@ -43,7 +43,7 @@ public class AccountServiceResource {
             ));
         }
         try {
-            AccountState accountState = accountService.login(authenticate.getCode(),
+            AccountState accountState = accountService.login(authenticate.getAccountCode(),
                     authenticate.getPassword());
             return new DataVO<>(AccountStateVO.valueOf(accountState));
         } catch (UserInterfaceException ex) {

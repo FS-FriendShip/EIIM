@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 public class AccountInfoVO {
-    private String id, code, nickname, eiimCode, avator;
+    private String id, code, nickname, eiimCode, avatar;
     private boolean valid = false;
     private PersonInfoVO person;
     private List<RoleInfoVO> roles;
@@ -25,7 +25,7 @@ public class AccountInfoVO {
         accountInfoVO.code = account.getCode();
         accountInfoVO.nickname = account.getNickName();
         accountInfoVO.eiimCode = account.getEiimCode();
-        accountInfoVO.avator = account.getAvatar();
+        accountInfoVO.avatar = account.getAvatar();
         accountInfoVO.valid = account.isValid();
         // 处理人员信息
         Person person = account.getPerson();
@@ -73,12 +73,12 @@ public class AccountInfoVO {
         this.eiimCode = eiimCode;
     }
 
-    public String getAvator() {
-        return avator;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setAvator(String avator) {
-        this.avator = avator;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public boolean isValid() {

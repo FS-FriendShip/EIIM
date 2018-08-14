@@ -74,7 +74,7 @@ public class OrgServiceResource {
 
     @Path("orgs/new")
     @POST
-    public DataVO<OrgInfoVO> newPerson(OrgFormVO orgFormVO) {
+    public DataVO<OrgInfoVO> newOrg(OrgFormVO orgFormVO) {
         if (logger.isWarnEnabled()) {
             logger.warn(String.format("The organization's id need blank string, but it is '%s'.", orgFormVO.getId()));
         }
@@ -84,7 +84,7 @@ public class OrgServiceResource {
 
     @Path("orgs/{orgId}")
     @PUT
-    public DataVO<OrgInfoVO> modifyPerson(@PathParam("orgId") String orgId, OrgFormVO orgFormVO) {
+    public DataVO<OrgInfoVO> modifyOrg(@PathParam("orgId") String orgId, OrgFormVO orgFormVO) {
         if (StringUtils.isBlank(orgId)) {
             if (logger.isErrorEnabled()) {
                 logger.error("The organization's id is blank.");
@@ -99,7 +99,7 @@ public class OrgServiceResource {
 
     @Path("orgs/{orgId}")
     @GET
-    public DataVO<OrgInfoVO> getPerson(@PathParam("orgId") String orgId) {
+    public DataVO<OrgInfoVO> getOrg(@PathParam("orgId") String orgId) {
         if (StringUtils.isBlank(orgId)) {
             if (logger.isErrorEnabled()) {
                 logger.error("The organization's id is blank.");

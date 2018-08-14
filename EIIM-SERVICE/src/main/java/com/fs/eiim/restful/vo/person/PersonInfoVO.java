@@ -12,6 +12,7 @@ import java.util.List;
 public class PersonInfoVO {
     private String id, name, title, phone, mobile, email, desc;
     private boolean hasAccount = false;
+    private User.Sex sex = User.Sex.NA;
     private AccountInfoVO account;
 
     public static PersonInfoVO valueOf(User user, Account account) {
@@ -22,6 +23,7 @@ public class PersonInfoVO {
         personInfoVO.id = user.getId();
         personInfoVO.name = user.getFullName();
         personInfoVO.desc = user.getDesc();
+        personInfoVO.sex = user.getSex();
         personInfoVO.hasAccount = account != null;
         if (account != null) {
             personInfoVO.account = AccountInfoVO.valueOf(account);
@@ -41,6 +43,7 @@ public class PersonInfoVO {
         personInfoVO.mobile = person.getMobile();
         personInfoVO.email = person.getEmail();
         personInfoVO.desc = person.getDesc();
+        personInfoVO.sex = person.getSex();
         personInfoVO.hasAccount = account != null;
         if (account != null) {
             personInfoVO.account = AccountInfoVO.valueOf(account);
@@ -117,15 +120,23 @@ public class PersonInfoVO {
         return hasAccount;
     }
 
+    public void setHasAccount(boolean hasAccount) {
+        this.hasAccount = hasAccount;
+    }
+
+    public User.Sex getSex() {
+        return sex;
+    }
+
+    public void setSex(User.Sex sex) {
+        this.sex = sex;
+    }
+
     public AccountInfoVO getAccount() {
         return account;
     }
 
     public void setAccount(AccountInfoVO account) {
         this.account = account;
-    }
-
-    public void setHasAccount(boolean hasAccount) {
-        this.hasAccount = hasAccount;
     }
 }
