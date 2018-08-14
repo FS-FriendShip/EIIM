@@ -38,6 +38,10 @@ public class UserInterfaceEiimErrorException extends UserInterfaceException {
 
         NO_LOGIN_RECORD("指定账户没有登入系统的记录。"),
 
+        ORG_NOT_FOUND("指定的组织单位不存在。"),
+
+        PERSON_NOT_FOUND("指定的人员不存在。"),
+
         EIIM_OTHER_FAIL("未知的EIIM(企业内部即时通信系统)错误。");
 
         public static final int BASE_ORDINAL = 100;
