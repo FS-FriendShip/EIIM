@@ -36,7 +36,7 @@ public interface BaseDataService {
 
     PersonAccountTuple enablePersonAccount(String personId);
 
-    void changeAccountPassword(String accountId, String oldPassword, String newPassword);
+    void changeAccountPassword(String accountCode, String oldPassword, String newPassword);
 
     class PersonAccountTuple {
         private Person person;

@@ -99,7 +99,7 @@ public class BaseDataServiceImpl implements BaseDataService {
     }
 
     @Override
-    public void changeAccountPassword(String accountId, String oldPassword, String newPassword) {
+    public void changeAccountPassword(String accountCode, String oldPassword, String newPassword) {
         // TODO
     }
 }

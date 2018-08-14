@@ -11,9 +11,11 @@ import java.util.List;
  * Date time 2018/8/12 下午2:27
  */
 public interface AccountService {
-    AccountState login(String code, String password);
+    AccountState login(String accountCode, String password);
 
-    void logout(String accountId);
+    AccountState validateToken(String token);
+
+    void logout(String accountCode);
 
     List<AccountState> getAllAccountsStatus();
 }

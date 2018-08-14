@@ -10,7 +10,9 @@ import org.mx.dal.EntityFactory;
 import org.mx.dal.service.GeneralDictAccessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
+@Component("initializeTaskService")
 public class InitializeTaskServiceImpl implements InitializeTaskService {
     private static final Log logger = LogFactory.getLog(InitializeTaskServiceImpl.class);
 

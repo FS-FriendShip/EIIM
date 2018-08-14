@@ -93,8 +93,8 @@ public class AccountServiceImpl implements AccountService {
      * @see AccountService#login(String, String)
      */
     @Override
-    public AccountState login(String code, String password) {
-        if (StringUtils.isBlank(code)) {
+    public AccountState login(String accountCode, String password) {
+        if (StringUtils.isBlank(accountCode)) {
             if (logger.isErrorEnabled()) {
                 logger.error("The account's code is blank.");
             }
@@ -106,7 +106,7 @@ public class AccountServiceImpl implements AccountService {
             }
             throw new UserInterfaceEiimErrorException(UserInterfaceEiimErrorException.EiimErrors.ACCOUNT_BLANK_PASSWORD);
         }
-        Account account = accessor.getByCode(code, Account.class);
+        Account account = accessor.getByCode(accountCode, Account.class);
         if (account == null) {
             throw new UserInterfaceRbacErrorException(UserInterfaceRbacErrorException.RbacErrors.ACCOUNT_NOT_FOUND);
         }
@@ -118,7 +118,7 @@ public class AccountServiceImpl implements AccountService {
 
         // 签发登录令牌
         Map<String, Object> claims = new HashMap<>();
-        claims.put("code", code);
+        claims.put("code", accountCode);
         claims.put("nickname", account.getNickName());
         claims.put("name", account.getName());
         claims.put("roles", account.getRoles());
@@ -142,17 +142,47 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void logout(String accountId) {
-        if (StringUtils.isBlank(accountId)) {
+    public AccountState validateToken(String token) {
+        if (StringUtils.isBlank(token)) {
+            if (logger.isErrorEnabled()) {
+                logger.error("The account's token is blank.");
+            }
+            throw new UserInterfaceEiimErrorException(UserInterfaceEiimErrorException.EiimErrors.ACCOUNT_BLANK_TOKEN);
+        }
+        JwtService.JwtVerifyResult result =jwtService.verify(token);
+        if (result.isPassed()) {
+            // 验证通过
+            String accountCode = result.getClaims().get("code").asString();
+            Account account = accessor.getByCode(accountCode, Account.class);
+            if (account == null) {
+                if (logger.isErrorEnabled()) {
+                    logger.error(String.format("The account[%s] not found.", accountCode));
+                }
+                throw new UserInterfaceRbacErrorException(UserInterfaceRbacErrorException.RbacErrors.ACCOUNT_NOT_FOUND);
+            }
+            // 记录登录状态
+            return getAccountState(account);
+        } else {
+            // 验证失败
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format("The token[%s] is invalid.", token));
+            }
+            return null;
+        }
+    }
+
+    @Override
+    public void logout(String accountCode) {
+        if (StringUtils.isBlank(accountCode)) {
             if (logger.isErrorEnabled()) {
                 logger.error("The account's id is blank.");
             }
             throw new UserInterfaceSystemErrorException(UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM);
         }
-        Account account = accessor.getById(accountId, Account.class);
+        Account account = accessor.getByCode(accountCode, Account.class);
         if (account == null) {
             if (logger.isErrorEnabled()) {
-                logger.error(String.format("The account[%s] not found.", accountId));
+                logger.error(String.format("The account[%s] not found.", accountCode));
             }
             throw new UserInterfaceRbacErrorException(UserInterfaceRbacErrorException.RbacErrors.ACCOUNT_NOT_FOUND);
         }
