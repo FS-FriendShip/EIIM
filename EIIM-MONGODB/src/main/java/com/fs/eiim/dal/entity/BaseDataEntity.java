@@ -21,13 +21,11 @@ public class BaseDataEntity extends MongoBaseDictEntity implements BaseData {
     private Set<BaseDataItem> items = new HashSet<>();
 
     /**
-     * 添加一个字典数据项
+     * {@inheritDoc}
      *
-     * @param code  代码
-     * @param name  名称
-     * @param value 值
-     * @return 字典数据项集合
+     * @see BaseData#addItem(String, String, String)
      */
+    @Override
     public Set<? extends BaseDataItem> addItem(String code, String name, String value) {
         if (items == null) {
             items = new HashSet<>();
@@ -43,14 +41,11 @@ public class BaseDataEntity extends MongoBaseDictEntity implements BaseData {
     }
 
     /**
-     * 添加一个字典数据项
+     * {@inheritDoc}
      *
-     * @param code       代码
-     * @param name       名称
-     * @param value      值
-     * @param parentCode 父级字典项代码
-     * @return 字典数据项集合
+     * @see BaseData#addItem(String, String, String, String)
      */
+    @Override
     public Set<? extends BaseDataItem> addItem(String code, String name, String value, String parentCode) {
         if (items == null) {
             items = new HashSet<>();

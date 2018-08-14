@@ -1,6 +1,7 @@
 package com.fs.eiim.service.impl;
 
 import com.fs.eiim.dal.entity.Account;
+import com.fs.eiim.dal.entity.BaseData;
 import com.fs.eiim.service.InitializeTaskService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,6 +23,20 @@ public class InitializeTaskServiceImpl implements InitializeTaskService {
     public InitializeTaskServiceImpl(@Qualifier("generalDictAccessorMongodb") GeneralDictAccessor accessor) {
         super();
         this.accessor = accessor;
+    }
+
+    private void initializeBaseData() {
+        // 初始化 账户状态 字典项
+        BaseData baseData = accessor.getByCode("account.status", BaseData.class);
+        if (baseData == null) {
+            baseData.setCode("account.status");
+            baseData.setName("账户状态");
+            baseData.addItem("online", "在线", "online");
+            baseData.addItem("offline", "离线", "offline");
+            baseData.addItem("hidden", "隐身", "hidden");
+            baseData.addItem("stepOut", "暂时离开", "stepOut");
+            accessor.save(baseData);
+        }
     }
 
     private void initializeRoles() {
@@ -87,6 +102,9 @@ public class InitializeTaskServiceImpl implements InitializeTaskService {
 
     @Override
     public void initializeInternalData() {
+        // 初始化 内置字典
+        initializeBaseData();
+
         // 初始化 角色
         initializeRoles();
 

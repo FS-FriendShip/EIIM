@@ -12,6 +12,27 @@ import java.util.Set;
  */
 public interface BaseData extends BaseDict {
     /**
+     * 添加一个字典数据项
+     *
+     * @param code  代码
+     * @param name  名称
+     * @param value 值
+     * @return 字典数据项集合
+     */
+    Set<? extends BaseDataItem> addItem(String code, String name, String value);
+
+    /**
+     * 添加一个字典数据项
+     *
+     * @param code       代码
+     * @param name       名称
+     * @param value      值
+     * @param parentCode 父级字典项代码
+     * @return 字典数据项集合
+     */
+    Set<? extends BaseDataItem> addItem(String code, String name, String value, String parentCode);
+
+    /**
      * 获取基础数据字典项集合
      *
      * @return 技术数据字典项集合
