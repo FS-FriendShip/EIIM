@@ -42,6 +42,8 @@ public class UserInterfaceEiimErrorException extends UserInterfaceException {
 
         PERSON_NOT_FOUND("指定的人员不存在。"),
 
+        CHATROOM_NOT_FOUND("指定的聊天室不存在。"),
+
         EIIM_OTHER_FAIL("未知的EIIM(企业内部即时通信系统)错误。");
 
         public static final int BASE_ORDINAL = 100;

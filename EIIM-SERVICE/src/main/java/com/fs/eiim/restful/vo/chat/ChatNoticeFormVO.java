@@ -1,21 +1,7 @@
 package com.fs.eiim.restful.vo.chat;
 
-import com.fs.eiim.dal.entity.ChatNotice;
-import com.fs.eiim.dal.entity.ChatRoom;
-import org.mx.dal.EntityFactory;
-
 public class ChatNoticeFormVO {
-    private String chatRoomId, noticeType, notice;
-
-    public ChatNotice get() {
-        ChatNotice chatNotice = EntityFactory.createEntity(ChatNotice.class);
-        ChatRoom chatRoom = EntityFactory.createEntity(ChatRoom.class);
-        chatRoom.setId(chatRoomId);
-        chatNotice.setChatRoom(chatRoom);
-        chatNotice.setNoticeType(noticeType);
-        chatNotice.setNotice(notice);
-        return chatNotice;
-    }
+    private String chatRoomId, noticeId, noticeType, notice;
 
     public String getChatRoomId() {
         return chatRoomId;
@@ -23,6 +9,14 @@ public class ChatNoticeFormVO {
 
     public void setChatRoomId(String chatRoomId) {
         this.chatRoomId = chatRoomId;
+    }
+
+    public String getNoticeId() {
+        return noticeId;
+    }
+
+    public void setNoticeId(String noticeId) {
+        this.noticeId = noticeId;
     }
 
     public String getNoticeType() {

@@ -18,10 +18,10 @@ public interface ChatRoomService {
 
     List<ChatRoom> getAllChatRoomsByAccount(String accountId);
 
-    ChatRoomTuple saveChatRoom(String chatRoomId, String chatRoomName, List<String> addAccountIds,
+    ChatRoom saveChatRoom(String chatRoomId, String chatRoomName, List<String> addAccountIds,
                                List<String> delAccountIds);
 
-    void deleteChatRoom(String chatRoomId);
+    void deleteChatRoom(String chatRoomId, String accountId);
 
     List<ChatRoomMember> getChatRoomMembers(String chatRoomId);
 
@@ -33,24 +33,5 @@ public interface ChatRoomService {
 
     List<ChatNotice> getAllChatRoomNotices(String chatRoomId);
 
-    void saveChatRoomNotice(ChatNotice notice);
-
-    class ChatRoomTuple {
-        private ChatRoom chatRoom;
-        private List<ChatRoomMember> members;
-
-        public ChatRoomTuple(ChatRoom chatRoom, List<ChatRoomMember> members) {
-            super();
-            this.chatRoom = chatRoom;
-            this.members = members;
-        }
-
-        public ChatRoom getChatRoom() {
-            return chatRoom;
-        }
-
-        public List<ChatRoomMember> getMembers() {
-            return members;
-        }
-    }
+    void saveChatRoomNotice(String chatRoomId, String noticeId, String noticeType, String notice);
 }

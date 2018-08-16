@@ -2,6 +2,8 @@ package com.fs.eiim.dal.entity;
 
 import org.mx.dal.entity.Base;
 
+import java.util.Set;
+
 /**
  * 描述： 聊天室信息接口定义
  *
@@ -20,4 +22,8 @@ public interface ChatRoom extends Base {
     String getDesc();
 
     void setDesc(String desc);
+
+    Set<ChatRoomMember> getMembers();
+
+    void setMembers(Set<ChatRoomMember> members);
 }

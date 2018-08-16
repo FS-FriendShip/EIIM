@@ -7,13 +7,14 @@ import com.fs.eiim.restful.vo.account.AccountInfoVO;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class ChatRoomInfoVO {
     private String id, name, desc;
     private AccountInfoVO creator;
     private List<ChatRoomMemberVO> members;
 
-    public static ChatRoomInfoVO valueOf(ChatRoom chatRoom, List<ChatRoomMember> members) {
+    public static ChatRoomInfoVO valueOf(ChatRoom chatRoom) {
         if (chatRoom == null) {
             return null;
         }
@@ -27,6 +28,7 @@ public class ChatRoomInfoVO {
             chatRoomInfoVO.creator = AccountInfoVO.valueOf(creator);
         }
 
+        Set<ChatRoomMember> members = chatRoom.getMembers();
         if (members != null && !members.isEmpty()) {
             List<ChatRoomMemberVO> list = new ArrayList<>(members.size());
             members.forEach(member -> list.add(ChatRoomMemberVO.valueOf(member)));
@@ -41,7 +43,7 @@ public class ChatRoomInfoVO {
             return null;
         }
         List<ChatRoomInfoVO> list = new ArrayList<>();
-        chatRooms.forEach(chatRoom -> list.add(valueOf(chatRoom, null)));
+        chatRooms.forEach(chatRoom -> list.add(valueOf(chatRoom)));
         return list;
     }
 

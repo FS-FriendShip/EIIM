@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatRoomMemberVO {
-    private String id, status;
+    private String status;
     private AccountInfoVO account;
     private Long lastAccessTime;
     private boolean isTop = false;
@@ -17,7 +17,6 @@ public class ChatRoomMemberVO {
             return null;
         }
         ChatRoomMemberVO chatRoomMemberVO = new ChatRoomMemberVO();
-        chatRoomMemberVO.id = member.getId();
         chatRoomMemberVO.status = member.getStatus();
         chatRoomMemberVO.account = AccountInfoVO.valueOf(member.getAccount());
         chatRoomMemberVO.lastAccessTime = member.getLastAccessTime();
@@ -32,14 +31,6 @@ public class ChatRoomMemberVO {
         List<ChatRoomMemberVO> list = new ArrayList<>();
         members.forEach(member -> list.add(valueOf(member)));
         return list;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public AccountInfoVO getAccount() {

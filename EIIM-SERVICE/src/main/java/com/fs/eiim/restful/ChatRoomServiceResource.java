@@ -75,8 +75,8 @@ public class ChatRoomServiceResource {
     }
 
     private DataVO<ChatRoomInfoVO> saveChatRoom(String id, String name, List<String> addAccountIds, List<String> delAccountIds) {
-        ChatRoomService.ChatRoomTuple tuple = chatRoomService.saveChatRoom(id, name, addAccountIds, delAccountIds);
-        return new DataVO<>(ChatRoomInfoVO.valueOf(tuple.getChatRoom(), tuple.getMembers()));
+        ChatRoom chatRoom = chatRoomService.saveChatRoom(id, name, addAccountIds, delAccountIds);
+        return new DataVO<>(ChatRoomInfoVO.valueOf(chatRoom));
     }
 
     @Path("chatRooms/new")
@@ -126,16 +126,12 @@ public class ChatRoomServiceResource {
         }
     }
 
-    @Path("chatRooms/{chatRoomId}")
+    @Path("chatRooms/{chatRoomId}/accounts/{accountId}")
     @DELETE
-    public DataVO<Boolean> deleteChatRoom(@PathParam("chatRoomId") String chatRoomId) {
-        if (StringUtils.isBlank(chatRoomId)) {
-            return new DataVO<>(new UserInterfaceSystemErrorException(
-                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
-            ));
-        }
+    public DataVO<Boolean> deleteChatRoom(@PathParam("chatRoomId") String chatRoomId,
+                                          @PathParam("accountId") String accountId) {
         try {
-            chatRoomService.deleteChatRoom(chatRoomId);
+            chatRoomService.deleteChatRoom(chatRoomId, accountId);
             return new DataVO<>(true);
         } catch (UserInterfaceException ex) {
             return new DataVO<>(ex);
@@ -289,7 +285,8 @@ public class ChatRoomServiceResource {
                                              ChatNoticeFormVO chatRoomNoticeFormVO) {
         chatRoomNoticeFormVO.setChatRoomId(chatRoomId);
         try {
-            chatRoomService.saveChatRoomNotice(chatRoomNoticeFormVO.get());
+            chatRoomService.saveChatRoomNotice(chatRoomNoticeFormVO.getChatRoomId(), null,
+                    chatRoomNoticeFormVO.getNoticeType(), chatRoomNoticeFormVO.getNotice());
             return new DataVO<>(true);
         } catch (UserInterfaceException ex) {
             return new DataVO<>(ex);
