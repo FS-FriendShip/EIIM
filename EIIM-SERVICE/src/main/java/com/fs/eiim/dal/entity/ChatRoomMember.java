@@ -13,6 +13,14 @@ public interface ChatRoomMember extends Base {
 
     void setChatRoom(ChatRoom chatRoom);
 
+    boolean isTop();
+
+    void setTop(boolean isTop);
+
+    String getStatus();
+
+    void setStatus(String status);
+
     Account getAccount();
 
     void setAccount(Account account);

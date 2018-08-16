@@ -20,8 +20,4 @@ public interface ChatRoom extends Base {
     String getDesc();
 
     void setDesc(String desc);
-
-    boolean isTop();
-
-    void setTop(boolean isTop);
 }

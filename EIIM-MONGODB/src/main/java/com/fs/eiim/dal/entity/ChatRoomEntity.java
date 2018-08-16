@@ -15,7 +15,6 @@ public class ChatRoomEntity extends MongoBaseEntity implements ChatRoom {
     private String name, desc;
     @DBRef
     private Account creator;
-    private boolean isTop;
 
     /**
      * {@inheritDoc}
@@ -75,25 +74,5 @@ public class ChatRoomEntity extends MongoBaseEntity implements ChatRoom {
     @Override
     public void setDesc(String desc) {
         this.desc = desc;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see ChatRoom#isTop()
-     */
-    @Override
-    public boolean isTop() {
-        return isTop;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see ChatRoom#setTop(boolean)
-     */
-    @Override
-    public void setTop(boolean isTop) {
-        this.isTop = isTop;
     }
 }

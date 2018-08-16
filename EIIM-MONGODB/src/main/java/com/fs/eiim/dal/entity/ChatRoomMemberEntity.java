@@ -14,6 +14,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class ChatRoomMemberEntity extends MongoBaseEntity implements ChatRoomMember {
     @DBRef
     private ChatRoom chatRoom;
+    private boolean isTop = false;
+    private String status = "online";
     @DBRef
     private Account account;
     private long lastAccessTime = System.currentTimeMillis();
@@ -36,6 +38,46 @@ public class ChatRoomMemberEntity extends MongoBaseEntity implements ChatRoomMem
     @Override
     public void setChatRoom(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see ChatRoomMember#isTop()
+     */
+    @Override
+    public boolean isTop() {
+        return isTop;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see ChatRoomMember#setTop(boolean)
+     */
+    @Override
+    public void setTop(boolean isTop) {
+        this.isTop = isTop;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see ChatRoomMember#getStatus()
+     */
+    @Override
+    public String getStatus() {
+        return status;
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * @see ChatRoomMember#setStatus(String)
+     */
+    @Override
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     /**
