@@ -66,6 +66,6 @@ public class AccountStateVO {
 
     public boolean isOnline() {
         // 状态为离线或者登出时间不为空，表示该账户不在线
-        return "offline".equalsIgnoreCase(status) || logoutTime != null;
+        return !("offline".equalsIgnoreCase(status) || logoutTime != null);
     }
 }

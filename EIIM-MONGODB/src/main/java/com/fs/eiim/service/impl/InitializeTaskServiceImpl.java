@@ -9,6 +9,7 @@ import org.mx.DigestUtils;
 import org.mx.comps.rbac.dal.entity.Role;
 import org.mx.dal.EntityFactory;
 import org.mx.dal.service.GeneralDictAccessor;
+import org.mx.dal.session.SessionDataStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -17,18 +18,22 @@ import org.springframework.stereotype.Component;
 public class InitializeTaskServiceImpl implements InitializeTaskService {
     private static final Log logger = LogFactory.getLog(InitializeTaskServiceImpl.class);
 
+    private SessionDataStore sessionDataStore;
     private GeneralDictAccessor accessor;
 
     @Autowired
-    public InitializeTaskServiceImpl(@Qualifier("generalDictAccessorMongodb") GeneralDictAccessor accessor) {
+    public InitializeTaskServiceImpl(@Qualifier("generalDictAccessorMongodb") GeneralDictAccessor accessor,
+                                     SessionDataStore sessionDataStore) {
         super();
         this.accessor = accessor;
+        this.sessionDataStore = sessionDataStore;
     }
 
     private void initializeBaseData() {
         // 初始化 账户状态 字典项
         BaseData baseData = accessor.getByCode("account.status", BaseData.class);
         if (baseData == null) {
+            baseData = EntityFactory.createEntity(BaseData.class);
             baseData.setCode("account.status");
             baseData.setName("账户状态");
             baseData.addItem("online", "在线", "online");
@@ -102,6 +107,7 @@ public class InitializeTaskServiceImpl implements InitializeTaskService {
 
     @Override
     public void initializeInternalData() {
+        sessionDataStore.setCurrentUserCode("System");
         // 初始化 内置字典
         initializeBaseData();
 
@@ -110,5 +116,6 @@ public class InitializeTaskServiceImpl implements InitializeTaskService {
 
         // 初始化 管理员
         initializeAdministratorAccount();
+        sessionDataStore.clean();
     }
 }

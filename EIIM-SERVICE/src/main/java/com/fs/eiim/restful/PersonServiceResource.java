@@ -3,12 +3,12 @@ package com.fs.eiim.restful;
 import com.fs.eiim.restful.vo.account.PasswordInfoVO;
 import com.fs.eiim.restful.vo.person.PersonFormVO;
 import com.fs.eiim.restful.vo.person.PersonInfoVO;
-import com.fs.eiim.service.AccountService;
 import com.fs.eiim.service.BaseDataService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mx.StringUtils;
 import org.mx.comps.rbac.error.UserInterfaceRbacErrorException;
+import org.mx.dal.session.SessionDataStore;
 import org.mx.error.UserInterfaceException;
 import org.mx.error.UserInterfaceSystemErrorException;
 import org.mx.service.rest.vo.DataVO;
@@ -32,14 +32,14 @@ import java.util.List;
 public class PersonServiceResource {
     private static final Log logger = LogFactory.getLog(PersonServiceResource.class);
 
-    private AccountService accountService;
     private BaseDataService baseDataService;
+    private SessionDataStore sessionDataStore;
 
     @Autowired
-    public PersonServiceResource(AccountService accountService, BaseDataService baseDataService) {
+    public PersonServiceResource(BaseDataService baseDataService, SessionDataStore sessionDataStore) {
         super();
-        this.accountService = accountService;
         this.baseDataService = baseDataService;
+        this.sessionDataStore = sessionDataStore;
     }
 
     @Path("persons")
@@ -65,6 +65,7 @@ public class PersonServiceResource {
         }
         try {
             BaseDataService.PersonAccountTuple tuple = baseDataService.savePersonInfo(personFormVO.get());
+            sessionDataStore.removeCurrentUserCode();
             return new DataVO<>(PersonInfoVO.valueOf(tuple.getPerson(), tuple.getAccount()));
         } catch (UserInterfaceException ex) {
             return new DataVO<>(ex);
@@ -77,17 +78,20 @@ public class PersonServiceResource {
 
     @Path("persons/new")
     @POST
-    public DataVO<PersonInfoVO> newPerson(PersonFormVO personFormVO) {
+    public DataVO<PersonInfoVO> newPerson(@QueryParam("accountCode") String accountCode, PersonFormVO personFormVO) {
         if (logger.isWarnEnabled()) {
             logger.warn(String.format("The person's id need blank string, but it is '%s'.", personFormVO.getId()));
         }
         personFormVO.setId(null);
+        sessionDataStore.setCurrentUserCode(accountCode);
         return savePerson(personFormVO);
     }
 
     @Path("persons/{personId}")
     @PUT
-    public DataVO<PersonInfoVO> modifyPerson(@PathParam("personId") String personId, PersonFormVO personFormVO) {
+    public DataVO<PersonInfoVO> modifyPerson(@PathParam("personId") String personId,
+                                             @QueryParam("accountCode") String accountCode,
+                                             PersonFormVO personFormVO) {
         if (StringUtils.isBlank(personId)) {
             if (logger.isErrorEnabled()) {
                 logger.error("The person's id is blank.");
@@ -97,6 +101,7 @@ public class PersonServiceResource {
             ));
         }
         personFormVO.setId(personId);
+        sessionDataStore.setCurrentUserCode(accountCode);
         return savePerson(personFormVO);
     }
 
@@ -125,7 +130,8 @@ public class PersonServiceResource {
 
     @Path("persons/{personId}/enable")
     @GET
-    public DataVO<PersonInfoVO> enablePersonAccount(@PathParam("personId") String personId) {
+    public DataVO<PersonInfoVO> enablePersonAccount(@PathParam("personId") String personId,
+                                                    @QueryParam("accountCode") String accountCode) {
         if (StringUtils.isBlank(personId)) {
             if (logger.isErrorEnabled()) {
                 logger.error("The person's id is blank.");
@@ -135,7 +141,9 @@ public class PersonServiceResource {
             ));
         }
         try {
+            sessionDataStore.setCurrentUserCode(accountCode);
             BaseDataService.PersonAccountTuple tuple = baseDataService.enablePersonAccount(personId);
+            sessionDataStore.removeCurrentUserCode();
             return new DataVO<>(PersonInfoVO.valueOf(tuple.getPerson(), tuple.getAccount()));
         } catch (UserInterfaceException ex) {
             return new DataVO<>(ex);
@@ -148,15 +156,17 @@ public class PersonServiceResource {
 
     @Path("persons/accounts/password")
     @PUT
-    public DataVO<Boolean> changeAccountPassword(PasswordInfoVO passwordInfoVO) {
+    public DataVO<Boolean> changeAccountPassword(@QueryParam("accountCode") String accountCode, PasswordInfoVO passwordInfoVO) {
         if (passwordInfoVO == null) {
             return new DataVO<>(new UserInterfaceSystemErrorException(
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
             ));
         }
         try {
+            sessionDataStore.setCurrentUserCode(accountCode);
             baseDataService.changeAccountPassword(passwordInfoVO.getAccountId(), passwordInfoVO.getOldPassword(),
                     passwordInfoVO.getNewPassword());
+            sessionDataStore.removeCurrentUserCode();
             return new DataVO<>(true);
         } catch (UserInterfaceException ex) {
             return new DataVO<>(ex);

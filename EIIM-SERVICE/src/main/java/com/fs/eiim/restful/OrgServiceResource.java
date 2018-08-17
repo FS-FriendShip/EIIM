@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mx.StringUtils;
 import org.mx.comps.rbac.error.UserInterfaceRbacErrorException;
+import org.mx.dal.session.SessionDataStore;
 import org.mx.error.UserInterfaceException;
 import org.mx.error.UserInterfaceSystemErrorException;
 import org.mx.service.rest.vo.DataVO;
@@ -32,11 +33,13 @@ public class OrgServiceResource {
     private static final Log logger = LogFactory.getLog(OrgServiceResource.class);
 
     private BaseDataService baseDataService;
+    private SessionDataStore sessionDataStore;
 
     @Autowired
-    public OrgServiceResource(BaseDataService baseDataService) {
+    public OrgServiceResource(BaseDataService baseDataService, SessionDataStore sessionDataStore) {
         super();
         this.baseDataService = baseDataService;
+        this.sessionDataStore = sessionDataStore;
     }
 
     @Path("orgs")
@@ -62,6 +65,7 @@ public class OrgServiceResource {
         }
         try {
             Org org = baseDataService.saveOrgInfo(orgFormVO.get());
+            sessionDataStore.removeCurrentUserCode();
             return new DataVO<>(OrgInfoVO.valueOf(org));
         } catch (UserInterfaceException ex) {
             return new DataVO<>(ex);
@@ -74,17 +78,19 @@ public class OrgServiceResource {
 
     @Path("orgs/new")
     @POST
-    public DataVO<OrgInfoVO> newOrg(OrgFormVO orgFormVO) {
+    public DataVO<OrgInfoVO> newOrg(@QueryParam("accountCode") String accountCode, OrgFormVO orgFormVO) {
         if (logger.isWarnEnabled()) {
             logger.warn(String.format("The organization's id need blank string, but it is '%s'.", orgFormVO.getId()));
         }
         orgFormVO.setId(null);
+        sessionDataStore.setCurrentUserCode(accountCode);
         return saveOrg(orgFormVO);
     }
 
     @Path("orgs/{orgId}")
     @PUT
-    public DataVO<OrgInfoVO> modifyOrg(@PathParam("orgId") String orgId, OrgFormVO orgFormVO) {
+    public DataVO<OrgInfoVO> modifyOrg(@PathParam("orgId") String orgId, @QueryParam("accountCode") String accountCode,
+                                       OrgFormVO orgFormVO) {
         if (StringUtils.isBlank(orgId)) {
             if (logger.isErrorEnabled()) {
                 logger.error("The organization's id is blank.");
@@ -94,6 +100,7 @@ public class OrgServiceResource {
             ));
         }
         orgFormVO.setId(orgId);
+        sessionDataStore.setCurrentUserCode(accountCode);
         return saveOrg(orgFormVO);
     }
 

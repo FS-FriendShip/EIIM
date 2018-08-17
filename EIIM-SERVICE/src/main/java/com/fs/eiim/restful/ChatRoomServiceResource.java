@@ -10,6 +10,7 @@ import com.fs.eiim.service.ChatRoomService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mx.StringUtils;
+import org.mx.dal.session.SessionDataStore;
 import org.mx.error.UserInterfaceException;
 import org.mx.error.UserInterfaceSystemErrorException;
 import org.mx.service.rest.vo.DataVO;
@@ -34,11 +35,13 @@ public class ChatRoomServiceResource {
     private static final Log logger = LogFactory.getLog(ChatRoomServiceResource.class);
 
     private ChatRoomService chatRoomService;
+    private SessionDataStore sessionDataStore;
 
     @Autowired
-    public ChatRoomServiceResource(ChatRoomService chatRoomService) {
+    public ChatRoomServiceResource(ChatRoomService chatRoomService, SessionDataStore sessionDataStore) {
         super();
         this.chatRoomService = chatRoomService;
+        this.sessionDataStore = sessionDataStore;
     }
 
     @Path("chatRooms")
@@ -76,18 +79,20 @@ public class ChatRoomServiceResource {
 
     private DataVO<ChatRoomInfoVO> saveChatRoom(String id, String name, List<String> addAccountIds, List<String> delAccountIds) {
         ChatRoom chatRoom = chatRoomService.saveChatRoom(id, name, addAccountIds, delAccountIds);
+        sessionDataStore.removeCurrentUserCode();
         return new DataVO<>(ChatRoomInfoVO.valueOf(chatRoom));
     }
 
     @Path("chatRooms/new")
     @POST
-    public DataVO<ChatRoomInfoVO> newChatRoom(ChatRoomFormVO chatRoomFormVO) {
+    public DataVO<ChatRoomInfoVO> newChatRoom(@QueryParam("accountCode") String accountCode, ChatRoomFormVO chatRoomFormVO) {
         if (chatRoomFormVO == null) {
             return new DataVO<>(new UserInterfaceSystemErrorException(
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
             ));
         }
         try {
+            sessionDataStore.setCurrentUserCode(accountCode);
             return saveChatRoom(null, chatRoomFormVO.getName(),
                     chatRoomFormVO.getAddAccountIds(), chatRoomFormVO.getDelAccountIds());
         } catch (UserInterfaceException ex) {
@@ -105,6 +110,7 @@ public class ChatRoomServiceResource {
     @Path("chatRooms/{chatRoomId}")
     @POST
     public DataVO<ChatRoomInfoVO> modifyChatRoom(@PathParam("chatRoomId") String chatRoomId,
+                                                 @QueryParam("accountCode") String accountCode,
                                                  ChatRoomFormVO chatRoomFormVO) {
         if (StringUtils.isBlank(chatRoomId) || chatRoomFormVO == null) {
             return new DataVO<>(new UserInterfaceSystemErrorException(
@@ -112,6 +118,7 @@ public class ChatRoomServiceResource {
             ));
         }
         try {
+            sessionDataStore.setCurrentUserCode(accountCode);
             return saveChatRoom(chatRoomId, chatRoomFormVO.getName(),
                     chatRoomFormVO.getAddAccountIds(), chatRoomFormVO.getDelAccountIds());
         } catch (UserInterfaceException ex) {
@@ -129,9 +136,12 @@ public class ChatRoomServiceResource {
     @Path("chatRooms/{chatRoomId}/accounts/{accountId}")
     @DELETE
     public DataVO<Boolean> deleteChatRoom(@PathParam("chatRoomId") String chatRoomId,
-                                          @PathParam("accountId") String accountId) {
+                                          @PathParam("accountId") String accountId,
+                                          @QueryParam("accountCode") String accountCode) {
         try {
+            sessionDataStore.setCurrentUserCode(accountCode);
             chatRoomService.deleteChatRoom(chatRoomId, accountId);
+            sessionDataStore.removeCurrentUserCode();
             return new DataVO<>(true);
         } catch (UserInterfaceException ex) {
             return new DataVO<>(ex);
@@ -148,6 +158,7 @@ public class ChatRoomServiceResource {
     @Path("chatRooms/{chatRoomId}/members")
     @PUT
     public DataVO<ChatRoomInfoVO> modifyChatRoomMembers(@PathParam("chatRoomId") String chatRoomId,
+                                                        @QueryParam("accountCode") String accountCode,
                                                         ChatRoomFormVO chatRoomFormVO) {
         if (StringUtils.isBlank(chatRoomId) || chatRoomFormVO == null) {
             return new DataVO<>(new UserInterfaceSystemErrorException(
@@ -155,6 +166,7 @@ public class ChatRoomServiceResource {
             ));
         }
         try {
+            sessionDataStore.setCurrentUserCode(accountCode);
             return saveChatRoom(chatRoomId, chatRoomFormVO.getName(),
                     chatRoomFormVO.getAddAccountIds(), chatRoomFormVO.getDelAccountIds());
         } catch (UserInterfaceException ex) {
@@ -195,6 +207,7 @@ public class ChatRoomServiceResource {
     @Path("chatRooms/{chatRoomId}/members/status")
     @PUT
     public DataVO<ChatRoomMemberVO> changeChatRoomMemberStatus(@PathParam("chatRoomId") String chatRoomId,
+                                                               @QueryParam("accountCode") String accountCode,
                                                                ChatRoomMemberStatusVO statusVO) {
         if (StringUtils.isBlank(chatRoomId) || statusVO == null) {
             return new DataVO<>(new UserInterfaceSystemErrorException(
@@ -202,8 +215,10 @@ public class ChatRoomServiceResource {
             ));
         }
         try {
+            sessionDataStore.setCurrentUserCode(accountCode);
             ChatRoomMember member = chatRoomService.changeMemberStatus(chatRoomId, statusVO.getAccountId(),
                     statusVO.getStatus());
+            sessionDataStore.removeCurrentUserCode();
             return new DataVO<>(ChatRoomMemberVO.valueOf(member));
         } catch (UserInterfaceException ex) {
             return new DataVO<>(ex);
@@ -220,6 +235,7 @@ public class ChatRoomServiceResource {
     @Path("chatRooms/{chatRoomId}/top")
     @PUT
     public DataVO<ChatRoomMemberVO> topChatRoom(@PathParam("chatRoomId") String chatRoomId,
+                                                @QueryParam("accountCode") String accountCode,
                                                 ChatRoomMemberStatusVO statusVO) {
         if (StringUtils.isBlank(chatRoomId) || statusVO == null) {
             return new DataVO<>(new UserInterfaceSystemErrorException(
@@ -227,8 +243,10 @@ public class ChatRoomServiceResource {
             ));
         }
         try {
+            sessionDataStore.setCurrentUserCode(accountCode);
             ChatRoomMember member = chatRoomService.topChatRoom(chatRoomId, statusVO.getAccountId(),
                     statusVO.isTop());
+            sessionDataStore.removeCurrentUserCode();
             return new DataVO<>(ChatRoomMemberVO.valueOf(member));
         } catch (UserInterfaceException ex) {
             return new DataVO<>(ex);
@@ -282,11 +300,14 @@ public class ChatRoomServiceResource {
     @Path("chatRooms/{chatRoomId}/notices/new")
     @POST
     public DataVO<Boolean> newChatRoomNotice(@PathParam("chatRoomId") String chatRoomId,
+                                             @QueryParam("accountCode") String accountCode,
                                              ChatNoticeFormVO chatRoomNoticeFormVO) {
         chatRoomNoticeFormVO.setChatRoomId(chatRoomId);
         try {
+            sessionDataStore.setCurrentUserCode(accountCode);
             chatRoomService.saveChatRoomNotice(chatRoomNoticeFormVO.getChatRoomId(), null,
                     chatRoomNoticeFormVO.getNoticeType(), chatRoomNoticeFormVO.getNotice());
+            sessionDataStore.removeCurrentUserCode();
             return new DataVO<>(true);
         } catch (UserInterfaceException ex) {
             return new DataVO<>(ex);

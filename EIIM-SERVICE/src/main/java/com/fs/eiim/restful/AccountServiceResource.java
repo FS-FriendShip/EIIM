@@ -5,6 +5,7 @@ import com.fs.eiim.restful.vo.account.AccountStateVO;
 import com.fs.eiim.restful.vo.account.AuthenticationVO;
 import com.fs.eiim.service.AccountService;
 import org.mx.comps.rbac.error.UserInterfaceRbacErrorException;
+import org.mx.dal.session.SessionDataStore;
 import org.mx.error.UserInterfaceException;
 import org.mx.error.UserInterfaceSystemErrorException;
 import org.mx.service.rest.vo.DataVO;
@@ -27,11 +28,13 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public class AccountServiceResource {
     private AccountService accountService;
+    private SessionDataStore sessionDataStore;
 
     @Autowired
-    public AccountServiceResource(AccountService accountService) {
+    public AccountServiceResource(AccountService accountService, SessionDataStore sessionDataStore) {
         super();
         this.accountService = accountService;
+        this.sessionDataStore = sessionDataStore;
     }
 
     @Path("login")
@@ -43,8 +46,10 @@ public class AccountServiceResource {
             ));
         }
         try {
+            sessionDataStore.setCurrentUserCode(authenticate.getAccountCode());
             AccountState accountState = accountService.login(authenticate.getAccountCode(),
                     authenticate.getPassword());
+            sessionDataStore.removeCurrentUserCode();
             return new DataVO<>(AccountStateVO.valueOf(accountState));
         } catch (UserInterfaceException ex) {
             return new DataVO<>(ex);
@@ -57,9 +62,12 @@ public class AccountServiceResource {
 
     @Path("logout/{accountId}")
     @GET
-    public DataVO<Boolean> logout(@PathParam("accountId") String accountId) {
+    public DataVO<Boolean> logout(@PathParam("accountId") String accountId,
+                                  @QueryParam("accountCode") String accountCode) {
         try {
+            sessionDataStore.setCurrentUserCode(accountCode);
             accountService.logout(accountId);
+            sessionDataStore.removeCurrentUserCode();
             return new DataVO<>(true);
         } catch (UserInterfaceException ex) {
             return new DataVO<>(ex);
