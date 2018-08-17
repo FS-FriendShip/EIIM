@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * @author john peng
  * Date time 2018/8/8 下午4:09
  */
-@Document(collection = "chatmessage")
+@Document(collection = "chatMessage")
 public class ChatMessageEntity extends MongoBaseEntity implements ChatMessage {
     @DBRef
     private ChatRoom chatRoom;

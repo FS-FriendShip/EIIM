@@ -15,7 +15,7 @@ import java.util.Set;
  * @author john peng
  * Date time 2018/8/8 下午3:54
  */
-@Document(collection = "basedata")
+@Document(collection = "baseData")
 public class BaseDataEntity extends MongoBaseDictEntity implements BaseData {
     private static final Log logger = LogFactory.getLog(BaseDataEntity.class);
     private Set<BaseDataItem> items = new HashSet<>();

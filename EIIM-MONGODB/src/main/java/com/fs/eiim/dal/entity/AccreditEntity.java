@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * @author john peng
  * Date time 2018/8/8 下午3:47
  */
-@Document(collection = "accredit-ext")
+@Document(collection = "accredit")
 public class AccreditEntity extends MongoBaseEntity implements Accredit {
     @DBRef
     private Account srcAccount, tarAccount;

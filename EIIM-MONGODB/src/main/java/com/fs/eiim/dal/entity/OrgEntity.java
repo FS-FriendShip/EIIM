@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * @author john peng
  * Date time 2018/8/8 下午5:49
  */
-@Document(collection = "organization")
+@Document(collection = "org")
 public class OrgEntity extends DepartmentEntity implements Org {
     private String type;
 

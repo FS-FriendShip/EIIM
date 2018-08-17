@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * @author john peng
  * Date time 2018/8/8 下午4:16
  */
-@Document(collection = "person-ext")
+@Document(collection = "person")
 public class PersonEntity extends UserEntity implements Person {
     @DBRef
     private Org organization;

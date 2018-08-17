@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * @author john peng
  * Date time 2018/8/8 下午3:05
  */
-@Document(collection = "account-state")
+@Document(collection = "accountState")
 public class AccountStateEntity extends MongoBaseEntity implements AccountState {
     private String status, token;
     @DBRef

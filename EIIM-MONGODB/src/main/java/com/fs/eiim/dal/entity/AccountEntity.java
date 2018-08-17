@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * @author john peng
  * Date time 2018/8/8 下午3:01
  */
-@Document(collection = "account-ext")
+@Document(collection = "account")
 public class AccountEntity extends org.mx.comps.rbac.dal.entity.AccountEntity implements Account {
     private String eiimCode, nickName, avatar;
     @DBRef

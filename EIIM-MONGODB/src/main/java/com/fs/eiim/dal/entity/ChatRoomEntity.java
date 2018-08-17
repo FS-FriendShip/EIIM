@@ -12,7 +12,7 @@ import java.util.Set;
  * @author john peng
  * Date time 2018/8/8 下午4:01
  */
-@Document(collection = "chatroom")
+@Document(collection = "chatRoom")
 public class ChatRoomEntity extends MongoBaseEntity implements ChatRoom {
     private String name, desc;
     @DBRef
