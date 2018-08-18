@@ -231,13 +231,15 @@ public class BaseDataServiceImpl implements BaseDataService {
     }
 
     @Override
-    public PersonAccountTuple enablePersonAccount(String personId) {
-        if (StringUtils.isBlank(personId)) {
-            if (logger.isErrorEnabled()) {
-                logger.error("The person's id is blank.");
-            }
+    public PersonAccountTuple enablePersonAccount(String personId, AccountInitialInfo accountInfo) {
+        if (StringUtils.isBlank(personId) || accountInfo == null) {
             throw new UserInterfaceSystemErrorException(
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            );
+        }
+        if (StringUtils.isBlank(accountInfo.getPassword())) {
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.ACCOUNT_BLANK_PASSWORD
             );
         }
         Person person = accessor.getById(personId, Person.class);
@@ -264,12 +266,13 @@ public class BaseDataServiceImpl implements BaseDataService {
         if (account == null) {
             // 账户不存在，创建账户
             account = EntityFactory.createEntity(Account.class);
-            account.setPassword(DigestUtils.md5("edmund8888"));
+            account.setCode(accountInfo.getAccountCode());
+            account.setPassword(DigestUtils.md5(accountInfo.getPassword()));
+            account.setNickName(accountInfo.getNickname());
+            account.setAvatar(accountInfo.getAvatar());
+            account.setEiimCode(String.format("EEIM-%d", accessor.count(Account.class)));
             account.setName(person.getFullName());
             account.getRoles().add(roleUser);
-            account.setNickName(person.getFirstName());
-            account.setCode(String.format("EEIM-%d", accessor.count(Account.class)));
-            account.setEiimCode(account.getCode());
             account.setPerson(person);
             account.setDesc(person.getFullName());
             account.setValid(true);
@@ -280,14 +283,17 @@ public class BaseDataServiceImpl implements BaseDataService {
                 logger.debug(String.format("Enable persion[%s]'s account sccuessfully, the eiim code: %s.",
                         person.getFullName(), account.getEiimCode()));
             }
+            return PersonAccountTuple.valueOf(person, account);
         } else {
             // 账户已经存在
             if (logger.isWarnEnabled()) {
                 logger.warn(String.format("The person[%s] has already enable the account, the eiim code: %s.",
                         person.getFullName(), account.getEiimCode()));
             }
+            throw new UserInterfaceRbacErrorException(
+                    UserInterfaceRbacErrorException.RbacErrors.ACCOUNT_HAS_EXIST
+            );
         }
-        return PersonAccountTuple.valueOf(person, account);
     }
 
     private boolean passwordStrength(String password) {

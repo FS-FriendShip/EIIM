@@ -2,6 +2,7 @@ package com.fs.eiim.restful;
 
 import com.fs.eiim.restful.vo.account.AccountInfoVO;
 import com.fs.eiim.restful.vo.account.PasswordInfoVO;
+import com.fs.eiim.restful.vo.person.AccountInitialInfoVO;
 import com.fs.eiim.restful.vo.person.PersonFormVO;
 import com.fs.eiim.restful.vo.person.PersonInfoVO;
 import com.fs.eiim.service.BaseDataService;
@@ -130,20 +131,19 @@ public class PersonServiceResource {
     }
 
     @Path("persons/{personId}/enable")
-    @GET
+    @POST
     public DataVO<AccountInfoVO> enablePersonAccount(@PathParam("personId") String personId,
-                                                     @QueryParam("accountCode") String accountCode) {
-        if (StringUtils.isBlank(personId)) {
-            if (logger.isErrorEnabled()) {
-                logger.error("The person's id is blank.");
-            }
+                                                     @QueryParam("accountCode") String accountCode,
+                                                     AccountInitialInfoVO accountInitialInfoVO) {
+        if (StringUtils.isBlank(personId) || accountInitialInfoVO == null) {
             return new DataVO<>(new UserInterfaceSystemErrorException(
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
             ));
         }
         try {
             sessionDataStore.setCurrentUserCode(accountCode);
-            BaseDataService.PersonAccountTuple tuple = baseDataService.enablePersonAccount(personId);
+            BaseDataService.PersonAccountTuple tuple = baseDataService.enablePersonAccount(personId,
+                    accountInitialInfoVO.get());
             sessionDataStore.removeCurrentUserCode();
             return new DataVO<>(AccountInfoVO.valueOf(tuple.getAccount()));
         } catch (UserInterfaceException ex) {
