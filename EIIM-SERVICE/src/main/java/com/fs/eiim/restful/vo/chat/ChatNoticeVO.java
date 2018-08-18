@@ -22,11 +22,10 @@ public class ChatNoticeVO {
     }
 
     public static List<ChatNoticeVO> valueOf(List<ChatNotice> chatNotices) {
-        if (chatNotices == null || chatNotices.isEmpty()) {
-            return null;
-        }
         List<ChatNoticeVO> list = new ArrayList<>(chatNotices.size());
-        chatNotices.forEach(chatNotice -> list.add(valueOf(chatNotice)));
+        if (chatNotices != null && !chatNotices.isEmpty()) {
+            chatNotices.forEach(chatNotice -> list.add(valueOf(chatNotice)));
+        }
         return list;
     }
 

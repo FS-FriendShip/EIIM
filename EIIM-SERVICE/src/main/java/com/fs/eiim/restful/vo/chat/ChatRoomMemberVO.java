@@ -25,11 +25,10 @@ public class ChatRoomMemberVO {
     }
 
     public static List<ChatRoomMemberVO> valueOf(List<ChatRoomMember> members) {
-        if (members == null || members.isEmpty()) {
-            return null;
-        }
         List<ChatRoomMemberVO> list = new ArrayList<>();
-        members.forEach(member -> list.add(valueOf(member)));
+        if (members != null && !members.isEmpty()) {
+            members.forEach(member -> list.add(valueOf(member)));
+        }
         return list;
     }
 

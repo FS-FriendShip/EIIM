@@ -24,11 +24,10 @@ public class AccountStateVO {
     }
 
     public static List<AccountStateVO> valueOf(List<AccountState> states) {
-        if (states == null || states.isEmpty()) {
-            return null;
-        }
         List<AccountStateVO> list = new ArrayList<>();
-        states.forEach(state -> list.add(valueOf(state)));
+        if (states != null && !states.isEmpty()) {
+            states.forEach(state -> list.add(valueOf(state)));
+        }
         return list;
     }
 

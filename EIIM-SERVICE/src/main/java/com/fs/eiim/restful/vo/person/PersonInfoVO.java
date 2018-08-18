@@ -52,11 +52,10 @@ public class PersonInfoVO {
     }
 
     public static List<PersonInfoVO> valueOf(List<BaseDataService.PersonAccountTuple> tuples) {
-        if (tuples == null || tuples.isEmpty()) {
-            return null;
-        }
         List<PersonInfoVO> persons = new ArrayList<>();
-        tuples.forEach(tuple -> persons.add(PersonInfoVO.valueOf(tuple.getPerson(), tuple.getAccount())));
+        if (tuples != null && !tuples.isEmpty()) {
+            tuples.forEach(tuple -> persons.add(PersonInfoVO.valueOf(tuple.getPerson(), tuple.getAccount())));
+        }
         return persons;
     }
 

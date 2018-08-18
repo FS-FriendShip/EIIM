@@ -39,11 +39,10 @@ public class ChatRoomInfoVO {
     }
 
     public static List<ChatRoomInfoVO> valueOf(List<ChatRoom> chatRooms) {
-        if (chatRooms == null || chatRooms.isEmpty()) {
-            return null;
-        }
         List<ChatRoomInfoVO> list = new ArrayList<>();
-        chatRooms.forEach(chatRoom -> list.add(valueOf(chatRoom)));
+        if (chatRooms != null && !chatRooms.isEmpty()) {
+            chatRooms.forEach(chatRoom -> list.add(valueOf(chatRoom)));
+        }
         return list;
     }
 

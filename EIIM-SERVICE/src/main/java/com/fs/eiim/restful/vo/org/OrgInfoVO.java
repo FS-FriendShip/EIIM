@@ -44,11 +44,10 @@ public class OrgInfoVO {
     }
 
     public static List<OrgInfoVO> valueOf(List<Org> orgs) {
-        if (orgs == null || orgs.isEmpty()) {
-            return null;
-        }
         List<OrgInfoVO> list = new ArrayList<>();
-        orgs.forEach(org -> list.add(valueOf(org)));
+        if (orgs != null && !orgs.isEmpty()) {
+            orgs.forEach(org -> list.add(valueOf(org)));
+        }
         return list;
     }
 

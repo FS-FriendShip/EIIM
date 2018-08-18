@@ -29,11 +29,10 @@ public class ChatMessageVO {
     }
 
     public static List<ChatMessageVO> valueOf(List<ChatMessage> chatMessages) {
-        if (chatMessages == null || chatMessages.isEmpty()) {
-            return null;
-        }
         List<ChatMessageVO> list = new ArrayList<>(chatMessages.size());
-        chatMessages.forEach(chatMessage -> list.add(valueOf(chatMessage)));
+        if (chatMessages != null && !chatMessages.isEmpty()) {
+            chatMessages.forEach(chatMessage -> list.add(valueOf(chatMessage)));
+        }
         return list;
     }
 
