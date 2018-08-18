@@ -290,6 +290,39 @@ public class BaseDataServiceImpl implements BaseDataService {
         return PersonAccountTuple.valueOf(person, account);
     }
 
+    private boolean passwordStrength(String password) {
+        if (StringUtils.isBlank(password)) {
+            // 密码为空
+            return false;
+        }
+        if (password.length() < 8) {
+            // 密码长度太短
+            return false;
+        }
+        if (StringUtils.isChinese(password)) {
+            // 中文密码
+            return true;
+        }
+        boolean isUpper = false, isLower = false, isNumeric = false, isSymbol = false;
+        for (char c : password.toCharArray()) {
+            if (!isUpper && Character.isUpperCase(c)) {
+                isUpper = true;
+            } else if (!isLower && Character.isLowerCase(c)) {
+                isLower = true;
+            } else if (!isNumeric && c >= '0' && c <= '9') {
+                isNumeric = true;
+            } else if (!isSymbol && "!@#$%^&*()_+-=,./<>?;':\"[]{}\\|".indexOf(c) >= 0) {
+                isSymbol = true;
+            }
+            int num = (isUpper ? 1 : 0) + (isLower ? 1 : 0) + (isNumeric ? 1 : 0) + (isSymbol ? 1 : 0);
+            if (num >= 2) {
+                // 两种及以上组合即可
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void changeAccountPassword(String accountCode, String oldPassword, String newPassword) {
         if (StringUtils.isBlank(accountCode)) {
@@ -308,24 +341,30 @@ public class BaseDataServiceImpl implements BaseDataService {
                     UserInterfaceEiimErrorException.EiimErrors.ACCOUNT_BLANK_PASSWORD
             );
         }
-        Account account = accessor.getByCode(accountCode, Account.class);
-        if (account == null) {
-            if (logger.isErrorEnabled()) {
-                logger.error(String.format("The account[%s] not found", accountCode));
+        if (passwordStrength(newPassword)) {
+            Account account = accessor.getByCode(accountCode, Account.class);
+            if (account == null) {
+                if (logger.isErrorEnabled()) {
+                    logger.error(String.format("The account[%s] not found", accountCode));
+                }
+                throw new UserInterfaceRbacErrorException(
+                        UserInterfaceRbacErrorException.RbacErrors.ACCOUNT_NOT_FOUND
+                );
             }
-            throw new UserInterfaceRbacErrorException(
-                    UserInterfaceRbacErrorException.RbacErrors.ACCOUNT_NOT_FOUND
+            if (!DigestUtils.md5(oldPassword).equals(account.getPassword())) {
+                throw new UserInterfaceRbacErrorException(
+                        UserInterfaceRbacErrorException.RbacErrors.ACCOUNT_PASSWORD_NOT_MATCHED
+                );
+            }
+            account.setPassword(DigestUtils.md5(newPassword));
+            accessor.save(account);
+            if (logger.isDebugEnabled()) {
+                logger.debug(String.format("Modify account[%s]'s password successfully.", accountCode));
+            }
+        } else {
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.ACCOUNT_PASSWORD_STRENGTHEN_LOW
             );
-        }
-        if (!DigestUtils.md5(oldPassword).equals(account.getPassword())) {
-            throw new UserInterfaceRbacErrorException(
-                    UserInterfaceRbacErrorException.RbacErrors.ACCOUNT_PASSWORD_NOT_MATCHED
-            );
-        }
-        account.setPassword(DigestUtils.md5(newPassword));
-        accessor.save(account);
-        if (logger.isDebugEnabled()) {
-            logger.debug(String.format("Modify account[%s]'s password successfully.", accountCode));
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.fs.eiim.restful;
 
+import com.fs.eiim.restful.vo.account.AccountInfoVO;
 import com.fs.eiim.restful.vo.account.PasswordInfoVO;
 import com.fs.eiim.restful.vo.person.PersonFormVO;
 import com.fs.eiim.restful.vo.person.PersonInfoVO;
@@ -130,8 +131,8 @@ public class PersonServiceResource {
 
     @Path("persons/{personId}/enable")
     @GET
-    public DataVO<PersonInfoVO> enablePersonAccount(@PathParam("personId") String personId,
-                                                    @QueryParam("accountCode") String accountCode) {
+    public DataVO<AccountInfoVO> enablePersonAccount(@PathParam("personId") String personId,
+                                                     @QueryParam("accountCode") String accountCode) {
         if (StringUtils.isBlank(personId)) {
             if (logger.isErrorEnabled()) {
                 logger.error("The person's id is blank.");
@@ -144,7 +145,7 @@ public class PersonServiceResource {
             sessionDataStore.setCurrentUserCode(accountCode);
             BaseDataService.PersonAccountTuple tuple = baseDataService.enablePersonAccount(personId);
             sessionDataStore.removeCurrentUserCode();
-            return new DataVO<>(PersonInfoVO.valueOf(tuple.getPerson(), tuple.getAccount()));
+            return new DataVO<>(AccountInfoVO.valueOf(tuple.getAccount()));
         } catch (UserInterfaceException ex) {
             return new DataVO<>(ex);
         } catch (Exception ex) {
@@ -154,7 +155,7 @@ public class PersonServiceResource {
         }
     }
 
-    @Path("persons/accounts/password")
+    @Path("persons/account/password")
     @PUT
     public DataVO<Boolean> changeAccountPassword(@QueryParam("accountCode") String accountCode, PasswordInfoVO passwordInfoVO) {
         if (passwordInfoVO == null) {
@@ -164,7 +165,7 @@ public class PersonServiceResource {
         }
         try {
             sessionDataStore.setCurrentUserCode(accountCode);
-            baseDataService.changeAccountPassword(passwordInfoVO.getAccountId(), passwordInfoVO.getOldPassword(),
+            baseDataService.changeAccountPassword(passwordInfoVO.getAccountCode(), passwordInfoVO.getOldPassword(),
                     passwordInfoVO.getNewPassword());
             sessionDataStore.removeCurrentUserCode();
             return new DataVO<>(true);

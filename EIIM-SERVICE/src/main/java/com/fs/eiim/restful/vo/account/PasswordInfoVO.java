@@ -1,10 +1,10 @@
 package com.fs.eiim.restful.vo.account;
 
 public class PasswordInfoVO {
-    private String accountId, oldPassword, newPassword;
+    private String accountCode, oldPassword, newPassword;
 
-    public String getAccountId() {
-        return accountId;
+    public String getAccountCode() {
+        return accountCode;
     }
 
     public String getOldPassword() {
@@ -15,8 +15,8 @@ public class PasswordInfoVO {
         return newPassword;
     }
 
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
+    public void setAccountCode(String accountCode) {
+        this.accountCode = accountCode;
     }
 
     public void setOldPassword(String oldPassword) {

@@ -41,39 +41,6 @@ public class AccountServiceImpl implements AccountService {
         this.jwtService = jwtService;
     }
 
-    private boolean passwordStrength(String password) {
-        if (StringUtils.isBlank(password)) {
-            // 密码为空
-            return false;
-        }
-        if (password.length() < 8) {
-            // 密码长度太短
-            return false;
-        }
-        if (StringUtils.isChinese(password)) {
-            // 中文密码
-            return true;
-        }
-        boolean isUpper = false, isLower = false, isNumeric = false, isSymbol = false;
-        for (char c : password.toCharArray()) {
-            if (!isUpper && Character.isUpperCase(c)) {
-                isUpper = true;
-            } else if (!isLower && Character.isLowerCase(c)) {
-                isLower = true;
-            } else if (!isNumeric && c >= '0' && c <= '9') {
-                isNumeric = true;
-            } else if (!isSymbol && "!@#$%^&*()_+-=,./<>?;':\"[]{}\\|".indexOf(c) >= 0) {
-                isSymbol = true;
-            }
-            int num = (isUpper ? 1 : 0) + (isLower ? 1 : 0) + (isNumeric ? 1 : 0) + (isSymbol ? 1 : 0);
-            if (num >= 2) {
-                // 两种及以上组合即可
-                return true;
-            }
-        }
-        return false;
-    }
-
     private AccountState getAccountState(Account account) {
         List<AccountState> accountStates = accessor.find(
                 GeneralAccessor.ConditionTuple.eq("account", account), AccountState.class);
