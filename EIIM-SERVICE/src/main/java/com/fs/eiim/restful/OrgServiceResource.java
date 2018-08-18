@@ -79,9 +79,6 @@ public class OrgServiceResource {
     @Path("orgs/new")
     @POST
     public DataVO<OrgInfoVO> newOrg(@QueryParam("accountCode") String accountCode, OrgFormVO orgFormVO) {
-        if (logger.isWarnEnabled()) {
-            logger.warn(String.format("The organization's id need blank string, but it is '%s'.", orgFormVO.getId()));
-        }
         orgFormVO.setId(null);
         sessionDataStore.setCurrentUserCode(accountCode);
         return saveOrg(orgFormVO);
