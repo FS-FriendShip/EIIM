@@ -94,7 +94,7 @@ public class ChatRoomServiceResource {
         try {
             sessionDataStore.setCurrentUserCode(accountCode);
             return saveChatRoom(null, chatRoomFormVO.getName(),
-                    chatRoomFormVO.getAddAccountIds(), chatRoomFormVO.getDelAccountIds());
+                    chatRoomFormVO.getAddAccountCodes(), chatRoomFormVO.getDelAccountCodes());
         } catch (UserInterfaceException ex) {
             return new DataVO<>(ex);
         } catch (Exception ex) {
@@ -120,7 +120,7 @@ public class ChatRoomServiceResource {
         try {
             sessionDataStore.setCurrentUserCode(accountCode);
             return saveChatRoom(chatRoomId, chatRoomFormVO.getName(),
-                    chatRoomFormVO.getAddAccountIds(), chatRoomFormVO.getDelAccountIds());
+                    chatRoomFormVO.getAddAccountCodes(), chatRoomFormVO.getDelAccountCodes());
         } catch (UserInterfaceException ex) {
             return new DataVO<>(ex);
         } catch (Exception ex) {
@@ -168,7 +168,7 @@ public class ChatRoomServiceResource {
         try {
             sessionDataStore.setCurrentUserCode(accountCode);
             return saveChatRoom(chatRoomId, chatRoomFormVO.getName(),
-                    chatRoomFormVO.getAddAccountIds(), chatRoomFormVO.getDelAccountIds());
+                    chatRoomFormVO.getAddAccountCodes(), chatRoomFormVO.getDelAccountCodes());
         } catch (UserInterfaceException ex) {
             return new DataVO<>(ex);
         } catch (Exception ex) {
@@ -216,7 +216,7 @@ public class ChatRoomServiceResource {
         }
         try {
             sessionDataStore.setCurrentUserCode(accountCode);
-            ChatRoomMember member = chatRoomService.changeMemberStatus(chatRoomId, statusVO.getAccountId(),
+            ChatRoomMember member = chatRoomService.changeMemberStatus(chatRoomId, statusVO.getAccountCode(),
                     statusVO.getStatus());
             sessionDataStore.removeCurrentUserCode();
             return new DataVO<>(ChatRoomMemberVO.valueOf(member));
@@ -244,7 +244,7 @@ public class ChatRoomServiceResource {
         }
         try {
             sessionDataStore.setCurrentUserCode(accountCode);
-            ChatRoomMember member = chatRoomService.topChatRoom(chatRoomId, statusVO.getAccountId(),
+            ChatRoomMember member = chatRoomService.topChatRoom(chatRoomId, statusVO.getAccountCode(),
                     statusVO.isTop());
             sessionDataStore.removeCurrentUserCode();
             return new DataVO<>(ChatRoomMemberVO.valueOf(member));

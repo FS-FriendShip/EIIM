@@ -89,8 +89,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
      * @see ChatRoomService#saveChatRoom(String, String, List, List)
      */
     @Override
-    public ChatRoom saveChatRoom(String chatRoomId, String chatRoomName, List<String> addAccountIds,
-                                 List<String> delAccountIds) {
+    public ChatRoom saveChatRoom(String chatRoomId, String chatRoomName, List<String> addAccountCodes,
+                                 List<String> delAccountCodes) {
         ChatRoom chatRoom = null;
         if (!StringUtils.isBlank(chatRoomId)) {
             chatRoom = accessor.getById(chatRoomId, ChatRoom.class);
@@ -98,20 +98,22 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         if (chatRoom == null) {
             chatRoom = EntityFactory.createEntity(ChatRoom.class);
         }
-        chatRoom.setName(chatRoomName);
+        if (!StringUtils.isBlank(chatRoomName)) {
+            chatRoom.setName(chatRoomName);
+        }
         if (chatRoom.getMembers() != null && !chatRoom.getMembers().isEmpty()) {
-            for (String accountId : delAccountIds) {
+            for (String accountCode : delAccountCodes) {
                 chatRoom.getMembers().removeIf(member -> {
                     Account account = member.getAccount();
-                    return account != null && accountId.equals(account.getId());
+                    return account != null && accountCode.equals(account.getCode());
                 });
             }
         }
-        for (String accountId : addAccountIds) {
-            Account account = accessor.getById(accountId, Account.class);
+        for (String accountCode : addAccountCodes) {
+            Account account = accessor.getByCode(accountCode, Account.class);
             if (account == null) {
                 if (logger.isErrorEnabled()) {
-                    logger.error(String.format("The account[%s] not found.", accountId));
+                    logger.error(String.format("The account[%s] not found.", accountCode));
                 }
                 throw new UserInterfaceRbacErrorException(
                         UserInterfaceRbacErrorException.RbacErrors.ACCOUNT_NOT_FOUND
@@ -201,10 +203,10 @@ public class ChatRoomServiceImpl implements ChatRoomService {
      * @see ChatRoomService#topChatRoom(String, String, boolean)
      */
     @Override
-    public ChatRoomMember topChatRoom(String chatRoomId, String accountId, boolean isTop) {
-        if (StringUtils.isBlank(chatRoomId) || StringUtils.isBlank(accountId)) {
+    public ChatRoomMember topChatRoom(String chatRoomId, String accountCode, boolean isTop) {
+        if (StringUtils.isBlank(chatRoomId) || StringUtils.isBlank(accountCode)) {
             if (logger.isErrorEnabled()) {
-                logger.error("The chat room's id or account's id is blank.");
+                logger.error("The chat room's id or account's code is blank.");
             }
             throw new UserInterfaceSystemErrorException(
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
@@ -222,12 +224,12 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         if (chatRoom.getMembers() != null && !chatRoom.getMembers().isEmpty()) {
             for (ChatRoomMember member : chatRoom.getMembers()) {
                 Account account = member.getAccount();
-                if (account != null && accountId.equals(account.getId())) {
+                if (account != null && accountCode.equals(account.getCode())) {
                     member.setTop(isTop);
                     accessor.save(chatRoom);
                     if (logger.isDebugEnabled()) {
                         logger.debug(String.format("Top the chat room successfully, chat room: %s, account: %s.",
-                                chatRoomId, accountId));
+                                chatRoomId, accountCode));
                     }
                     return member;
                 }
@@ -235,7 +237,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         }
         if (logger.isWarnEnabled()) {
             logger.warn(String.format("Top the chat room fail, chat room: %s, account: %s.",
-                    chatRoomId, accountId));
+                    chatRoomId, accountCode));
         }
         return null;
     }
@@ -246,10 +248,10 @@ public class ChatRoomServiceImpl implements ChatRoomService {
      * @see ChatRoomService#changeMemberStatus(String, String, String)
      */
     @Override
-    public ChatRoomMember changeMemberStatus(String chatRoomId, String accountId, String status) {
-        if (StringUtils.isBlank(chatRoomId) || StringUtils.isBlank(accountId)) {
+    public ChatRoomMember changeMemberStatus(String chatRoomId, String accountCode, String status) {
+        if (StringUtils.isBlank(chatRoomId) || StringUtils.isBlank(accountCode)) {
             if (logger.isErrorEnabled()) {
-                logger.error("The chat room's id or account's id is blank.");
+                logger.error("The chat room's id or account's code is blank.");
             }
             throw new UserInterfaceSystemErrorException(
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
@@ -267,12 +269,12 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         if (chatRoom.getMembers() != null && !chatRoom.getMembers().isEmpty()) {
             for (ChatRoomMember member : chatRoom.getMembers()) {
                 Account account = member.getAccount();
-                if (account != null && accountId.equals(account.getId())) {
+                if (account != null && accountCode.equals(account.getCode())) {
                     member.setStatus(status);
                     accessor.save(chatRoom);
                     if (logger.isDebugEnabled()) {
                         logger.debug(String.format("Change the chat room's status successfully, chat room: %s, account: %s.",
-                                chatRoomId, accountId));
+                                chatRoomId, accountCode));
                     }
                     return member;
                 }
@@ -280,7 +282,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         }
         if (logger.isWarnEnabled()) {
             logger.warn(String.format("Change the chat room's status fail, chat room: %s, account: %s.",
-                    chatRoomId, accountId));
+                    chatRoomId, accountCode));
         }
         return null;
     }

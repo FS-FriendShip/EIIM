@@ -18,16 +18,16 @@ public interface ChatRoomService {
 
     List<ChatRoom> getAllChatRoomsByAccount(String accountId);
 
-    ChatRoom saveChatRoom(String chatRoomId, String chatRoomName, List<String> addAccountIds,
-                               List<String> delAccountIds);
+    ChatRoom saveChatRoom(String chatRoomId, String chatRoomName, List<String> addAccountCodes,
+                               List<String> delAccountCodes);
 
     void deleteChatRoom(String chatRoomId, String accountId);
 
     List<ChatRoomMember> getChatRoomMembers(String chatRoomId);
 
-    ChatRoomMember topChatRoom(String chatRoomId, String accountId, boolean isTop);
+    ChatRoomMember topChatRoom(String chatRoomId, String accountCode, boolean isTop);
 
-    ChatRoomMember changeMemberStatus(String chatRoomId, String accountId, String status);
+    ChatRoomMember changeMemberStatus(String chatRoomId, String accountCode, String status);
 
     List<ChatMessage> getAllUnreadMessage(String chatRoomId, String accountId);
 

@@ -1,11 +1,11 @@
 package com.fs.eiim.restful.vo.chat;
 
 public class ChatRoomMemberStatusVO {
-    private String accountId, status;
+    private String accountCode, status;
     private boolean isTop = false;
 
-    public String getAccountId() {
-        return accountId;
+    public String getAccountCode() {
+        return accountCode;
     }
 
     public String getStatus() {
@@ -16,8 +16,8 @@ public class ChatRoomMemberStatusVO {
         return isTop;
     }
 
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
+    public void setAccountCode(String accountCode) {
+        this.accountCode = accountCode;
     }
 
     public void setStatus(String status) {

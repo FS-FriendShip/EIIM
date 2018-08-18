@@ -4,8 +4,8 @@ import java.util.List;
 
 public class ChatRoomFormVO {
     private String id, name;
-    private List<String> addAccountIds;
-    private List<String> delAccountIds;
+    private List<String> addAccountCodes;
+    private List<String> delAccountCodes;
 
     public String getId() {
         return id;
@@ -15,12 +15,12 @@ public class ChatRoomFormVO {
         return name;
     }
 
-    public List<String> getAddAccountIds() {
-        return addAccountIds;
+    public List<String> getAddAccountCodes() {
+        return addAccountCodes;
     }
 
-    public List<String> getDelAccountIds() {
-        return delAccountIds;
+    public List<String> getDelAccountCodes() {
+        return delAccountCodes;
     }
 
     public void setId(String id) {
@@ -31,11 +31,11 @@ public class ChatRoomFormVO {
         this.name = name;
     }
 
-    public void setAddAccountIds(List<String> addAccountIds) {
-        this.addAccountIds = addAccountIds;
+    public void setAddAccountCodes(List<String> addAccountCodes) {
+        this.addAccountCodes = addAccountCodes;
     }
 
-    public void setDelAccountIds(List<String> delAccountIds) {
-        this.delAccountIds = delAccountIds;
+    public void setDelAccountCodes(List<String> delAccountCodes) {
+        this.delAccountCodes = delAccountCodes;
     }
 }
