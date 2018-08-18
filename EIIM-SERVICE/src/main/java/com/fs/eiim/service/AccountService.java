@@ -15,7 +15,7 @@ public interface AccountService {
 
     AccountState validateToken(String token);
 
-    void logout(String accountCode);
+    void logout(String accountId);
 
     List<AccountState> getAllAccountsStatus();
 }
