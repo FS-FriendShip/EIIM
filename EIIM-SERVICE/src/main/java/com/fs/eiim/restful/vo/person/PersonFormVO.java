@@ -4,11 +4,13 @@ import com.fs.eiim.dal.entity.Account;
 import com.fs.eiim.dal.entity.Person;
 import com.fs.eiim.service.BaseDataService;
 import org.mx.StringUtils;
+import org.mx.comps.rbac.dal.entity.User;
 import org.mx.dal.EntityFactory;
 
 public class PersonFormVO {
     private String id, firstName, lastName, title, phone, mobile, email, desc;
     private String accountId, nickname, avatar;
+    private User.Sex sex = User.Sex.NA;
 
     public BaseDataService.PersonAccountTuple get() {
         Person person = EntityFactory.createEntity(Person.class);
@@ -20,6 +22,7 @@ public class PersonFormVO {
         person.setMobile(mobile);
         person.setEmail(email);
         person.setDesc(desc);
+        person.setSex(sex);
 
         Account account = null;
         if (!StringUtils.isBlank(accountId)) {
@@ -93,6 +96,14 @@ public class PersonFormVO {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public User.Sex getSex() {
+        return sex;
+    }
+
+    public void setSex(User.Sex sex) {
+        this.sex = sex;
     }
 
     public String getAccountId() {

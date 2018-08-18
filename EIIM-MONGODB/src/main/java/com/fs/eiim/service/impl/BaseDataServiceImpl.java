@@ -174,6 +174,7 @@ public class BaseDataServiceImpl implements BaseDataService {
                 checkedPerson.setMobile(person.getMobile());
                 checkedPerson.setEmail(person.getEmail());
                 checkedPerson.setDesc(person.getDesc());
+                checkedPerson.setSex(person.getSex());
                 person = checkedPerson;
             }
         }
