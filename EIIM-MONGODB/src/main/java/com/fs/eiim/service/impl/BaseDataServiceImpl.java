@@ -67,7 +67,7 @@ public class BaseDataServiceImpl implements BaseDataService {
 
     @Override
     public List<Org> getAllOrgs() {
-        return accessor.find(GeneralAccessor.ConditionTuple.eq("parent", null), Org.class);
+        return accessor.find(GeneralAccessor.ConditionTuple.eq("parentId", null), Org.class);
     }
 
     @SuppressWarnings("unchecked")
@@ -132,8 +132,10 @@ public class BaseDataServiceImpl implements BaseDataService {
         org.setManager(manager);
         org.setEmployees(employees);
         org = accessor.save(org);
-        parent.getChildren().add(org);
-        accessor.save(parent);
+        if (parent != null) {
+            parent.getChildren().add(org);
+            accessor.save(parent);
+        }
         return org;
     }
 
