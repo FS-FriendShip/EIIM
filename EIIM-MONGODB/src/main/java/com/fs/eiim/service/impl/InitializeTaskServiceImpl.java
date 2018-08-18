@@ -84,6 +84,8 @@ public class InitializeTaskServiceImpl implements InitializeTaskService {
             admin.setPassword(DigestUtils.md5("edmund-EIIM"));
             admin.getRoles().add(roleAdmin);
             accessor.save(admin);
+            roleAdmin.getAccounts().add(admin);
+            accessor.save(roleAdmin);
             if (logger.isInfoEnabled()) {
                 logger.info("Create account[Administrator] successfully.");
             }
