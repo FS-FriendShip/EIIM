@@ -131,7 +131,10 @@ public class BaseDataServiceImpl implements BaseDataService {
         org.setParent(parent);
         org.setManager(manager);
         org.setEmployees(employees);
-        return accessor.save(org);
+        org = accessor.save(org);
+        parent.getChildren().add(org);
+        accessor.save(parent);
+        return org;
     }
 
     @Override
