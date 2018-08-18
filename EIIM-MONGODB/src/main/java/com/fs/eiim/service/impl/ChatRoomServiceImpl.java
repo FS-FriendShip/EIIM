@@ -86,11 +86,11 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     /**
      * {@inheritDoc}
      *
-     * @see ChatRoomService#saveChatRoom(String, String, List, List)
+     * @see ChatRoomService#saveChatRoom(String, String, List, List, String)
      */
     @Override
     public ChatRoom saveChatRoom(String chatRoomId, String chatRoomName, List<String> addAccountCodes,
-                                 List<String> delAccountCodes) {
+                                 List<String> delAccountCodes, String creatorCode) {
         ChatRoom chatRoom = null;
         if (!StringUtils.isBlank(chatRoomId)) {
             chatRoom = accessor.getById(chatRoomId, ChatRoom.class);
@@ -101,7 +101,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         if (!StringUtils.isBlank(chatRoomName)) {
             chatRoom.setName(chatRoomName);
         }
-        if (chatRoom.getMembers() != null && !chatRoom.getMembers().isEmpty()) {
+        if (chatRoom.getMembers() != null && !chatRoom.getMembers().isEmpty() && delAccountCodes != null) {
             for (String accountCode : delAccountCodes) {
                 chatRoom.getMembers().removeIf(member -> {
                     Account account = member.getAccount();
@@ -109,19 +109,33 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 });
             }
         }
-        for (String accountCode : addAccountCodes) {
-            Account account = accessor.getByCode(accountCode, Account.class);
-            if (account == null) {
+        if (addAccountCodes != null) {
+            for (String accountCode : addAccountCodes) {
+                Account account = accessor.getByCode(accountCode, Account.class);
+                if (account == null) {
+                    if (logger.isErrorEnabled()) {
+                        logger.error(String.format("The account[%s] not found.", accountCode));
+                    }
+                    throw new UserInterfaceRbacErrorException(
+                            UserInterfaceRbacErrorException.RbacErrors.ACCOUNT_NOT_FOUND
+                    );
+                }
+                ChatRoomMember member = new ChatRoomEntity.ChatRoomMemberEntity();
+                member.setAccount(account);
+                chatRoom.getMembers().add(member);
+            }
+        }
+        if (!StringUtils.isBlank(creatorCode)) {
+            Account creator = accessor.getByCode(creatorCode, Account.class);
+            if (creator == null) {
                 if (logger.isErrorEnabled()) {
-                    logger.error(String.format("The account[%s] not found.", accountCode));
+                    logger.error(String.format("The account[%s] not found.", creator));
                 }
                 throw new UserInterfaceRbacErrorException(
                         UserInterfaceRbacErrorException.RbacErrors.ACCOUNT_NOT_FOUND
                 );
             }
-            ChatRoomMember member = new ChatRoomEntity.ChatRoomMemberEntity();
-            member.setAccount(account);
-            chatRoom.getMembers().add(member);
+            chatRoom.setCreator(creator);
         }
         return accessor.save(chatRoom);
     }

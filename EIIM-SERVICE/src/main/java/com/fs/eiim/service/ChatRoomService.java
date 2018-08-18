@@ -19,7 +19,7 @@ public interface ChatRoomService {
     List<ChatRoom> getAllChatRoomsByAccount(String accountId);
 
     ChatRoom saveChatRoom(String chatRoomId, String chatRoomName, List<String> addAccountCodes,
-                               List<String> delAccountCodes);
+                               List<String> delAccountCodes, String creatorCode);
 
     void deleteChatRoom(String chatRoomId, String accountId);
 
