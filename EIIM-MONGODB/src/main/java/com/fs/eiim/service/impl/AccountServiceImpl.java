@@ -31,7 +31,8 @@ public class AccountServiceImpl implements AccountService {
     /**
      * 构造函数
      *
-     * @param accessor 数据库访问接口
+     * @param accessor   数据库访问接口
+     * @param jwtService JWT服务接口
      */
     @Autowired
     public AccountServiceImpl(@Qualifier("generalDictAccessorMongodb") GeneralDictAccessor accessor,
@@ -116,7 +117,7 @@ public class AccountServiceImpl implements AccountService {
             }
             throw new UserInterfaceEiimErrorException(UserInterfaceEiimErrorException.EiimErrors.ACCOUNT_BLANK_TOKEN);
         }
-        JwtService.JwtVerifyResult result =jwtService.verify(token);
+        JwtService.JwtVerifyResult result = jwtService.verify(token);
         if (result.isPassed()) {
             // 验证通过
             String accountCode = result.getClaims().get("code").asString();
