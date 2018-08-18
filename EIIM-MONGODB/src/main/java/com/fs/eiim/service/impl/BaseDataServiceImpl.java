@@ -274,6 +274,8 @@ public class BaseDataServiceImpl implements BaseDataService {
             account.setDesc(person.getFullName());
             account.setValid(true);
             accessor.save(account);
+            roleUser.getAccounts().add(account);
+            accessor.save(roleUser);
             if (logger.isDebugEnabled()) {
                 logger.debug(String.format("Enable persion[%s]'s account sccuessfully, the eiim code: %s.",
                         person.getFullName(), account.getEiimCode()));
