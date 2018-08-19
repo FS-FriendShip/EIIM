@@ -1,9 +1,6 @@
 package com.fs.eiim.config;
 
-import com.fs.eiim.restful.AccountServiceResource;
-import com.fs.eiim.restful.ChatRoomServiceResource;
-import com.fs.eiim.restful.OrgServiceResource;
-import com.fs.eiim.restful.PersonServiceResource;
+import com.fs.eiim.restful.*;
 import com.fs.eiim.task.EiimInitializeTask;
 import org.mx.service.server.config.ServerConfig;
 import org.mx.spring.config.SpringConfig;
@@ -41,6 +38,6 @@ public class EiimServiceConfig {
     @Bean("restfulClassesEiim")
     public List<Class<?>> restfulClassesEiim() {
         return Arrays.asList(PersonServiceResource.class, AccountServiceResource.class, ChatRoomServiceResource.class,
-                OrgServiceResource.class);
+                OrgServiceResource.class, BaseDataServiceResource.class);
     }
 }

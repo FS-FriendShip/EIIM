@@ -1,12 +1,11 @@
 package com.fs.eiim.service;
 
 import com.fs.eiim.dal.entity.Account;
-import com.fs.eiim.dal.entity.BaseDataItem;
 import com.fs.eiim.dal.entity.Org;
 import com.fs.eiim.dal.entity.Person;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 描述： 基础数据服务接口定义
@@ -20,7 +19,11 @@ public interface BaseDataService {
      *
      * @return 字典数据项集合，Key形如："字典代码-字典项代码"
      */
-    Map<String, BaseDataItem> getAllBaseData();
+    List<BaseData> getAllBaseData();
+
+    List<BaseDataItem> getBaseDataItems(String categoryCode);
+
+    BaseDataItem getBaseDataItem(String categoryCode, String code);
 
     List<Org> getAllOrgs();
 
@@ -37,6 +40,89 @@ public interface BaseDataService {
     PersonAccountTuple enablePersonAccount(String personId, AccountInitialInfo accountInfo);
 
     void changeAccountPassword(String accountCode, String oldPassword, String newPassword);
+
+    class BaseData {
+        private String id, code, name;
+        private List<BaseDataItem> items = new ArrayList<>();
+
+        public BaseData(String id, String code, String name) {
+            super();
+            this.id = id;
+            this.code = code;
+            this.name = name;
+        }
+
+        public BaseData(String id, String code, String name, List<BaseDataItem> items) {
+            this(id, code, name);
+            this.items = items;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public List<BaseDataItem> getItems() {
+            return items;
+        }
+    }
+
+    class BaseDataItem {
+        private String code, name, value, parentCode;
+        private BaseDataItem parent;
+        private List<BaseDataItem> children = new ArrayList<>();
+
+        public BaseDataItem(String code, String name, String value) {
+            super();
+            this.code = code;
+            this.name = name;
+            this.value = value;
+        }
+
+        public BaseDataItem(String code, String name, String value, String parentCode) {
+            this(code, name, value);
+            this.parentCode = parentCode;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public String getParentCode() {
+            return parentCode;
+        }
+
+        public BaseDataItem getParent() {
+            return parent;
+        }
+
+        public List<BaseDataItem> getChildren() {
+            return children;
+        }
+
+        public void setParent(BaseDataItem parent) {
+            this.parent = parent;
+        }
+
+        public void setChildren(List<BaseDataItem> children) {
+            this.children = children;
+        }
+    }
 
     class PersonAccountTuple {
         private Person person;

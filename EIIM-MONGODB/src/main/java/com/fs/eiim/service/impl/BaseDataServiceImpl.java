@@ -1,6 +1,8 @@
 package com.fs.eiim.service.impl;
 
-import com.fs.eiim.dal.entity.*;
+import com.fs.eiim.dal.entity.Account;
+import com.fs.eiim.dal.entity.Org;
+import com.fs.eiim.dal.entity.Person;
 import com.fs.eiim.error.UserInterfaceEiimErrorException;
 import com.fs.eiim.service.BaseDataService;
 import org.apache.commons.logging.Log;
@@ -17,10 +19,12 @@ import org.mx.error.UserInterfaceSystemErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 描述： 基础数据服务实现类定义
@@ -46,23 +50,106 @@ public class BaseDataServiceImpl implements BaseDataService {
         this.accessor = accessor;
     }
 
+    @Cacheable(key = "'baseData.'.concat(#categoryCode)")
+    @Override
+    public List<BaseDataItem> getBaseDataItems(String categoryCode) {
+        if (StringUtils.isBlank(categoryCode)) {
+            throw new UserInterfaceSystemErrorException(
+                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            );
+        }
+        List<BaseData> list = getAllBaseData();
+        if (list != null && !list.isEmpty()) {
+            for (BaseData baseData : list) {
+                if (baseData.getCode().equals(categoryCode)) {
+                    return baseData.getItems();
+                }
+            }
+        }
+        return null;
+    }
+
+    @Cacheable(key = "'baseData.'.concat(#categoryCode).concat(#code)")
+    @Override
+    public BaseDataItem getBaseDataItem(String categoryCode, String code) {
+        if (StringUtils.isBlank(categoryCode) || StringUtils.isBlank(code)) {
+            throw new UserInterfaceSystemErrorException(
+                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            );
+        }
+        List<BaseDataItem> list = getBaseDataItems(categoryCode);
+        if (list != null && !list.isEmpty()) {
+            for (BaseDataItem item : list) {
+                if (item.getCode().equals(code)) {
+                    return item;
+                }
+            }
+        }
+        return null;
+    }
+
+    @CachePut(key = "'baseData.'.concat(#categoryCode)")
+    public List<BaseDataItem> putBaseDataItemListCache(String categoryCode, List<BaseDataItem> items) {
+        return items;
+    }
+
+    @CachePut(key = "'baseData.'.concat(#categoryCode).concat(#code)")
+    public BaseDataItem putBaseDataItemCache(String categoryCode, String code, BaseDataItem item) {
+        return item;
+    }
+
     /**
      * {@inheritDoc}
      *
      * @see BaseDataService#getAllBaseData()
      */
-    @Cacheable(key = "'baseData'")
     @Override
-    public Map<String, BaseDataItem> getAllBaseData() {
-        List<BaseData> baseDatas = accessor.list(BaseData.class, true);
-        Map<String, BaseDataItem> map = new HashMap<>(baseDatas.size());
-        for (BaseData baseData : baseDatas) {
-            for (BaseDataItem item : baseData.getItems()) {
-                String key = String.format("%s-%s", baseData.getCode(), item.getCode());
-                map.put(key, item);
+    public List<BaseData> getAllBaseData() {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Load base data from db.");
+        }
+        List<com.fs.eiim.dal.entity.BaseData> baseDatas = accessor.list(com.fs.eiim.dal.entity.BaseData.class, true);
+        List<BaseData> list = new ArrayList<>();
+        if (baseDatas != null && !baseDatas.isEmpty()) {
+            for (com.fs.eiim.dal.entity.BaseData baseData : baseDatas) {
+                Set<? extends com.fs.eiim.dal.entity.BaseDataItem> itemEntities = baseData.getItems();
+                List<BaseDataItem> items = new ArrayList<>();
+                if (itemEntities != null && !itemEntities.isEmpty()) {
+                    Map<String, BaseDataItem> mapItems = new HashMap<>();
+                    boolean isTree = false;
+                    for (com.fs.eiim.dal.entity.BaseDataItem item : itemEntities) {
+                        BaseDataItem itemData = new BaseDataItem(item.getCode(), item.getName(), item.getValue(),
+                                item.getParentCode());
+                        mapItems.put(item.getCode(), itemData);
+                        putBaseDataItemCache(baseData.getCode(), item.getCode(), itemData);
+                        if (!isTree && !StringUtils.isBlank(item.getParentCode())) {
+                            isTree = true;
+                        }
+                    }
+                    if (isTree) {
+                        // 树
+                        mapItems.values().forEach(item -> {
+                            BaseDataItem parent = mapItems.get(item.getCode());
+                            item.setParent(parent);
+                            if (parent != null) {
+                                if (parent.getChildren() == null) {
+                                    parent.setChildren(new ArrayList<>());
+                                }
+                                parent.getChildren().add(item);
+                            }
+                        });
+                        items.addAll(mapItems.values().stream().filter(item -> item.getParent() == null)
+                                .collect(Collectors.toList()));
+                    } else {
+                        // 非树
+                        items.addAll(mapItems.values());
+                    }
+                }
+                list.add(new BaseData(baseData.getId(), baseData.getCode(), baseData.getName(), items));
+                putBaseDataItemListCache(baseData.getCode(), items);
             }
         }
-        return map;
+        return list;
     }
 
     @Override
