@@ -4,6 +4,7 @@ import com.fs.eiim.dal.entity.Account;
 import com.fs.eiim.dal.entity.Org;
 import com.fs.eiim.dal.entity.Person;
 import com.fs.eiim.error.UserInterfaceEiimErrorException;
+import com.fs.eiim.service.BaseDataCacheService;
 import com.fs.eiim.service.BaseDataService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,7 +20,6 @@ import org.mx.error.UserInterfaceSystemErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
@@ -38,16 +38,20 @@ public class BaseDataServiceImpl implements BaseDataService {
     private static final Log logger = LogFactory.getLog(BaseDataServiceImpl.class);
 
     private GeneralDictAccessor accessor;
+    private BaseDataCacheService baseDataCacheService;
 
     /**
      * 构造函数
      *
-     * @param accessor 数据库访问接口
+     * @param accessor             数据库访问接口
+     * @param baseDataCacheService 基础字典数据缓存服务接口
      */
     @Autowired
-    public BaseDataServiceImpl(@Qualifier("generalDictAccessorMongodb") GeneralDictAccessor accessor) {
+    public BaseDataServiceImpl(@Qualifier("generalDictAccessorMongodb") GeneralDictAccessor accessor,
+                               BaseDataCacheService baseDataCacheService) {
         super();
         this.accessor = accessor;
+        this.baseDataCacheService = baseDataCacheService;
     }
 
     @Cacheable(key = "'baseData.'.concat(#categoryCode)")
@@ -88,16 +92,6 @@ public class BaseDataServiceImpl implements BaseDataService {
         return null;
     }
 
-    @CachePut(key = "'baseData.'.concat(#categoryCode)")
-    public List<BaseDataItem> putBaseDataItemListCache(String categoryCode, List<BaseDataItem> items) {
-        return items;
-    }
-
-    @CachePut(key = "'baseData.'.concat(#categoryCode).concat(#code)")
-    public BaseDataItem putBaseDataItemCache(String categoryCode, String code, BaseDataItem item) {
-        return item;
-    }
-
     /**
      * {@inheritDoc}
      *
@@ -121,7 +115,7 @@ public class BaseDataServiceImpl implements BaseDataService {
                         BaseDataItem itemData = new BaseDataItem(item.getCode(), item.getName(), item.getValue(),
                                 item.getParentCode());
                         mapItems.put(item.getCode(), itemData);
-                        putBaseDataItemCache(baseData.getCode(), item.getCode(), itemData);
+                        baseDataCacheService.putBaseDataItemCache(baseData.getCode(), item.getCode(), itemData);
                         if (!isTree && !StringUtils.isBlank(item.getParentCode())) {
                             isTree = true;
                         }
@@ -146,7 +140,7 @@ public class BaseDataServiceImpl implements BaseDataService {
                     }
                 }
                 list.add(new BaseData(baseData.getId(), baseData.getCode(), baseData.getName(), items));
-                putBaseDataItemListCache(baseData.getCode(), items);
+                baseDataCacheService.putBaseDataItemListCache(baseData.getCode(), items);
             }
         }
         return list;
