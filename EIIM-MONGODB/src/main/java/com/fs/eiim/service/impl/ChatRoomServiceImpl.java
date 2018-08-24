@@ -351,6 +351,56 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     /**
      * {@inheritDoc}
      *
+     * @see ChatRoomService#saveChatMessage(String, String, String, String, String)
+     */
+    @Override
+    public ChatRoom saveChatMessage(String accoutnCode, String eiimCode, String chatRoomId, String messageType,
+                                    String message) {
+        if (StringUtils.isBlank(accoutnCode) || StringUtils.isBlank(chatRoomId) || StringUtils.isBlank(messageType) ||
+                StringUtils.isBlank(message)) {
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format("Any parameter invalid, account code: %s, chat room id: %s, " +
+                        "message type: %s, message: %s.", accoutnCode, chatRoomId, messageType, message));
+            }
+            throw new UserInterfaceSystemErrorException(
+                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            );
+        }
+        Account sender = accessor.getByCode(accoutnCode, Account.class);
+        if (sender == null) {
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format("The account[%s] not found.", accoutnCode));
+            }
+            throw new UserInterfaceRbacErrorException(
+                    UserInterfaceRbacErrorException.RbacErrors.ACCOUNT_NOT_FOUND
+            );
+        }
+        ChatRoom chatRoom = accessor.getById(chatRoomId, ChatRoom.class);
+        if (chatRoom == null) {
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format("The chat room[%s] not found.", chatRoomId));
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.CHATROOM_NOT_FOUND
+            );
+        }
+        ChatMessage chatMessage = EntityFactory.createEntity(ChatMessage.class);
+        chatMessage.setChatRoom(chatRoom);
+        chatMessage.setMessage(message);
+        chatMessage.setMessageType(messageType);
+        chatMessage.setSender(sender);
+        chatMessage.setSentTime(System.currentTimeMillis());
+        accessor.save(chatMessage);
+        if (logger.isDebugEnabled()) {
+            logger.debug(String.format("Save a chat message successfully, chat room id: %s, account code: %s," +
+                    "message type: %s, message: %s.", chatRoomId, accoutnCode, messageType, message));
+        }
+        return chatRoom;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
      * @see ChatRoomService#getAllChatRoomNotices(String)
      */
     @Override

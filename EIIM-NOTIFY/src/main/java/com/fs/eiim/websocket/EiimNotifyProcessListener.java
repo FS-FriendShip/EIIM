@@ -15,7 +15,7 @@ public class EiimNotifyProcessListener implements NotifyProcessListener {
      */
     @Override
     public void before(JSONObject data) {
-        // TODO
+        // do nothing
     }
 
     /**
@@ -25,6 +25,6 @@ public class EiimNotifyProcessListener implements NotifyProcessListener {
      */
     @Override
     public void after(JSONObject data, boolean success, Set<String> invalidDevices) {
-        // TODO
+        // do nothing
     }
 }

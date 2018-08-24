@@ -1,13 +1,13 @@
 package com.fs.eiim;
 
 import com.fs.eiim.config.EiimNotifyServerConfig;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 
-@Configuration
+//@Configuration
 @PropertySource({
-        "classpath:server.properties"
+        "classpath:server.properties",
+        "classpath:notify.properties"
 })
 @Import({
         EiimNotifyServerConfig.class
