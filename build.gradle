@@ -12,15 +12,7 @@ project(':EIIM-NOTIFY') {
 
     dependencies {
         compile(
-                libs.'fastjson',
-                libs.'log4j-api',
-                libs.'log4j-core',
-                libs.'log4j-jcl',
-                libs.'log4j-slf4j-impl',
-                libs.'slf4j-api',
-        		libs.'mx-utils',
-		        libs.'mx-spring',
-		        libs.'mx-service-utils',
+                project(':EIIM-SERVICE'),
 		        libs.'mx-notify-server'
         )
     }
@@ -32,7 +24,15 @@ project(':EIIM-SERVICE') {
 
     dependencies {
         compile(
-                project(':EIIM-NOTIFY'),
+                libs.'fastjson',
+                libs.'log4j-api',
+                libs.'log4j-core',
+                libs.'log4j-jcl',
+                libs.'log4j-slf4j-impl',
+                libs.'slf4j-api',
+                libs.'mx-utils',
+                libs.'mx-spring',
+                libs.'mx-service-utils',
                 libs.'mx-dal',
 		        libs.'mx-rbac-service'
         )
