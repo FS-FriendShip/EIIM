@@ -60,4 +60,20 @@ project(':EIIM-MONGODB') {
     }
 }
 
+project(':EIIM-ALLINONE') {
+    version = '1.0.0'
+    description = 'All modules in one for EIIM.'
+
+    dependencies {
+        compile(
+                project(':EIIM-SERVICE'),
+                project(':EIIM-MONGODB'),
+                project(':EIIM-NOTIFY')
+        )
+        testCompile(
+                libs.'mongodb-embed'
+        )
+    }
+}
+
 apply from: './subproject.gradle'
