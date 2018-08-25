@@ -115,7 +115,7 @@ public class ChatMessageEntity extends MongoBaseEntity implements ChatMessage {
      * @see ChatMessage#setMessage(String)
      */
     @Override
-    public void setMessage(String essage) {
-        this.message = messageType;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

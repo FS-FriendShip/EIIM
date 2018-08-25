@@ -27,5 +27,5 @@ public interface ChatMessage extends Base {
 
     String getMessage();
 
-    void setMessage(String essage);
+    void setMessage(String message);
 }

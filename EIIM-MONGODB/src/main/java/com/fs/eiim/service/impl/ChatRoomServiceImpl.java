@@ -59,10 +59,10 @@ public class ChatRoomServiceImpl implements ChatRoomService {
      * @see ChatRoomService#getAllChatRoomsByAccount(String)
      */
     @Override
-    public List<ChatRoom> getAllChatRoomsByAccount(String accountId) {
-        if (StringUtils.isBlank(accountId)) {
+    public List<ChatRoom> getAllChatRoomsByAccount(String accountCode) {
+        if (StringUtils.isBlank(accountCode)) {
             if (logger.isErrorEnabled()) {
-                logger.error("The account's id is blank.");
+                logger.error("The account's code is blank.");
             }
             throw new UserInterfaceSystemErrorException(
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
@@ -74,7 +74,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             if (members != null && !members.isEmpty()) {
                 for (ChatRoomMember member : members) {
                     Account account = member.getAccount();
-                    if (account != null && accountId.equals(account.getId())) {
+                    if (account != null && accountCode.equals(account.getCode())) {
                         return true;
                     }
                 }
@@ -146,10 +146,10 @@ public class ChatRoomServiceImpl implements ChatRoomService {
      * @see ChatRoomService#deleteChatRoom(String, String)
      */
     @Override
-    public void deleteChatRoom(String chatRoomId, String accountId) {
-        if (StringUtils.isBlank(chatRoomId) || StringUtils.isBlank(accountId)) {
+    public void deleteChatRoom(String chatRoomId, String accountCode) {
+        if (StringUtils.isBlank(chatRoomId) || StringUtils.isBlank(accountCode)) {
             if (logger.isErrorEnabled()) {
-                logger.error("The chat room's id or account's id is blank.");
+                logger.error("The chat room's id or account's code is blank.");
             }
             throw new UserInterfaceSystemErrorException(
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
@@ -167,12 +167,12 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         if (chatRoom.getMembers() != null && !chatRoom.getMembers().isEmpty()) {
             for (ChatRoomMember member : chatRoom.getMembers()) {
                 Account account = member.getAccount();
-                if (account != null && accountId.equals(account.getId())) {
+                if (account != null && accountCode.equals(account.getCode())) {
                     member.setValid(false);
                     accessor.save(chatRoom);
                     if (logger.isDebugEnabled()) {
                         logger.debug(String.format("Delete the chat room successfully, chat room: %s, account: %s.",
-                                chatRoomId, accountId));
+                                chatRoomId, accountCode));
                     }
                     return;
                 }
@@ -180,7 +180,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         }
         if (logger.isWarnEnabled()) {
             logger.warn(String.format("Delete the chat room fail, chat room: %s, account: %s.",
-                    chatRoomId, accountId));
+                    chatRoomId, accountCode));
         }
     }
 
@@ -307,10 +307,10 @@ public class ChatRoomServiceImpl implements ChatRoomService {
      * @see ChatRoomService#getAllUnreadMessage(String, String)
      */
     @Override
-    public List<ChatMessage> getAllUnreadMessage(String chatRoomId, String accountId) {
-        if (StringUtils.isBlank(chatRoomId) || StringUtils.isBlank(accountId)) {
+    public List<ChatMessage> getAllUnreadMessage(String chatRoomId, String accountCode) {
+        if (StringUtils.isBlank(chatRoomId) || StringUtils.isBlank(accountCode)) {
             if (logger.isErrorEnabled()) {
-                logger.error("The chat room's id or account's id is blank.");
+                logger.error("The chat room's id or account's code is blank.");
             }
             throw new UserInterfaceSystemErrorException(
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
@@ -325,10 +325,10 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                     UserInterfaceEiimErrorException.EiimErrors.CHATROOM_NOT_FOUND
             );
         }
-        Account account = accessor.getById(accountId, Account.class);
+        Account account = accessor.getByCode(accountCode, Account.class);
         if (account == null) {
             if (logger.isErrorEnabled()) {
-                logger.error(String.format("The account[%s] not found.", accountId));
+                logger.error(String.format("The account[%s] not found.", accountCode));
             }
             throw new UserInterfaceRbacErrorException(
                     UserInterfaceRbacErrorException.RbacErrors.ACCOUNT_NOT_FOUND
@@ -337,7 +337,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         long lastAccessTime = 0;
         if (chatRoom.getMembers() != null && !chatRoom.getMembers().isEmpty()) {
             for (ChatRoomMember member : chatRoom.getMembers()) {
-                if (member.getAccount() != null && accountId.equals(member.getAccount().getId())) {
+                if (member.getAccount() != null && accountCode.equals(member.getAccount().getCode())) {
                     lastAccessTime = member.getLastAccessTime();
                 }
             }

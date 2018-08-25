@@ -16,12 +16,12 @@ import java.util.List;
 public interface ChatRoomService {
     List<ChatRoom> getAllChatRooms();
 
-    List<ChatRoom> getAllChatRoomsByAccount(String accountId);
+    List<ChatRoom> getAllChatRoomsByAccount(String accountCode);
 
     ChatRoom saveChatRoom(String chatRoomId, String chatRoomName, List<String> addAccountCodes,
                                List<String> delAccountCodes, String creatorCode);
 
-    void deleteChatRoom(String chatRoomId, String accountId);
+    void deleteChatRoom(String chatRoomId, String accountCode);
 
     List<ChatRoomMember> getChatRoomMembers(String chatRoomId);
 
@@ -29,7 +29,7 @@ public interface ChatRoomService {
 
     ChatRoomMember changeMemberStatus(String chatRoomId, String accountCode, String status);
 
-    List<ChatMessage> getAllUnreadMessage(String chatRoomId, String accountId);
+    List<ChatMessage> getAllUnreadMessage(String chatRoomId, String accountCode);
 
     ChatRoom saveChatMessage(String accoutnCode, String eiimCode, String chatRoomId, String messageType, String message);
 

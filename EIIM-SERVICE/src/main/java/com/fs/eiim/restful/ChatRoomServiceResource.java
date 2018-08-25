@@ -59,11 +59,11 @@ public class ChatRoomServiceResource {
         }
     }
 
-    @Path("chatRooms/accounts/{accountId}")
+    @Path("chatRooms/accounts/{accountCode}")
     @GET
-    public DataVO<List<ChatRoomInfoVO>> getAllChatRoomsByAccount(@PathParam("accountId") String accountId) {
+    public DataVO<List<ChatRoomInfoVO>> getAllChatRoomsByAccount(@PathParam("accountCode") String accountCode) {
         try {
-            List<ChatRoom> chatRooms = chatRoomService.getAllChatRoomsByAccount(accountId);
+            List<ChatRoom> chatRooms = chatRoomService.getAllChatRoomsByAccount(accountCode);
             return new DataVO<>(ChatRoomInfoVO.valueOf(chatRooms));
         } catch (UserInterfaceException ex) {
             return new DataVO<>(ex);
@@ -134,14 +134,13 @@ public class ChatRoomServiceResource {
         }
     }
 
-    @Path("chatRooms/{chatRoomId}/accounts/{accountId}")
+    @Path("chatRooms/{chatRoomId}/accounts/{accountCode}")
     @DELETE
     public DataVO<Boolean> deleteChatRoom(@PathParam("chatRoomId") String chatRoomId,
-                                          @PathParam("accountId") String accountId,
-                                          @QueryParam("accountCode") String accountCode) {
+                                          @PathParam("accountCode") String accountCode) {
         try {
             sessionDataStore.setCurrentUserCode(accountCode);
-            chatRoomService.deleteChatRoom(chatRoomId, accountId);
+            chatRoomService.deleteChatRoom(chatRoomId, accountCode);
             sessionDataStore.removeCurrentUserCode();
             return new DataVO<>(true);
         } catch (UserInterfaceException ex) {
@@ -261,12 +260,12 @@ public class ChatRoomServiceResource {
         }
     }
 
-    @Path("chatRooms/{chatRoomId}/accounts/{accountId}/unread")
+    @Path("chatRooms/{chatRoomId}/accounts/{accountCode}/unread")
     @GET
     public DataVO<List<ChatMessageVO>> getAllUnreadMessages(@PathParam("chatRoomId") String chatRoomId,
-                                                            @PathParam("accountId") String accountId) {
+                                                            @PathParam("accountCode") String accountCode) {
         try {
-            List<ChatMessage> messages = chatRoomService.getAllUnreadMessage(chatRoomId, accountId);
+            List<ChatMessage> messages = chatRoomService.getAllUnreadMessage(chatRoomId, accountCode);
             return new DataVO<>(ChatMessageVO.valueOf(messages));
         } catch (UserInterfaceException ex) {
             return new DataVO<>(ex);

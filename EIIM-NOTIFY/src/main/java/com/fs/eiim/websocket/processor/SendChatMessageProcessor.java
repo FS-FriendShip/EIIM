@@ -2,6 +2,7 @@ package com.fs.eiim.websocket.processor;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fs.eiim.dal.entity.ChatRoom;
+import com.fs.eiim.dal.entity.ChatRoomMember;
 import com.fs.eiim.service.ChatRoomService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -12,6 +13,7 @@ import org.mx.comps.notify.online.OnlineDevice;
 import org.mx.comps.notify.online.OnlineManager;
 import org.mx.comps.notify.processor.MessageProcessor;
 import org.mx.comps.notify.processor.NotifyProcessor;
+import org.mx.dal.session.SessionDataStore;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,13 +36,15 @@ public class SendChatMessageProcessor implements MessageProcessor {
     private ChatRoomService chatRoomService;
     private NotifyProcessor notifyProcessor;
     private OnlineManager onlineManager;
+    private SessionDataStore sessionDataStore;
 
     public SendChatMessageProcessor(ChatRoomService chatRoomService, NotifyProcessor notifyProcessor,
-                                    OnlineManager onlineManager) {
+                                    OnlineManager onlineManager, SessionDataStore sessionDataStore) {
         super();
         this.chatRoomService = chatRoomService;
         this.notifyProcessor = notifyProcessor;
         this.onlineManager = onlineManager;
+        this.sessionDataStore = sessionDataStore;
     }
 
     @Override
@@ -72,11 +76,20 @@ public class SendChatMessageProcessor implements MessageProcessor {
                                 "message type: %s, message: %s.", accountCode, chatRoomId, messageType, message));
                     }
                 } else {
+                    sessionDataStore.setCurrentUserCode(accountCode);
                     // 调用消息保存服务
                     ChatRoom chatRoom = chatRoomService.saveChatMessage(accountCode, eiimCode, chatRoomId, messageType, message);
+                    Set<ChatRoomMember> members = chatRoom.getMembers();
                     // 获取在本聊天室中的在线用户
                     Set<OnlineDevice> onlineDevices = onlineManager.getOnlineDevices(Collections.singletonList(
-                            onlineDevice -> onlineDevice.getDeviceId().startsWith(accountCode)
+                            onlineDevice -> {
+                                for (ChatRoomMember member : members) {
+                                    if (onlineDevice.getDeviceId().startsWith(member.getAccount().getCode())) {
+                                        return true;
+                                    }
+                                }
+                                return false;
+                            }
                     ));
                     if (onlineDevices != null && !onlineDevices.isEmpty()) {
                         // 封装聊天数据推送对象
@@ -104,6 +117,7 @@ public class SendChatMessageProcessor implements MessageProcessor {
                             logger.warn(String.format("The chat room[%s] has none member online.", chatRoomId));
                         }
                     }
+                    sessionDataStore.removeCurrentUserCode();
                 }
             }
             return true;
