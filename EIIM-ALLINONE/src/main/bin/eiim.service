@@ -1,0 +1,11 @@
+[Unit]
+Description=The all in one application server for EIIM.
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/opt/EIIM-ALLINONE/bin/start-server.sh
+ExecStop=/opt/EIIM-ALLINONE/bin/stop-server.sh
+
+[Install]
+WantedBy=multi-user.target
