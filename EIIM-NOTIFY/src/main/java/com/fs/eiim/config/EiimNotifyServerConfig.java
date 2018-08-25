@@ -25,7 +25,7 @@ public class EiimNotifyServerConfig {
      * @param onlineManager   在线设备管理器接口
      * @return 处理器
      */
-    @Bean(name = "sendChatMessageProcessor")
+    @Bean(name = "sendChatMessageCommandProcessor")
     public SendChatMessageProcessor sendChatMessageProcessor(ChatRoomService chatRoomService,
                                                              NotifyProcessor notifyProcessor,
                                                              OnlineManager onlineManager) {
