@@ -4,14 +4,12 @@ import com.fs.eiim.dal.entity.ChatMessage;
 import com.fs.eiim.dal.entity.ChatNotice;
 import com.fs.eiim.dal.entity.ChatRoom;
 import com.fs.eiim.dal.entity.ChatRoomMember;
-import com.fs.eiim.error.UserInterfaceEiimErrorException;
 import com.fs.eiim.restful.vo.chat.*;
 import com.fs.eiim.service.ChatRoomService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mx.StringUtils;
 import org.mx.dal.session.SessionDataStore;
-import org.mx.error.UserInterfaceException;
 import org.mx.error.UserInterfaceSystemErrorException;
 import org.mx.service.rest.vo.DataVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,34 +45,15 @@ public class ChatRoomServiceResource {
     @Path("chatRooms")
     @GET
     public DataVO<List<ChatRoomInfoVO>> getAllChatRooms() {
-        try {
-            List<ChatRoom> chatRooms = chatRoomService.getAllChatRooms();
-            return new DataVO<>(ChatRoomInfoVO.valueOf(chatRooms));
-        } catch (UserInterfaceException ex) {
-            return new DataVO<>(ex);
-        } catch (Exception ex) {
-            return new DataVO<>(new UserInterfaceEiimErrorException(
-                    UserInterfaceEiimErrorException.EiimErrors.EIIM_OTHER_FAIL
-            ));
-        }
+        List<ChatRoom> chatRooms = chatRoomService.getAllChatRooms();
+        return new DataVO<>(ChatRoomInfoVO.valueOf(chatRooms));
     }
 
     @Path("chatRooms/accounts/{accountCode}")
     @GET
     public DataVO<List<ChatRoomInfoVO>> getAllChatRoomsByAccount(@PathParam("accountCode") String accountCode) {
-        try {
-            List<ChatRoom> chatRooms = chatRoomService.getAllChatRoomsByAccount(accountCode);
-            return new DataVO<>(ChatRoomInfoVO.valueOf(chatRooms));
-        } catch (UserInterfaceException ex) {
-            return new DataVO<>(ex);
-        } catch (Exception ex) {
-            if (logger.isErrorEnabled()) {
-                logger.error("Get all chat rooms fail.", ex);
-            }
-            return new DataVO<>(new UserInterfaceEiimErrorException(
-                    UserInterfaceEiimErrorException.EiimErrors.EIIM_OTHER_FAIL
-            ));
-        }
+        List<ChatRoom> chatRooms = chatRoomService.getAllChatRoomsByAccount(accountCode);
+        return new DataVO<>(ChatRoomInfoVO.valueOf(chatRooms));
     }
 
     private DataVO<ChatRoomInfoVO> saveChatRoom(String id, String name, List<String> addAccountIds,
@@ -92,20 +71,9 @@ public class ChatRoomServiceResource {
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
             ));
         }
-        try {
-            sessionDataStore.setCurrentUserCode(accountCode);
-            return saveChatRoom(null, chatRoomFormVO.getName(),
-                    chatRoomFormVO.getAddAccountCodes(), chatRoomFormVO.getDelAccountCodes(), accountCode);
-        } catch (UserInterfaceException ex) {
-            return new DataVO<>(ex);
-        } catch (Exception ex) {
-            if (logger.isErrorEnabled()) {
-                logger.error("Create a chat room fail.", ex);
-            }
-            return new DataVO<>(new UserInterfaceEiimErrorException(
-                    UserInterfaceEiimErrorException.EiimErrors.EIIM_OTHER_FAIL
-            ));
-        }
+        sessionDataStore.setCurrentUserCode(accountCode);
+        return saveChatRoom(null, chatRoomFormVO.getName(),
+                chatRoomFormVO.getAddAccountCodes(), chatRoomFormVO.getDelAccountCodes(), accountCode);
     }
 
     @Path("chatRooms/{chatRoomId}")
@@ -118,41 +86,19 @@ public class ChatRoomServiceResource {
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
             ));
         }
-        try {
-            sessionDataStore.setCurrentUserCode(accountCode);
-            return saveChatRoom(chatRoomId, chatRoomFormVO.getName(),
-                    chatRoomFormVO.getAddAccountCodes(), chatRoomFormVO.getDelAccountCodes(), null);
-        } catch (UserInterfaceException ex) {
-            return new DataVO<>(ex);
-        } catch (Exception ex) {
-            if (logger.isErrorEnabled()) {
-                logger.error("Modify the chat room fail.", ex);
-            }
-            return new DataVO<>(new UserInterfaceEiimErrorException(
-                    UserInterfaceEiimErrorException.EiimErrors.EIIM_OTHER_FAIL
-            ));
-        }
+        sessionDataStore.setCurrentUserCode(accountCode);
+        return saveChatRoom(chatRoomId, chatRoomFormVO.getName(),
+                chatRoomFormVO.getAddAccountCodes(), chatRoomFormVO.getDelAccountCodes(), null);
     }
 
     @Path("chatRooms/{chatRoomId}/accounts/{accountCode}")
     @DELETE
     public DataVO<Boolean> deleteChatRoom(@PathParam("chatRoomId") String chatRoomId,
                                           @PathParam("accountCode") String accountCode) {
-        try {
-            sessionDataStore.setCurrentUserCode(accountCode);
-            chatRoomService.deleteChatRoom(chatRoomId, accountCode);
-            sessionDataStore.removeCurrentUserCode();
-            return new DataVO<>(true);
-        } catch (UserInterfaceException ex) {
-            return new DataVO<>(ex);
-        } catch (Exception ex) {
-            if (logger.isErrorEnabled()) {
-                logger.error("Delete the chat room fail.", ex);
-            }
-            return new DataVO<>(new UserInterfaceEiimErrorException(
-                    UserInterfaceEiimErrorException.EiimErrors.EIIM_OTHER_FAIL
-            ));
-        }
+        sessionDataStore.setCurrentUserCode(accountCode);
+        chatRoomService.deleteChatRoom(chatRoomId, accountCode);
+        sessionDataStore.removeCurrentUserCode();
+        return new DataVO<>(true);
     }
 
     @Path("chatRooms/{chatRoomId}/members")
@@ -165,20 +111,9 @@ public class ChatRoomServiceResource {
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
             ));
         }
-        try {
-            sessionDataStore.setCurrentUserCode(accountCode);
-            return saveChatRoom(chatRoomId, chatRoomFormVO.getName(),
-                    chatRoomFormVO.getAddAccountCodes(), chatRoomFormVO.getDelAccountCodes(), null);
-        } catch (UserInterfaceException ex) {
-            return new DataVO<>(ex);
-        } catch (Exception ex) {
-            if (logger.isErrorEnabled()) {
-                logger.error("Modify the chat room member fail.", ex);
-            }
-            return new DataVO<>(new UserInterfaceEiimErrorException(
-                    UserInterfaceEiimErrorException.EiimErrors.EIIM_OTHER_FAIL
-            ));
-        }
+        sessionDataStore.setCurrentUserCode(accountCode);
+        return saveChatRoom(chatRoomId, chatRoomFormVO.getName(),
+                chatRoomFormVO.getAddAccountCodes(), chatRoomFormVO.getDelAccountCodes(), null);
     }
 
     @Path("chatRooms/{chatRoomId}/members")
@@ -189,19 +124,8 @@ public class ChatRoomServiceResource {
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
             ));
         }
-        try {
-            List<ChatRoomMember> members = chatRoomService.getChatRoomMembers(chatRoomId);
-            return new DataVO<>(ChatRoomMemberVO.valueOf(members));
-        } catch (UserInterfaceException ex) {
-            return new DataVO<>(ex);
-        } catch (Exception ex) {
-            if (logger.isErrorEnabled()) {
-                logger.error("Get chat room member's status fail.", ex);
-            }
-            return new DataVO<>(new UserInterfaceEiimErrorException(
-                    UserInterfaceEiimErrorException.EiimErrors.EIIM_OTHER_FAIL
-            ));
-        }
+        List<ChatRoomMember> members = chatRoomService.getChatRoomMembers(chatRoomId);
+        return new DataVO<>(ChatRoomMemberVO.valueOf(members));
     }
 
     @Path("chatRooms/{chatRoomId}/member/status")
@@ -214,22 +138,11 @@ public class ChatRoomServiceResource {
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
             ));
         }
-        try {
-            sessionDataStore.setCurrentUserCode(accountCode);
-            ChatRoomMember member = chatRoomService.changeMemberStatus(chatRoomId, statusVO.getAccountCode(),
-                    statusVO.getStatus());
-            sessionDataStore.removeCurrentUserCode();
-            return new DataVO<>(ChatRoomMemberVO.valueOf(member));
-        } catch (UserInterfaceException ex) {
-            return new DataVO<>(ex);
-        } catch (Exception ex) {
-            if (logger.isErrorEnabled()) {
-                logger.error("Change the chat room member's status fail.", ex);
-            }
-            return new DataVO<>(new UserInterfaceEiimErrorException(
-                    UserInterfaceEiimErrorException.EiimErrors.EIIM_OTHER_FAIL
-            ));
-        }
+        sessionDataStore.setCurrentUserCode(accountCode);
+        ChatRoomMember member = chatRoomService.changeMemberStatus(chatRoomId, statusVO.getAccountCode(),
+                statusVO.getStatus());
+        sessionDataStore.removeCurrentUserCode();
+        return new DataVO<>(ChatRoomMemberVO.valueOf(member));
     }
 
     @Path("chatRooms/{chatRoomId}/top")
@@ -242,59 +155,26 @@ public class ChatRoomServiceResource {
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
             ));
         }
-        try {
-            sessionDataStore.setCurrentUserCode(accountCode);
-            ChatRoomMember member = chatRoomService.topChatRoom(chatRoomId, statusVO.getAccountCode(),
-                    statusVO.isTop());
-            sessionDataStore.removeCurrentUserCode();
-            return new DataVO<>(ChatRoomMemberVO.valueOf(member));
-        } catch (UserInterfaceException ex) {
-            return new DataVO<>(ex);
-        } catch (Exception ex) {
-            if (logger.isErrorEnabled()) {
-                logger.error("Top the chat room fail.", ex);
-            }
-            return new DataVO<>(new UserInterfaceEiimErrorException(
-                    UserInterfaceEiimErrorException.EiimErrors.EIIM_OTHER_FAIL
-            ));
-        }
+        sessionDataStore.setCurrentUserCode(accountCode);
+        ChatRoomMember member = chatRoomService.topChatRoom(chatRoomId, statusVO.getAccountCode(),
+                statusVO.isTop());
+        sessionDataStore.removeCurrentUserCode();
+        return new DataVO<>(ChatRoomMemberVO.valueOf(member));
     }
 
     @Path("chatRooms/{chatRoomId}/accounts/{accountCode}/unread")
     @GET
     public DataVO<List<ChatMessageVO>> getAllUnreadMessages(@PathParam("chatRoomId") String chatRoomId,
                                                             @PathParam("accountCode") String accountCode) {
-        try {
-            List<ChatMessage> messages = chatRoomService.getAllUnreadMessage(chatRoomId, accountCode);
-            return new DataVO<>(ChatMessageVO.valueOf(messages));
-        } catch (UserInterfaceException ex) {
-            return new DataVO<>(ex);
-        } catch (Exception ex) {
-            if (logger.isErrorEnabled()) {
-                logger.error("Get all unread message fail for the chat room.", ex);
-            }
-            return new DataVO<>(new UserInterfaceEiimErrorException(
-                    UserInterfaceEiimErrorException.EiimErrors.EIIM_OTHER_FAIL
-            ));
-        }
+        List<ChatMessage> messages = chatRoomService.getAllUnreadMessage(chatRoomId, accountCode);
+        return new DataVO<>(ChatMessageVO.valueOf(messages));
     }
 
     @Path("chatRooms/{chatRoomId}/notices")
     @GET
     public DataVO<List<ChatNoticeVO>> getAllChatRoomNotices(@PathParam("chatRoomId") String chatRoomId) {
-        try {
-            List<ChatNotice> notices = chatRoomService.getAllChatRoomNotices(chatRoomId);
-            return new DataVO<>(ChatNoticeVO.valueOf(notices));
-        } catch (UserInterfaceException ex) {
-            return new DataVO<>(ex);
-        } catch (Exception ex) {
-            if (logger.isErrorEnabled()) {
-                logger.error("Get all notices fail for the chat room.", ex);
-            }
-            return new DataVO<>(new UserInterfaceEiimErrorException(
-                    UserInterfaceEiimErrorException.EiimErrors.EIIM_OTHER_FAIL
-            ));
-        }
+        List<ChatNotice> notices = chatRoomService.getAllChatRoomNotices(chatRoomId);
+        return new DataVO<>(ChatNoticeVO.valueOf(notices));
     }
 
     @Path("chatRooms/{chatRoomId}/notices/new")
@@ -303,21 +183,10 @@ public class ChatRoomServiceResource {
                                              @QueryParam("accountCode") String accountCode,
                                              ChatNoticeFormVO chatRoomNoticeFormVO) {
         chatRoomNoticeFormVO.setChatRoomId(chatRoomId);
-        try {
-            sessionDataStore.setCurrentUserCode(accountCode);
-            chatRoomService.saveChatRoomNotice(chatRoomNoticeFormVO.getChatRoomId(), null,
-                    chatRoomNoticeFormVO.getNoticeType(), chatRoomNoticeFormVO.getNotice());
-            sessionDataStore.removeCurrentUserCode();
-            return new DataVO<>(true);
-        } catch (UserInterfaceException ex) {
-            return new DataVO<>(ex);
-        } catch (Exception ex) {
-            if (logger.isErrorEnabled()) {
-                logger.error("Create a new chat room notice fail.", ex);
-            }
-            return new DataVO<>(new UserInterfaceEiimErrorException(
-                    UserInterfaceEiimErrorException.EiimErrors.EIIM_OTHER_FAIL
-            ));
-        }
+        sessionDataStore.setCurrentUserCode(accountCode);
+        chatRoomService.saveChatRoomNotice(chatRoomNoticeFormVO.getChatRoomId(), null,
+                chatRoomNoticeFormVO.getNoticeType(), chatRoomNoticeFormVO.getNotice());
+        sessionDataStore.removeCurrentUserCode();
+        return new DataVO<>(true);
     }
 }

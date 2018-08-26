@@ -9,9 +9,7 @@ import com.fs.eiim.service.BaseDataService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mx.StringUtils;
-import org.mx.comps.rbac.error.UserInterfaceRbacErrorException;
 import org.mx.dal.session.SessionDataStore;
-import org.mx.error.UserInterfaceException;
 import org.mx.error.UserInterfaceSystemErrorException;
 import org.mx.service.rest.vo.DataVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,16 +45,8 @@ public class PersonServiceResource {
     @Path("persons")
     @GET
     public DataVO<List<PersonInfoVO>> getAllPersons() {
-        try {
-            List<BaseDataService.PersonAccountTuple> persons = baseDataService.getAllPersons();
-            return new DataVO<>(PersonInfoVO.valueOf(persons));
-        } catch (UserInterfaceException ex) {
-            return new DataVO<>(ex);
-        } catch (Exception ex) {
-            return new DataVO<>(new UserInterfaceRbacErrorException(
-                    UserInterfaceRbacErrorException.RbacErrors.RBAC_OTHER_FAIL
-            ));
-        }
+        List<BaseDataService.PersonAccountTuple> persons = baseDataService.getAllPersons();
+        return new DataVO<>(PersonInfoVO.valueOf(persons));
     }
 
     private DataVO<PersonInfoVO> savePerson(PersonFormVO personFormVO) {
@@ -65,17 +55,9 @@ public class PersonServiceResource {
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
             ));
         }
-        try {
-            BaseDataService.PersonAccountTuple tuple = baseDataService.savePersonInfo(personFormVO.get());
-            sessionDataStore.removeCurrentUserCode();
-            return new DataVO<>(PersonInfoVO.valueOf(tuple.getPerson(), tuple.getAccount()));
-        } catch (UserInterfaceException ex) {
-            return new DataVO<>(ex);
-        } catch (Exception ex) {
-            return new DataVO<>(new UserInterfaceRbacErrorException(
-                    UserInterfaceRbacErrorException.RbacErrors.RBAC_OTHER_FAIL
-            ));
-        }
+        BaseDataService.PersonAccountTuple tuple = baseDataService.savePersonInfo(personFormVO.get());
+        sessionDataStore.removeCurrentUserCode();
+        return new DataVO<>(PersonInfoVO.valueOf(tuple.getPerson(), tuple.getAccount()));
     }
 
     @Path("persons/new")
@@ -118,16 +100,8 @@ public class PersonServiceResource {
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
             ));
         }
-        try {
-            BaseDataService.PersonAccountTuple tuple = baseDataService.getPersonInfo(personId);
-            return new DataVO<>(PersonInfoVO.valueOf(tuple.getPerson(), tuple.getAccount()));
-        } catch (UserInterfaceException ex) {
-            return new DataVO<>(ex);
-        } catch (Exception ex) {
-            return new DataVO<>(new UserInterfaceRbacErrorException(
-                    UserInterfaceRbacErrorException.RbacErrors.RBAC_OTHER_FAIL
-            ));
-        }
+        BaseDataService.PersonAccountTuple tuple = baseDataService.getPersonInfo(personId);
+        return new DataVO<>(PersonInfoVO.valueOf(tuple.getPerson(), tuple.getAccount()));
     }
 
     @Path("persons/{personId}/enable")
@@ -140,19 +114,11 @@ public class PersonServiceResource {
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
             ));
         }
-        try {
-            sessionDataStore.setCurrentUserCode(accountCode);
-            BaseDataService.PersonAccountTuple tuple = baseDataService.enablePersonAccount(personId,
-                    accountInitialInfoVO.get());
-            sessionDataStore.removeCurrentUserCode();
-            return new DataVO<>(AccountInfoVO.valueOf(tuple.getAccount()));
-        } catch (UserInterfaceException ex) {
-            return new DataVO<>(ex);
-        } catch (Exception ex) {
-            return new DataVO<>(new UserInterfaceRbacErrorException(
-                    UserInterfaceRbacErrorException.RbacErrors.RBAC_OTHER_FAIL
-            ));
-        }
+        sessionDataStore.setCurrentUserCode(accountCode);
+        BaseDataService.PersonAccountTuple tuple = baseDataService.enablePersonAccount(personId,
+                accountInitialInfoVO.get());
+        sessionDataStore.removeCurrentUserCode();
+        return new DataVO<>(AccountInfoVO.valueOf(tuple.getAccount()));
     }
 
     @Path("persons/account/password")
@@ -163,18 +129,10 @@ public class PersonServiceResource {
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
             ));
         }
-        try {
-            sessionDataStore.setCurrentUserCode(accountCode);
-            baseDataService.changeAccountPassword(passwordInfoVO.getAccountCode(), passwordInfoVO.getOldPassword(),
-                    passwordInfoVO.getNewPassword());
-            sessionDataStore.removeCurrentUserCode();
-            return new DataVO<>(true);
-        } catch (UserInterfaceException ex) {
-            return new DataVO<>(ex);
-        } catch (Exception ex) {
-            return new DataVO<>(new UserInterfaceRbacErrorException(
-                    UserInterfaceRbacErrorException.RbacErrors.RBAC_OTHER_FAIL
-            ));
-        }
+        sessionDataStore.setCurrentUserCode(accountCode);
+        baseDataService.changeAccountPassword(passwordInfoVO.getAccountCode(), passwordInfoVO.getOldPassword(),
+                passwordInfoVO.getNewPassword());
+        sessionDataStore.removeCurrentUserCode();
+        return new DataVO<>(true);
     }
 }

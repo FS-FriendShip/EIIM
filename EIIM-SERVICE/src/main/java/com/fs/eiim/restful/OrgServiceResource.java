@@ -7,9 +7,7 @@ import com.fs.eiim.service.BaseDataService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mx.StringUtils;
-import org.mx.comps.rbac.error.UserInterfaceRbacErrorException;
 import org.mx.dal.session.SessionDataStore;
-import org.mx.error.UserInterfaceException;
 import org.mx.error.UserInterfaceSystemErrorException;
 import org.mx.service.rest.vo.DataVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,16 +43,8 @@ public class OrgServiceResource {
     @Path("orgs")
     @GET
     public DataVO<List<OrgInfoVO>> getAllOrgs() {
-        try {
-            List<Org> orgs = baseDataService.getAllOrgs();
-            return new DataVO<>(OrgInfoVO.valueOf(orgs));
-        } catch (UserInterfaceException ex) {
-            return new DataVO<>(ex);
-        } catch (Exception ex) {
-            return new DataVO<>(new UserInterfaceRbacErrorException(
-                    UserInterfaceRbacErrorException.RbacErrors.RBAC_OTHER_FAIL
-            ));
-        }
+        List<Org> orgs = baseDataService.getAllOrgs();
+        return new DataVO<>(OrgInfoVO.valueOf(orgs));
     }
 
     private DataVO<OrgInfoVO> saveOrg(OrgFormVO orgFormVO) {
@@ -63,17 +53,9 @@ public class OrgServiceResource {
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
             ));
         }
-        try {
-            Org org = baseDataService.saveOrgInfo(orgFormVO.get());
-            sessionDataStore.removeCurrentUserCode();
-            return new DataVO<>(OrgInfoVO.valueOf(org));
-        } catch (UserInterfaceException ex) {
-            return new DataVO<>(ex);
-        } catch (Exception ex) {
-            return new DataVO<>(new UserInterfaceRbacErrorException(
-                    UserInterfaceRbacErrorException.RbacErrors.RBAC_OTHER_FAIL
-            ));
-        }
+        Org org = baseDataService.saveOrgInfo(orgFormVO.get());
+        sessionDataStore.removeCurrentUserCode();
+        return new DataVO<>(OrgInfoVO.valueOf(org));
     }
 
     @Path("orgs/new")
@@ -112,15 +94,7 @@ public class OrgServiceResource {
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
             ));
         }
-        try {
-            Org org = baseDataService.getOrgInfo(orgId);
-            return new DataVO<>(OrgInfoVO.valueOf(org));
-        } catch (UserInterfaceException ex) {
-            return new DataVO<>(ex);
-        } catch (Exception ex) {
-            return new DataVO<>(new UserInterfaceRbacErrorException(
-                    UserInterfaceRbacErrorException.RbacErrors.RBAC_OTHER_FAIL
-            ));
-        }
+        Org org = baseDataService.getOrgInfo(orgId);
+        return new DataVO<>(OrgInfoVO.valueOf(org));
     }
 }
