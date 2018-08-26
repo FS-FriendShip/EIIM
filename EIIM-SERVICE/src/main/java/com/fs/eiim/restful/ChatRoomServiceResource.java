@@ -11,6 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import org.mx.StringUtils;
 import org.mx.dal.session.SessionDataStore;
 import org.mx.error.UserInterfaceSystemErrorException;
+import org.mx.service.rest.auth.RestAuthenticate;
 import org.mx.service.rest.vo.DataVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -44,6 +45,7 @@ public class ChatRoomServiceResource {
 
     @Path("chatRooms")
     @GET
+    @RestAuthenticate
     public DataVO<List<ChatRoomInfoVO>> getAllChatRooms() {
         List<ChatRoom> chatRooms = chatRoomService.getAllChatRooms();
         return new DataVO<>(ChatRoomInfoVO.valueOf(chatRooms));
@@ -51,6 +53,7 @@ public class ChatRoomServiceResource {
 
     @Path("chatRooms/accounts/{accountCode}")
     @GET
+    @RestAuthenticate
     public DataVO<List<ChatRoomInfoVO>> getAllChatRoomsByAccount(@PathParam("accountCode") String accountCode) {
         List<ChatRoom> chatRooms = chatRoomService.getAllChatRoomsByAccount(accountCode);
         return new DataVO<>(ChatRoomInfoVO.valueOf(chatRooms));
@@ -65,6 +68,7 @@ public class ChatRoomServiceResource {
 
     @Path("chatRooms/new")
     @POST
+    @RestAuthenticate
     public DataVO<ChatRoomInfoVO> newChatRoom(@QueryParam("accountCode") String accountCode, ChatRoomFormVO chatRoomFormVO) {
         if (chatRoomFormVO == null) {
             return new DataVO<>(new UserInterfaceSystemErrorException(
@@ -78,6 +82,7 @@ public class ChatRoomServiceResource {
 
     @Path("chatRooms/{chatRoomId}")
     @PUT
+    @RestAuthenticate
     public DataVO<ChatRoomInfoVO> modifyChatRoom(@PathParam("chatRoomId") String chatRoomId,
                                                  @QueryParam("accountCode") String accountCode,
                                                  ChatRoomFormVO chatRoomFormVO) {
@@ -93,6 +98,7 @@ public class ChatRoomServiceResource {
 
     @Path("chatRooms/{chatRoomId}/accounts/{accountCode}")
     @DELETE
+    @RestAuthenticate
     public DataVO<Boolean> deleteChatRoom(@PathParam("chatRoomId") String chatRoomId,
                                           @PathParam("accountCode") String accountCode) {
         sessionDataStore.setCurrentUserCode(accountCode);
@@ -103,6 +109,7 @@ public class ChatRoomServiceResource {
 
     @Path("chatRooms/{chatRoomId}/members")
     @PUT
+    @RestAuthenticate
     public DataVO<ChatRoomInfoVO> modifyChatRoomMembers(@PathParam("chatRoomId") String chatRoomId,
                                                         @QueryParam("accountCode") String accountCode,
                                                         ChatRoomFormVO chatRoomFormVO) {
@@ -118,6 +125,7 @@ public class ChatRoomServiceResource {
 
     @Path("chatRooms/{chatRoomId}/members")
     @GET
+    @RestAuthenticate
     public DataVO<List<ChatRoomMemberVO>> getChatRoomMemberStatus(@PathParam("chatRoomId") String chatRoomId) {
         if (StringUtils.isBlank(chatRoomId)) {
             return new DataVO<>(new UserInterfaceSystemErrorException(
@@ -130,6 +138,7 @@ public class ChatRoomServiceResource {
 
     @Path("chatRooms/{chatRoomId}/member/status")
     @PUT
+    @RestAuthenticate
     public DataVO<ChatRoomMemberVO> changeChatRoomMemberStatus(@PathParam("chatRoomId") String chatRoomId,
                                                                @QueryParam("accountCode") String accountCode,
                                                                ChatRoomMemberStatusVO statusVO) {
@@ -147,6 +156,7 @@ public class ChatRoomServiceResource {
 
     @Path("chatRooms/{chatRoomId}/top")
     @PUT
+    @RestAuthenticate
     public DataVO<ChatRoomMemberVO> topChatRoom(@PathParam("chatRoomId") String chatRoomId,
                                                 @QueryParam("accountCode") String accountCode,
                                                 ChatRoomMemberStatusVO statusVO) {
@@ -164,6 +174,7 @@ public class ChatRoomServiceResource {
 
     @Path("chatRooms/{chatRoomId}/accounts/{accountCode}/unread")
     @GET
+    @RestAuthenticate
     public DataVO<List<ChatMessageVO>> getAllUnreadMessages(@PathParam("chatRoomId") String chatRoomId,
                                                             @PathParam("accountCode") String accountCode) {
         List<ChatMessage> messages = chatRoomService.getAllUnreadMessage(chatRoomId, accountCode);
@@ -172,6 +183,7 @@ public class ChatRoomServiceResource {
 
     @Path("chatRooms/{chatRoomId}/notices")
     @GET
+    @RestAuthenticate
     public DataVO<List<ChatNoticeVO>> getAllChatRoomNotices(@PathParam("chatRoomId") String chatRoomId) {
         List<ChatNotice> notices = chatRoomService.getAllChatRoomNotices(chatRoomId);
         return new DataVO<>(ChatNoticeVO.valueOf(notices));
@@ -179,6 +191,7 @@ public class ChatRoomServiceResource {
 
     @Path("chatRooms/{chatRoomId}/notices/new")
     @POST
+    @RestAuthenticate
     public DataVO<Boolean> newChatRoomNotice(@PathParam("chatRoomId") String chatRoomId,
                                              @QueryParam("accountCode") String accountCode,
                                              ChatNoticeFormVO chatRoomNoticeFormVO) {

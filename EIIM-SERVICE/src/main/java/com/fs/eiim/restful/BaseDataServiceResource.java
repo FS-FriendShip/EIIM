@@ -5,6 +5,7 @@ import com.fs.eiim.restful.vo.baseData.BaseDataVO;
 import com.fs.eiim.service.BaseDataService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.mx.service.rest.auth.RestAuthenticate;
 import org.mx.service.rest.vo.DataVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,6 +37,7 @@ public class BaseDataServiceResource {
 
     @Path("baseDatas")
     @GET
+    @RestAuthenticate
     public DataVO<List<BaseDataVO>> getAllBaseDatas() {
         List<BaseDataService.BaseData> baseDatas = baseDataService.getAllBaseData();
         return new DataVO<>(BaseDataVO.valueOf(baseDatas));
@@ -43,6 +45,7 @@ public class BaseDataServiceResource {
 
     @Path("baseDatas/{baseDataCategoryCode}")
     @GET
+    @RestAuthenticate
     public DataVO<List<BaseDataItemVO>> getBaseDataItems(@PathParam("baseDataCategoryCode") String baseDataCategoryCode) {
         List<BaseDataService.BaseDataItem> baseDataItems = baseDataService.getBaseDataItems(baseDataCategoryCode);
         return new DataVO<>(BaseDataItemVO.valueOf(baseDataItems));
@@ -50,6 +53,7 @@ public class BaseDataServiceResource {
 
     @Path("baseDatas/{baseDataCategoryCode}/items/{code}")
     @GET
+    @RestAuthenticate
     public DataVO<BaseDataItemVO> getBaseDataItems(@PathParam("baseDataCategoryCode") String baseDataCategoryCode,
                                                    @PathParam("code") String code) {
         BaseDataService.BaseDataItem item = baseDataService.getBaseDataItem(baseDataCategoryCode, code);

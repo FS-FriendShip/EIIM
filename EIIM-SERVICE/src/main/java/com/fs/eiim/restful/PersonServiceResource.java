@@ -11,6 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import org.mx.StringUtils;
 import org.mx.dal.session.SessionDataStore;
 import org.mx.error.UserInterfaceSystemErrorException;
+import org.mx.service.rest.auth.RestAuthenticate;
 import org.mx.service.rest.vo.DataVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -44,6 +45,7 @@ public class PersonServiceResource {
 
     @Path("persons")
     @GET
+    @RestAuthenticate
     public DataVO<List<PersonInfoVO>> getAllPersons() {
         List<BaseDataService.PersonAccountTuple> persons = baseDataService.getAllPersons();
         return new DataVO<>(PersonInfoVO.valueOf(persons));
@@ -62,6 +64,7 @@ public class PersonServiceResource {
 
     @Path("persons/new")
     @POST
+    @RestAuthenticate
     public DataVO<PersonInfoVO> newPerson(@QueryParam("accountCode") String accountCode, PersonFormVO personFormVO) {
         if (logger.isWarnEnabled()) {
             logger.warn(String.format("The person's id need blank string, but it is '%s'.", personFormVO.getId()));
@@ -73,6 +76,7 @@ public class PersonServiceResource {
 
     @Path("persons/{personId}")
     @PUT
+    @RestAuthenticate
     public DataVO<PersonInfoVO> modifyPerson(@PathParam("personId") String personId,
                                              @QueryParam("accountCode") String accountCode,
                                              PersonFormVO personFormVO) {
@@ -91,6 +95,7 @@ public class PersonServiceResource {
 
     @Path("persons/{personId}")
     @GET
+    @RestAuthenticate
     public DataVO<PersonInfoVO> getPerson(@PathParam("personId") String personId) {
         if (StringUtils.isBlank(personId)) {
             if (logger.isErrorEnabled()) {
@@ -106,6 +111,7 @@ public class PersonServiceResource {
 
     @Path("persons/{personId}/enable")
     @POST
+    @RestAuthenticate
     public DataVO<AccountInfoVO> enablePersonAccount(@PathParam("personId") String personId,
                                                      @QueryParam("accountCode") String accountCode,
                                                      AccountInitialInfoVO accountInitialInfoVO) {
@@ -123,6 +129,7 @@ public class PersonServiceResource {
 
     @Path("persons/account/password")
     @PUT
+    @RestAuthenticate
     public DataVO<Boolean> changeAccountPassword(@QueryParam("accountCode") String accountCode, PasswordInfoVO passwordInfoVO) {
         if (passwordInfoVO == null) {
             return new DataVO<>(new UserInterfaceSystemErrorException(

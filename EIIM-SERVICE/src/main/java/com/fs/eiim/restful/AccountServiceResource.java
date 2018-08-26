@@ -6,6 +6,7 @@ import com.fs.eiim.restful.vo.account.AuthenticationVO;
 import com.fs.eiim.service.AccountService;
 import org.mx.dal.session.SessionDataStore;
 import org.mx.error.UserInterfaceSystemErrorException;
+import org.mx.service.rest.auth.RestAuthenticate;
 import org.mx.service.rest.vo.DataVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -62,6 +63,7 @@ public class AccountServiceResource {
 
     @Path("accounts/status")
     @GET
+    @RestAuthenticate
     public DataVO<List<AccountStateVO>> getAllAccountsStatus() {
         List<AccountState> states = accountService.getAllAccountsStatus();
         return new DataVO<>(AccountStateVO.valueOf(states));

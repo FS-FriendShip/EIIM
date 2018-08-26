@@ -9,6 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.mx.StringUtils;
 import org.mx.dal.session.SessionDataStore;
 import org.mx.error.UserInterfaceSystemErrorException;
+import org.mx.service.rest.auth.RestAuthenticate;
 import org.mx.service.rest.vo.DataVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -42,6 +43,7 @@ public class OrgServiceResource {
 
     @Path("orgs")
     @GET
+    @RestAuthenticate
     public DataVO<List<OrgInfoVO>> getAllOrgs() {
         List<Org> orgs = baseDataService.getAllOrgs();
         return new DataVO<>(OrgInfoVO.valueOf(orgs));
@@ -60,6 +62,7 @@ public class OrgServiceResource {
 
     @Path("orgs/new")
     @POST
+    @RestAuthenticate
     public DataVO<OrgInfoVO> newOrg(@QueryParam("accountCode") String accountCode, OrgFormVO orgFormVO) {
         orgFormVO.setId(null);
         sessionDataStore.setCurrentUserCode(accountCode);
@@ -68,6 +71,7 @@ public class OrgServiceResource {
 
     @Path("orgs/{orgId}")
     @PUT
+    @RestAuthenticate
     public DataVO<OrgInfoVO> modifyOrg(@PathParam("orgId") String orgId, @QueryParam("accountCode") String accountCode,
                                        OrgFormVO orgFormVO) {
         if (StringUtils.isBlank(orgId)) {
@@ -85,6 +89,7 @@ public class OrgServiceResource {
 
     @Path("orgs/{orgId}")
     @GET
+    @RestAuthenticate
     public DataVO<OrgInfoVO> getOrg(@PathParam("orgId") String orgId) {
         if (StringUtils.isBlank(orgId)) {
             if (logger.isErrorEnabled()) {
