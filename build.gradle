@@ -32,6 +32,7 @@ project(':EIIM-SERVICE') {
                 libs.'slf4j-api',
                 libs.'mx-utils',
                 libs.'mx-spring',
+                libs.'mx-jwt-utils',
                 libs.'mx-service-utils',
                 libs.'mx-dal',
 		        libs.'mx-rbac-service'
