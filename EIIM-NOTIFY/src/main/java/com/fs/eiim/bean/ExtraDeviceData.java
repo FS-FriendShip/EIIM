@@ -9,16 +9,17 @@ import com.alibaba.fastjson.JSON;
  * Date time 2018/8/21 下午8:28
  */
 public class ExtraDeviceData {
-    private String accountCode, eiimCode;
+    private String accountCode, eiimCode, token;
 
     public ExtraDeviceData() {
         super();
     }
 
-    public ExtraDeviceData(String accountCode, String eiimCode) {
+    public ExtraDeviceData(String accountCode, String eiimCode, String token) {
         this();
         this.accountCode = accountCode;
         this.eiimCode = eiimCode;
+        this.token = token;
     }
 
     /**
@@ -45,5 +46,13 @@ public class ExtraDeviceData {
 
     public void setEiimCode(String eiimCode) {
         this.eiimCode = eiimCode;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

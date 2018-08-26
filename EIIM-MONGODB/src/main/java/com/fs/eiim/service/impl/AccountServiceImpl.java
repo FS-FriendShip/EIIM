@@ -8,12 +8,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mx.DigestUtils;
 import org.mx.StringUtils;
-import org.mx.comps.jwt.JwtService;
 import org.mx.comps.rbac.error.UserInterfaceRbacErrorException;
 import org.mx.dal.EntityFactory;
 import org.mx.dal.service.GeneralAccessor;
 import org.mx.dal.service.GeneralDictAccessor;
 import org.mx.error.UserInterfaceSystemErrorException;
+import org.mx.jwt.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -90,7 +90,7 @@ public class AccountServiceImpl implements AccountService {
         claims.put("nickname", account.getNickName());
         claims.put("name", account.getName());
         claims.put("roles", account.getRoles());
-        String token = jwtService.sign(claims);
+        String token = jwtService.signToken(claims);
 
         // 记录登录状态
         AccountState accountState = getAccountState(account);
@@ -117,7 +117,7 @@ public class AccountServiceImpl implements AccountService {
             }
             throw new UserInterfaceEiimErrorException(UserInterfaceEiimErrorException.EiimErrors.ACCOUNT_BLANK_TOKEN);
         }
-        JwtService.JwtVerifyResult result = jwtService.verify(token);
+        JwtService.JwtVerifyResult result = jwtService.verifyToken(token);
         if (result.isPassed()) {
             // 验证通过
             String accountCode = result.getClaims().get("code").asString();
