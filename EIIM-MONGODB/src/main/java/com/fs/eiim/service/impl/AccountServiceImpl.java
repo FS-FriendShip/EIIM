@@ -18,9 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Component("accountService")
 public class AccountServiceImpl implements AccountService {
@@ -85,12 +83,7 @@ public class AccountServiceImpl implements AccountService {
         }
 
         // 签发登录令牌
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("code", accountCode);
-        claims.put("nickname", account.getNickName());
-        claims.put("name", account.getName());
-        claims.put("roles", account.getRoles());
-        String token = jwtService.signToken(claims);
+        String token = jwtService.signToken(accountCode);
 
         // 记录登录状态
         AccountState accountState = getAccountState(account);
