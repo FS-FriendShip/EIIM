@@ -148,7 +148,7 @@ public class BaseDataServiceImpl implements BaseDataService {
 
     @Override
     public List<Org> getAllOrgs() {
-        return accessor.find(GeneralAccessor.ConditionTuple.eq("parentId", null), Org.class);
+        return accessor.find(GeneralAccessor.ConditionTuple.eq("parent", null), Org.class);
     }
 
     @SuppressWarnings("unchecked")
