@@ -2,6 +2,7 @@ package com.fs.eiim.service.impl;
 
 import com.fs.eiim.dal.entity.Account;
 import com.fs.eiim.dal.entity.Org;
+import com.fs.eiim.dal.entity.OrgEntity;
 import com.fs.eiim.dal.entity.Person;
 import com.fs.eiim.error.UserInterfaceEiimErrorException;
 import com.fs.eiim.service.BaseDataCacheService;
@@ -21,10 +22,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
  * 描述： 基础数据服务实现类定义
@@ -40,18 +45,22 @@ public class BaseDataServiceImpl implements BaseDataService {
     private GeneralDictAccessor accessor;
     private BaseDataCacheService baseDataCacheService;
 
+    private MongoTemplate mongoTemplate;
+
     /**
      * 构造函数
      *
      * @param accessor             数据库访问接口
      * @param baseDataCacheService 基础字典数据缓存服务接口
+     * @param mongoTemplate        Mongodb操作模版
      */
     @Autowired
     public BaseDataServiceImpl(@Qualifier("generalDictAccessorMongodb") GeneralDictAccessor accessor,
-                               BaseDataCacheService baseDataCacheService) {
+                               BaseDataCacheService baseDataCacheService, MongoTemplate mongoTemplate) {
         super();
         this.accessor = accessor;
         this.baseDataCacheService = baseDataCacheService;
+        this.mongoTemplate = mongoTemplate;
     }
 
     @Cacheable(key = "'baseData.'.concat(#categoryCode)")
@@ -225,6 +234,20 @@ public class BaseDataServiceImpl implements BaseDataService {
         return accessor.getById(orgId, Org.class);
     }
 
+    private Org getOrgByPerson(Person person) {
+        if (person == null) {
+            return null;
+        }
+        Query query = new Query();
+        query.addCriteria(where("employees").all(person));
+        List<OrgEntity> orgs = mongoTemplate.find(query, OrgEntity.class);
+        if (!orgs.isEmpty()) {
+            return orgs.get(0);
+        } else {
+            return null;
+        }
+    }
+
     @Override
     public List<PersonAccountTuple> getAllPersons() {
         List<Person> persons = accessor.list(Person.class);
@@ -233,7 +256,7 @@ public class BaseDataServiceImpl implements BaseDataService {
             Account account = accessor.findOne(Collections.singletonList(
                     GeneralAccessor.ConditionTuple.eq("person", person)
             ), Account.class);
-            tuples.add(PersonAccountTuple.valueOf(person, account));
+            tuples.add(PersonAccountTuple.valueOf(person, account, getOrgByPerson(person)));
         }
         return tuples;
     }
@@ -283,7 +306,7 @@ public class BaseDataServiceImpl implements BaseDataService {
         } else {
             account = null;
         }
-        return PersonAccountTuple.valueOf(person, account);
+        return PersonAccountTuple.valueOf(person, account, getOrgByPerson(person));
     }
 
     @Override
@@ -313,7 +336,7 @@ public class BaseDataServiceImpl implements BaseDataService {
                 logger.warn(String.format("The person[%s] not be enabled a account.", person.getFullName()));
             }
         }
-        return PersonAccountTuple.valueOf(person, account);
+        return PersonAccountTuple.valueOf(person, account, getOrgByPerson(person));
     }
 
     @Override
@@ -369,7 +392,7 @@ public class BaseDataServiceImpl implements BaseDataService {
                 logger.debug(String.format("Enable persion[%s]'s account sccuessfully, the eiim code: %s.",
                         person.getFullName(), account.getEiimCode()));
             }
-            return PersonAccountTuple.valueOf(person, account);
+            return PersonAccountTuple.valueOf(person, account, getOrgByPerson(person));
         } else {
             // 账户已经存在
             if (logger.isWarnEnabled()) {

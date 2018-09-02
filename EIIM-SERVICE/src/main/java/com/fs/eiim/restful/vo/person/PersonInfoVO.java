@@ -1,8 +1,10 @@
 package com.fs.eiim.restful.vo.person;
 
 import com.fs.eiim.dal.entity.Account;
+import com.fs.eiim.dal.entity.Org;
 import com.fs.eiim.dal.entity.Person;
 import com.fs.eiim.restful.vo.account.AccountInfoVO;
+import com.fs.eiim.restful.vo.org.OrgInfoVO;
 import com.fs.eiim.service.BaseDataService;
 import org.mx.comps.rbac.dal.entity.User;
 
@@ -14,8 +16,9 @@ public class PersonInfoVO {
     private boolean hasAccount = false;
     private User.Sex sex = User.Sex.NA;
     private AccountInfoVO account;
+    private OrgInfoVO org;
 
-    public static PersonInfoVO valueOf(User user, Account account) {
+    public static PersonInfoVO valueOf(User user, Account account, Org org) {
         if (user == null) {
             return null;
         }
@@ -28,10 +31,13 @@ public class PersonInfoVO {
         if (account != null) {
             personInfoVO.account = AccountInfoVO.valueOf(account);
         }
+        if (org != null) {
+            personInfoVO.org = OrgInfoVO.valueOf(org);
+        }
         return personInfoVO;
     }
 
-    public static PersonInfoVO valueOf(Person person, Account account) {
+    public static PersonInfoVO valueOf(Person person, Account account, Org org) {
         if (person == null) {
             return null;
         }
@@ -48,13 +54,18 @@ public class PersonInfoVO {
         if (account != null) {
             personInfoVO.account = AccountInfoVO.valueOf(account);
         }
+        if (org != null) {
+            personInfoVO.org = OrgInfoVO.valueOf(org);
+        }
         return personInfoVO;
     }
 
     public static List<PersonInfoVO> valueOf(List<BaseDataService.PersonAccountTuple> tuples) {
         List<PersonInfoVO> persons = new ArrayList<>();
         if (tuples != null && !tuples.isEmpty()) {
-            tuples.forEach(tuple -> persons.add(PersonInfoVO.valueOf(tuple.getPerson(), tuple.getAccount())));
+            tuples.forEach(tuple -> persons.add(
+                    PersonInfoVO.valueOf(tuple.getPerson(), tuple.getAccount(), tuple.getOrg()))
+            );
         }
         return persons;
     }
@@ -137,5 +148,13 @@ public class PersonInfoVO {
 
     public void setAccount(AccountInfoVO account) {
         this.account = account;
+    }
+
+    public OrgInfoVO getOrg() {
+        return org;
+    }
+
+    public void setOrg(OrgInfoVO org) {
+        this.org = org;
     }
 }

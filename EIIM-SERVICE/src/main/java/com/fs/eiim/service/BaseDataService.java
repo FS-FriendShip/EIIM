@@ -127,15 +127,17 @@ public interface BaseDataService {
     class PersonAccountTuple {
         private Person person;
         private Account account;
+        private Org org;
 
-        private PersonAccountTuple(Person person, Account account) {
+        private PersonAccountTuple(Person person, Account account, Org org) {
             super();
             this.person = person;
             this.account = account;
+            this.org = org;
         }
 
-        public static PersonAccountTuple valueOf(Person person, Account account) {
-            return new PersonAccountTuple(person, account);
+        public static PersonAccountTuple valueOf(Person person, Account account, Org org) {
+            return new PersonAccountTuple(person, account, org);
         }
 
         public Person getPerson() {
@@ -144,6 +146,10 @@ public interface BaseDataService {
 
         public Account getAccount() {
             return account;
+        }
+
+        public Org getOrg() {
+            return org;
         }
     }
 
