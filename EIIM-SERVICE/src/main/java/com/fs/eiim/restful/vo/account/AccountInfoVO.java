@@ -30,7 +30,7 @@ public class AccountInfoVO {
         // 处理人员信息
         Person person = account.getPerson();
         if (person != null) {
-            accountInfoVO.person = PersonInfoVO.valueOf(person, null);
+            accountInfoVO.person = PersonInfoVO.valueOf(person, null, null);
         }
         // 处理账户角色
         Set<Role> roles = account.getRoles();

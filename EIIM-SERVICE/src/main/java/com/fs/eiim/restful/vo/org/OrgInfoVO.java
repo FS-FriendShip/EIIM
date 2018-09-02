@@ -32,12 +32,12 @@ public class OrgInfoVO {
             orgInfoVO.children = list;
         }
         if (org.getManager() != null) {
-            orgInfoVO.manager = PersonInfoVO.valueOf(org.getManager(), null);
+            orgInfoVO.manager = PersonInfoVO.valueOf(org.getManager(), null, null);
         }
         Set<User> employees = org.getEmployees();
         if (employees != null && !employees.isEmpty()) {
             List<PersonInfoVO> list = new ArrayList<>();
-            employees.forEach(employee -> list.add(PersonInfoVO.valueOf(employee, null)));
+            employees.forEach(employee -> list.add(PersonInfoVO.valueOf(employee, null, null)));
             orgInfoVO.employees = list;
         }
         return orgInfoVO;

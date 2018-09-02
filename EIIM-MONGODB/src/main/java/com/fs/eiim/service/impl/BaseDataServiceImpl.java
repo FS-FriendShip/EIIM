@@ -193,7 +193,7 @@ public class BaseDataServiceImpl implements BaseDataService {
         if (org.getEmployees() != null && org.getEmployees().size() > 0) {
             employees = new HashSet<>();
             for (User employee : org.getEmployees()) {
-                User user = accessor.getById(employee.getId(), User.class);
+                User user = accessor.getById(employee.getId(), Person.class);
                 if (user == null) {
                     if (logger.isErrorEnabled()) {
                         logger.error(String.format("The person[%s] not found.", employee.getId()));

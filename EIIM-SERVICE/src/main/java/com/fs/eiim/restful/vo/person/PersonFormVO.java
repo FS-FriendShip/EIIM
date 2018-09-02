@@ -31,7 +31,7 @@ public class PersonFormVO {
             account.setNickName(nickname);
             account.setAvatar(avatar);
         }
-        return BaseDataService.PersonAccountTuple.valueOf(person, account);
+        return BaseDataService.PersonAccountTuple.valueOf(person, account, null);
     }
 
     public String getId() {
