@@ -36,12 +36,13 @@ public class OnlineDeviceAuthenticateImpl implements OnlineDeviceAuthenticate {
     @Override
     public boolean authenticate(OnlineDevice onlineDevice) {
         if (onlineDevice != null && onlineDevice.getExtraData() != null) {
-            ExtraDeviceData extraDeviceData = onlineDevice.getExtraData().getJSONObject("data").toJavaObject(ExtraDeviceData.class);
+            ExtraDeviceData extraDeviceData = onlineDevice.getExtraData().toJavaObject(ExtraDeviceData.class);
             if (extraDeviceData != null && !StringUtils.isBlank(extraDeviceData.getToken())) {
                 String accountCode = extraDeviceData.getAccountCode(),
                         token = extraDeviceData.getToken();
+                // TODO 需要根据配置内容来设定额外校验的代码字段
                 JwtService.JwtVerifyResult result = jwtService.verifyToken(token,
-                        JwtService.JwtVerifyPredicateBuilder.eq("code", accountCode));
+                        JwtService.JwtVerifyPredicateBuilder.eq("accountCode", accountCode));
                 return result.isPassed();
             }
         }
