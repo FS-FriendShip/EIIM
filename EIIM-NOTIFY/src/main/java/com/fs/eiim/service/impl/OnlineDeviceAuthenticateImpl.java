@@ -4,6 +4,7 @@ import com.fs.eiim.bean.ExtraDeviceData;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mx.StringUtils;
+import org.mx.comps.notify.config.NotifyConfigBean;
 import org.mx.comps.notify.online.OnlineDevice;
 import org.mx.comps.notify.online.OnlineDeviceAuthenticate;
 import org.mx.jwt.service.JwtService;
@@ -21,6 +22,7 @@ public class OnlineDeviceAuthenticateImpl implements OnlineDeviceAuthenticate {
     private static final Log logger = LogFactory.getLog(OnlineDeviceAuthenticateImpl.class);
 
     private JwtService jwtService;
+    private NotifyConfigBean notifyConfigBean;
 
     @Autowired
     public OnlineDeviceAuthenticateImpl(JwtService jwtService) {
@@ -40,9 +42,8 @@ public class OnlineDeviceAuthenticateImpl implements OnlineDeviceAuthenticate {
             if (extraDeviceData != null && !StringUtils.isBlank(extraDeviceData.getToken())) {
                 String accountCode = extraDeviceData.getAccountCode(),
                         token = extraDeviceData.getToken();
-                // TODO 需要根据配置内容来设定额外校验的代码字段
                 JwtService.JwtVerifyResult result = jwtService.verifyToken(token,
-                        JwtService.JwtVerifyPredicateBuilder.eq("accountCode", accountCode));
+                        JwtService.JwtVerifyPredicateBuilder.accountCode(accountCode));
                 return result.isPassed();
             }
         }
