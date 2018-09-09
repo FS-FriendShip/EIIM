@@ -33,16 +33,30 @@ public class UserInterfaceEiimErrorException extends UserInterfaceException {
         ACCOUNT_BLANK_TOKEN("账户令牌为空。"),
         ACCOUNT_BLANK_PASSWORD("账户密码为空。"),
         ACCOUNT_PASSWORD_STRENGTHEN_LOW("账户密码强度太低。"),
+        ACCOUNT_STATE_SAVE_FAIL("保存账户登录状态失败。"),
+        ACCOUNT_SAVE_FAIL("保存指定的账户信息失败。"),
+        PASSWORD_CHANGE_FAIL("修改账户密码失败。"),
 
         TOKEN_EXPIRED("账户令牌已经过期。"),
 
         NO_LOGIN_RECORD("指定账户没有登入系统的记录。"),
 
         ORG_NOT_FOUND("指定的组织单位不存在。"),
+        ORG_SAVE_FAIL("保存指定的组织单位失败。"),
 
         PERSON_NOT_FOUND("指定的人员不存在。"),
+        PERSON_SAVE_FAIL("保存指定的人员信息失败。"),
 
         CHATROOM_NOT_FOUND("指定的聊天室不存在。"),
+        CHATROOM_TOP_FAIL("将指定聊天室置顶失败。"),
+        CHATROOM_SAVE_FAIL("保存指定的聊天室信息失败。"),
+        CHATROOM_DELETE_FAIL("删除指定的聊天室失败。"),
+
+        CHATROOM_MEMBER_STATE_SAVE_FAIL("保存指定聊天成员状态失败。"),
+
+        CHATROOM_MESSAGE_SAVE_FAIL("保存指定的聊天消息失败。"),
+
+        CHATROOM_NOTICE_SAVE_FAIL("保存指定的聊天室公告失败。"),
 
         EIIM_OTHER_FAIL("未知的EIIM(企业内部即时通信系统)错误。");
 

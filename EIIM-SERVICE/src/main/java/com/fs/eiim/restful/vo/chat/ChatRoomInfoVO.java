@@ -50,39 +50,19 @@ public class ChatRoomInfoVO {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDesc() {
         return desc;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
     public AccountInfoVO getCreator() {
         return creator;
     }
 
-    public void setCreator(AccountInfoVO creator) {
-        this.creator = creator;
-    }
-
     public List<ChatRoomMemberVO> getMembers() {
         return members;
-    }
-
-    public void setMembers(List<ChatRoomMemberVO> members) {
-        this.members = members;
     }
 }

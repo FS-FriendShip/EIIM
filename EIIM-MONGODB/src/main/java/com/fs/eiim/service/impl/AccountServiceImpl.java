@@ -13,6 +13,7 @@ import org.mx.dal.EntityFactory;
 import org.mx.dal.service.GeneralAccessor;
 import org.mx.dal.service.GeneralDictAccessor;
 import org.mx.error.UserInterfaceSystemErrorException;
+import org.mx.jwt.error.UserInterfaceJwtErrorException;
 import org.mx.jwt.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -98,8 +99,17 @@ public class AccountServiceImpl implements AccountService {
         accountState.setLogoutTime(null);
         accountState.setStatus("online");
         accountState.setToken(token);
-        accessor.save(accountState);
-        return accountState;
+        try {
+            accessor.save(accountState);
+            return accountState;
+        } catch (Exception ex) {
+            if (logger.isErrorEnabled()) {
+                logger.error("Save account login state fail.", ex);
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.ACCOUNT_STATE_SAVE_FAIL
+            );
+        }
     }
 
     @Override
@@ -128,7 +138,9 @@ public class AccountServiceImpl implements AccountService {
             if (logger.isErrorEnabled()) {
                 logger.error(String.format("The token[%s] is invalid.", token));
             }
-            return null;
+            throw new UserInterfaceJwtErrorException(
+                    UserInterfaceJwtErrorException.JwtErrors.JWT_VERIFY_FAIL
+            );
         }
     }
 
@@ -157,7 +169,16 @@ public class AccountServiceImpl implements AccountService {
         }
         accountState.setStatus("offline");
         accountState.setLogoutTime(System.currentTimeMillis());
-        accessor.save(accountState);
+        try {
+            accessor.save(accountState);
+        } catch (Exception ex) {
+            if (logger.isErrorEnabled()) {
+                logger.error("Save account logout state fail.", ex);
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.ACCOUNT_STATE_SAVE_FAIL
+            );
+        }
     }
 
     @Override

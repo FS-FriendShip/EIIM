@@ -129,7 +129,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             Account creator = accessor.getByCode(creatorCode, Account.class);
             if (creator == null) {
                 if (logger.isErrorEnabled()) {
-                    logger.error(String.format("The account[%s] not found.", creator));
+                    logger.error(String.format("The account[%s] not found.", creatorCode));
                 }
                 throw new UserInterfaceRbacErrorException(
                         UserInterfaceRbacErrorException.RbacErrors.ACCOUNT_NOT_FOUND
@@ -137,7 +137,16 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             }
             chatRoom.setCreator(creator);
         }
-        return accessor.save(chatRoom);
+        try {
+            return accessor.save(chatRoom);
+        } catch (Exception ex) {
+            if (logger.isErrorEnabled()) {
+                logger.error("Save chat room info fail.", ex);
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.CHATROOM_SAVE_FAIL
+            );
+        }
     }
 
     /**
@@ -169,12 +178,21 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 Account account = member.getAccount();
                 if (account != null && accountCode.equals(account.getCode())) {
                     member.setValid(false);
-                    accessor.save(chatRoom);
-                    if (logger.isDebugEnabled()) {
-                        logger.debug(String.format("Delete the chat room successfully, chat room: %s, account: %s.",
-                                chatRoomId, accountCode));
+                    try {
+                        accessor.save(chatRoom);
+                        if (logger.isDebugEnabled()) {
+                            logger.debug(String.format("Delete the chat room successfully, chat room: %s, account: %s.",
+                                    chatRoomId, accountCode));
+                        }
+                        return;
+                    } catch (Exception ex) {
+                        if (logger.isErrorEnabled()) {
+                            logger.error("Delete the chat room fail.", ex);
+                        }
+                        throw new UserInterfaceEiimErrorException(
+                                UserInterfaceEiimErrorException.EiimErrors.CHATROOM_DELETE_FAIL
+                        );
                     }
-                    return;
                 }
             }
         }
@@ -240,12 +258,21 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 Account account = member.getAccount();
                 if (account != null && accountCode.equals(account.getCode())) {
                     member.setTop(isTop);
-                    accessor.save(chatRoom);
-                    if (logger.isDebugEnabled()) {
-                        logger.debug(String.format("Top the chat room successfully, chat room: %s, account: %s.",
-                                chatRoomId, accountCode));
+                    try {
+                        accessor.save(chatRoom);
+                        if (logger.isDebugEnabled()) {
+                            logger.debug(String.format("Top the chat room successfully, chat room: %s, account: %s.",
+                                    chatRoomId, accountCode));
+                        }
+                        return member;
+                    } catch (Exception ex) {
+                        if (logger.isErrorEnabled()) {
+                            logger.error("Top the chat room fail.", ex);
+                        }
+                        throw new UserInterfaceEiimErrorException(
+                                UserInterfaceEiimErrorException.EiimErrors.CHATROOM_TOP_FAIL
+                        );
                     }
-                    return member;
                 }
             }
         }
@@ -285,12 +312,21 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 Account account = member.getAccount();
                 if (account != null && accountCode.equals(account.getCode())) {
                     member.setStatus(status);
-                    accessor.save(chatRoom);
-                    if (logger.isDebugEnabled()) {
-                        logger.debug(String.format("Change the chat room's status successfully, chat room: %s, account: %s.",
-                                chatRoomId, accountCode));
+                    try {
+                        accessor.save(chatRoom);
+                        if (logger.isDebugEnabled()) {
+                            logger.debug(String.format("Change the chat room's status successfully, chat room: %s, account: %s.",
+                                    chatRoomId, accountCode));
+                        }
+                        return member;
+                    } catch (Exception ex) {
+                        if (logger.isErrorEnabled()) {
+                            logger.error("Save chat member's state fail.", ex);
+                        }
+                        throw new UserInterfaceEiimErrorException(
+                                UserInterfaceEiimErrorException.EiimErrors.CHATROOM_MEMBER_STATE_SAVE_FAIL
+                        );
                     }
-                    return member;
                 }
             }
         }
@@ -304,10 +340,10 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     /**
      * {@inheritDoc}
      *
-     * @see ChatRoomService#getAllUnreadMessage(String, String)
+     * @see ChatRoomService#getAllUnreadMessages(String, String)
      */
     @Override
-    public List<ChatMessage> getAllUnreadMessage(String chatRoomId, String accountCode) {
+    public List<ChatMessage> getAllUnreadMessages(String chatRoomId, String accountCode) {
         if (StringUtils.isBlank(chatRoomId) || StringUtils.isBlank(accountCode)) {
             if (logger.isErrorEnabled()) {
                 logger.error("The chat room's id or account's code is blank.");
@@ -346,6 +382,32 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 GeneralAccessor.ConditionTuple.eq("chatRoom", chatRoom),
                 GeneralAccessor.ConditionTuple.gte("sentTime", lastAccessTime)
         ), ChatMessage.class);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see ChatRoomService#getAllUnreadMessages(String)
+     */
+    @Override
+    public List<ChatRoomMessageTuple> getAllUnreadMessages(String accountCode) {
+        if (StringUtils.isBlank(accountCode)) {
+            if (logger.isErrorEnabled()) {
+                logger.error("The account's code is blank.");
+            }
+            throw new UserInterfaceSystemErrorException(
+                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            );
+        }
+        List<ChatRoom> chatRooms = getAllChatRoomsByAccount(accountCode);
+        List<ChatRoomMessageTuple> tuples = new ArrayList<>();
+        if (chatRooms != null && !chatRooms.isEmpty()) {
+            chatRooms.forEach(chatRoom -> {
+                List<ChatMessage> messages = getAllUnreadMessages(chatRoom.getId(), accountCode);
+                tuples.add(new ChatRoomMessageTuple(chatRoom, messages));
+            });
+        }
+        return tuples;
     }
 
     /**
@@ -390,12 +452,21 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         chatMessage.setMessageType(messageType);
         chatMessage.setSender(sender);
         chatMessage.setSentTime(System.currentTimeMillis());
-        accessor.save(chatMessage);
-        if (logger.isDebugEnabled()) {
-            logger.debug(String.format("Save a chat message successfully, chat room id: %s, account code: %s," +
-                    "message type: %s, message: %s.", chatRoomId, accoutnCode, messageType, message));
+        try {
+            accessor.save(chatMessage);
+            if (logger.isDebugEnabled()) {
+                logger.debug(String.format("Save a chat message successfully, chat room id: %s, account code: %s," +
+                        "message type: %s, message: %s.", chatRoomId, accoutnCode, messageType, message));
+            }
+            return chatRoom;
+        } catch (Exception ex) {
+            if (logger.isErrorEnabled()) {
+                logger.error("Save chat message fail.", ex);
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.CHATROOM_MESSAGE_SAVE_FAIL
+            );
         }
-        return chatRoom;
     }
 
     /**
@@ -463,6 +534,15 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         chatNotice.setNotice(notice);
         chatNotice.setChatRoom(chatRoom);
         chatNotice.setPushTime(System.currentTimeMillis());
-        accessor.save(chatNotice);
+        try {
+            accessor.save(chatNotice);
+        } catch (Exception ex) {
+            if (logger.isErrorEnabled()) {
+                logger.error("Save chat room's notice fail.", ex);
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.CHATROOM_NOTICE_SAVE_FAIL
+            );
+        }
     }
 }

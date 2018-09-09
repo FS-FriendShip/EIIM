@@ -177,8 +177,16 @@ public class ChatRoomServiceResource {
     @RestAuthenticate
     public DataVO<List<ChatMessageVO>> getAllUnreadMessages(@PathParam("chatRoomId") String chatRoomId,
                                                             @PathParam("accountCode") String accountCode) {
-        List<ChatMessage> messages = chatRoomService.getAllUnreadMessage(chatRoomId, accountCode);
+        List<ChatMessage> messages = chatRoomService.getAllUnreadMessages(chatRoomId, accountCode);
         return new DataVO<>(ChatMessageVO.valueOf(messages));
+    }
+
+    @Path("chatRooms/accounts/{accountCode}/unread")
+    @GET
+    @RestAuthenticate
+    public DataVO<List<ChatRoomMessageInfoVO>> getAllUnreadMessage(@PathParam("accountCode") String accountCode) {
+        List<ChatRoomService.ChatRoomMessageTuple> tuples = chatRoomService.getAllUnreadMessages(accountCode);
+        return new DataVO<>(ChatRoomMessageInfoVO.valueOf(tuples));
     }
 
     @Path("chatRooms/{chatRoomId}/notices")

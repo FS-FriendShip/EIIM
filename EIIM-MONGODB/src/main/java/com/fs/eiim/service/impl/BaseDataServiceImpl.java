@@ -79,6 +79,9 @@ public class BaseDataServiceImpl implements BaseDataService {
                 }
             }
         }
+        if (logger.isWarnEnabled()) {
+            logger.warn(String.format("There are none base data item for category[%s].", categoryCode));
+        }
         return null;
     }
 
@@ -97,6 +100,9 @@ public class BaseDataServiceImpl implements BaseDataService {
                     return item;
                 }
             }
+        }
+        if (logger.isWarnEnabled()) {
+            logger.warn(String.format("The base data item[%s:%s] not found.", categoryCode, code));
         }
         return null;
     }
@@ -221,12 +227,21 @@ public class BaseDataServiceImpl implements BaseDataService {
         org.setParent(parent);
         org.setManager(manager);
         org.setEmployees(employees);
-        org = accessor.save(org);
-        if (parent != null) {
-            parent.getChildren().add(org);
-            accessor.save(parent);
+        try {
+            org = accessor.save(org);
+            if (parent != null) {
+                parent.getChildren().add(org);
+                accessor.save(parent);
+            }
+            return org;
+        } catch (Exception ex) {
+            if (logger.isErrorEnabled()) {
+                logger.error("Save org fail.", ex);
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.ORG_SAVE_FAIL
+            );
         }
-        return org;
     }
 
     @Override
@@ -287,14 +302,32 @@ public class BaseDataServiceImpl implements BaseDataService {
                 person = checkedPerson;
             }
         }
-        person = accessor.save(person);
+        try {
+            person = accessor.save(person);
+        } catch (Exception ex) {
+            if (logger.isErrorEnabled()) {
+                logger.error("Save person info fail.", ex);
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.PERSON_SAVE_FAIL
+            );
+        }
         if (account != null && !StringUtils.isBlank(account.getId())) {
             Account checkAccount = accessor.getById(account.getId(), Account.class);
             if (checkAccount != null) {
                 checkAccount.setNickName(account.getNickName());
                 checkAccount.setAvatar(account.getAvatar());
                 checkAccount.setPerson(person);
-                account = accessor.save(checkAccount);
+                try {
+                    account = accessor.save(checkAccount);
+                } catch (Exception ex) {
+                    if (logger.isErrorEnabled()) {
+                        logger.error("Save account info fail.", ex);
+                    }
+                    throw new UserInterfaceEiimErrorException(
+                            UserInterfaceEiimErrorException.EiimErrors.ACCOUNT_SAVE_FAIL
+                    );
+                }
             } else {
                 if (logger.isErrorEnabled()) {
                     logger.error(String.format("The account[%s] not found.", account.getId()));
@@ -385,14 +418,23 @@ public class BaseDataServiceImpl implements BaseDataService {
             account.setPerson(person);
             account.setDesc(person.getFullName());
             account.setValid(true);
-            accessor.save(account);
-            roleUser.getAccounts().add(account);
-            accessor.save(roleUser);
-            if (logger.isDebugEnabled()) {
-                logger.debug(String.format("Enable persion[%s]'s account sccuessfully, the eiim code: %s.",
-                        person.getFullName(), account.getEiimCode()));
+            try {
+                accessor.save(account);
+                roleUser.getAccounts().add(account);
+                accessor.save(roleUser);
+                if (logger.isDebugEnabled()) {
+                    logger.debug(String.format("Enable persion[%s]'s account sccuessfully, the eiim code: %s.",
+                            person.getFullName(), account.getEiimCode()));
+                }
+                return PersonAccountTuple.valueOf(person, account, getOrgByPerson(person));
+            } catch (Exception ex) {
+                if (logger.isErrorEnabled()) {
+                    logger.error("Save account info fail.", ex);
+                }
+                throw new UserInterfaceEiimErrorException(
+                        UserInterfaceEiimErrorException.EiimErrors.ACCOUNT_SAVE_FAIL
+                );
             }
-            return PersonAccountTuple.valueOf(person, account, getOrgByPerson(person));
         } else {
             // 账户已经存在
             if (logger.isWarnEnabled()) {
@@ -472,9 +514,18 @@ public class BaseDataServiceImpl implements BaseDataService {
                 );
             }
             account.setPassword(DigestUtils.md5(newPassword));
-            accessor.save(account);
-            if (logger.isDebugEnabled()) {
-                logger.debug(String.format("Modify account[%s]'s password successfully.", accountCode));
+            try {
+                accessor.save(account);
+                if (logger.isDebugEnabled()) {
+                    logger.debug(String.format("Modify account[%s]'s password successfully.", accountCode));
+                }
+            } catch (Exception ex) {
+                if (logger.isErrorEnabled()) {
+                    logger.error("Save changed password fail.", ex);
+                }
+                throw new UserInterfaceEiimErrorException(
+                        UserInterfaceEiimErrorException.EiimErrors.PASSWORD_CHANGE_FAIL
+                );
             }
         } else {
             throw new UserInterfaceEiimErrorException(
