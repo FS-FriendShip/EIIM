@@ -14,11 +14,10 @@ public class ChatRoomInfoVO {
     private AccountInfoVO creator;
     private List<ChatRoomMemberVO> members;
 
-    public static ChatRoomInfoVO valueOf(ChatRoom chatRoom) {
-        if (chatRoom == null) {
-            return null;
+    public static void transform(ChatRoom chatRoom, ChatRoomInfoVO chatRoomInfoVO) {
+        if (chatRoom == null || chatRoomInfoVO == null) {
+            return;
         }
-        ChatRoomInfoVO chatRoomInfoVO = new ChatRoomInfoVO();
         chatRoomInfoVO.id = chatRoom.getId();
         chatRoomInfoVO.name = chatRoom.getName();
         chatRoomInfoVO.desc = chatRoom.getDesc();
@@ -34,6 +33,14 @@ public class ChatRoomInfoVO {
             members.forEach(member -> list.add(ChatRoomMemberVO.valueOf(member)));
             chatRoomInfoVO.members = list;
         }
+    }
+
+    public static ChatRoomInfoVO valueOf(ChatRoom chatRoom) {
+        if (chatRoom == null) {
+            return null;
+        }
+        ChatRoomInfoVO chatRoomInfoVO = new ChatRoomInfoVO();
+        transform(chatRoom, chatRoomInfoVO);
 
         return chatRoomInfoVO;
     }

@@ -1,6 +1,7 @@
 package com.fs.eiim.service;
 
 import com.fs.eiim.dal.entity.*;
+import org.mx.dal.Pagination;
 
 import java.util.List;
 
@@ -14,6 +15,8 @@ public interface ChatRoomService {
     List<ChatRoom> getAllChatRooms();
 
     List<ChatRoom> getAllChatRoomsByAccount(String accountCode);
+
+    List<ChatRoomSummary> getAllChatRoomsByAccount(String accountCode, List<ChatRoomSummaryRequest> summaryRequests);
 
     ChatRoom saveChatRoom(String chatRoomId, String chatRoomName, List<String> addAccountCodes,
                           List<String> delAccountCodes, String creatorCode);
@@ -32,11 +35,18 @@ public interface ChatRoomService {
 
     List<ChatRoomMessageTuple> getAllUnreadMessages(String accountCode);
 
+    List<ChatMessage> getMessagesByRequest(String chatRoomId, String accountCode, String lastMessageId,
+                                           Direction direction, Pagination pagination);
+
     ChatRoom saveChatMessage(String accoutnCode, String eiimCode, String chatRoomId, String messageType, String message);
 
     List<ChatNotice> getAllChatRoomNotices(String chatRoomId);
 
     void saveChatRoomNotice(String chatRoomId, String noticeId, String noticeType, String notice);
+
+    enum Direction {
+        FORWARD, BACKWARD;
+    }
 
     class ChatRoomMessageTuple {
         private ChatRoom chatRoom;
@@ -58,6 +68,60 @@ public interface ChatRoomService {
 
         public List<ChatMessage> getMessages() {
             return messages;
+        }
+    }
+
+    class ChatRoomSummaryRequest {
+        private String chatRoomId, lastMessageId;
+        private Direction direction = Direction.FORWARD;
+
+        public String getChatRoomId() {
+            return chatRoomId;
+        }
+
+        public void setChatRoomId(String chatRoomId) {
+            this.chatRoomId = chatRoomId;
+        }
+
+        public String getLastMessageId() {
+            return lastMessageId;
+        }
+
+        public void setLastMessageId(String lastMessageId) {
+            this.lastMessageId = lastMessageId;
+        }
+
+        public Direction getDirection() {
+            return direction;
+        }
+
+        public void setDirection(Direction direction) {
+            this.direction = direction;
+        }
+    }
+
+    class ChatRoomSummary {
+        private ChatRoom chatRoom;
+        private int unread;
+        private ChatMessage latestMessage;
+
+        public ChatRoomSummary(ChatRoom chatRoom, int unread, ChatMessage latestMessage) {
+            super();
+            this.chatRoom = chatRoom;
+            this.unread = unread;
+            this.latestMessage = latestMessage;
+        }
+
+        public ChatRoom getChatRoom() {
+            return chatRoom;
+        }
+
+        public int getUnread() {
+            return unread;
+        }
+
+        public ChatMessage getLatestMessage() {
+            return latestMessage;
         }
     }
 }

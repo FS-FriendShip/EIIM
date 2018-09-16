@@ -52,6 +52,7 @@ public class UserInterfaceEiimErrorException extends UserInterfaceException {
         CHATROOM_TOP_FAIL("将指定聊天室置顶失败。"),
         CHATROOM_SAVE_FAIL("保存指定的聊天室信息失败。"),
         CHATROOM_DELETE_FAIL("删除指定的聊天室失败。"),
+        CHATROOM_MEMBER_NOT_FOUND("指定的账户不在指定的聊天室中。"),
 
         CHATROOM_MEMBER_STATE_SAVE_FAIL("保存指定聊天成员状态失败。"),
 

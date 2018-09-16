@@ -9,15 +9,18 @@ import com.fs.eiim.service.ChatRoomService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mx.StringUtils;
+import org.mx.dal.Pagination;
 import org.mx.dal.session.SessionDataStore;
 import org.mx.error.UserInterfaceSystemErrorException;
 import org.mx.service.rest.auth.RestAuthenticate;
 import org.mx.service.rest.vo.DataVO;
+import org.mx.service.rest.vo.PaginationDataVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,6 +52,24 @@ public class ChatRoomServiceResource {
     public DataVO<List<ChatRoomInfoVO>> getAllChatRooms() {
         List<ChatRoom> chatRooms = chatRoomService.getAllChatRooms();
         return new DataVO<>(ChatRoomInfoVO.valueOf(chatRooms));
+    }
+
+    @Path("chatRooms/accounts/{accountCode}/summary")
+    @POST
+    @RestAuthenticate
+    public DataVO<List<ChatRoomSummaryInfoVO>> getAllChatRoomsByAccount(@PathParam("accountCode") String accountCode,
+                                                                        List<ChatRoomService.ChatRoomSummaryRequest> summaryReqeusts) {
+        if (summaryReqeusts == null) {
+            throw new UserInterfaceSystemErrorException(
+                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            );
+        }
+        List<ChatRoomSummaryInfoVO> list = new ArrayList<>();
+        List<ChatRoomService.ChatRoomSummary> summaries = chatRoomService.getAllChatRoomsByAccount(accountCode, summaryReqeusts);
+        if (summaries != null && !summaries.isEmpty()) {
+            summaries.forEach(summary -> list.add(ChatRoomSummaryInfoVO.valueOf(summary)));
+        }
+        return new DataVO<>(list);
     }
 
     @Path("chatRooms/accounts/{accountCode}")
@@ -179,6 +200,30 @@ public class ChatRoomServiceResource {
                                                             @PathParam("accountCode") String accountCode) {
         List<ChatMessage> messages = chatRoomService.getAllUnreadMessages(chatRoomId, accountCode);
         return new DataVO<>(ChatMessageVO.valueOf(messages));
+    }
+
+    @Path("chatRooms/{chatRoomId}/accounts/{accountCode}/messages")
+    @GET
+    @RestAuthenticate
+    @SuppressWarnings("unchecked")
+    public DataVO<List<ChatMessageVO>> getAllMessagesByRequest(@PathParam("chatRoomId") String chatRoomId,
+                                                               @PathParam("accountCode") String accountCode,
+                                                               MessageRequestVO messageRequestVO) {
+        if (messageRequestVO == null) {
+            throw new UserInterfaceSystemErrorException(
+                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            );
+        }
+        String lastMessageId = messageRequestVO.getLastMessageId();
+        ChatRoomService.Direction direction = messageRequestVO.getDirection();
+        Pagination pagination = messageRequestVO.getPagination();
+        List<ChatMessage> messages = chatRoomService.getMessagesByRequest(chatRoomId, accountCode, lastMessageId,
+                direction, pagination);
+        if (pagination != null) {
+            return new PaginationDataVO<>(pagination, ChatMessageVO.valueOf(messages));
+        } else {
+            return new DataVO<>(ChatMessageVO.valueOf(messages));
+        }
     }
 
     @Path("chatRooms/accounts/{accountCode}/unread")

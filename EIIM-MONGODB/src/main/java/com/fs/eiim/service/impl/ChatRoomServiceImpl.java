@@ -8,6 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import org.mx.StringUtils;
 import org.mx.comps.rbac.error.UserInterfaceRbacErrorException;
 import org.mx.dal.EntityFactory;
+import org.mx.dal.Pagination;
 import org.mx.dal.service.GeneralAccessor;
 import org.mx.dal.service.GeneralDictAccessor;
 import org.mx.error.UserInterfaceSystemErrorException;
@@ -15,9 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -53,6 +52,19 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         return accessor.list(ChatRoom.class);
     }
 
+    private boolean hasMember(ChatRoom chatRoom, String accountCode) {
+        Set<ChatRoomMember> members = chatRoom.getMembers();
+        if (members != null && !members.isEmpty()) {
+            for (ChatRoomMember member : members) {
+                Account account = member.getAccount();
+                if (account != null && accountCode.equals(account.getCode())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * {@inheritDoc}
      *
@@ -69,17 +81,57 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             );
         }
         List<ChatRoom> chatRooms = accessor.list(ChatRoom.class);
-        return chatRooms.stream().filter(chatRoom -> {
-            Set<ChatRoomMember> members = chatRoom.getMembers();
-            if (members != null && !members.isEmpty()) {
-                for (ChatRoomMember member : members) {
-                    Account account = member.getAccount();
-                    if (account != null && accountCode.equals(account.getCode())) {
-                        return true;
+        return chatRooms.stream().filter(chatRoom -> hasMember(chatRoom, accountCode)).collect(Collectors.toList());
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see ChatRoomService#getAllChatRoomsByAccount(String, List)
+     */
+    @Override
+    public List<ChatRoomSummary> getAllChatRoomsByAccount(String accountCode, List<ChatRoomSummaryRequest> summaryRequests) {
+        if (StringUtils.isBlank(accountCode)) {
+            if (logger.isErrorEnabled()) {
+                logger.error("The account's code is blank.");
+            }
+            throw new UserInterfaceSystemErrorException(
+                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            );
+        }
+        Map<String, ChatRoomSummaryRequest> map = new HashMap<>();
+        if (summaryRequests != null && !summaryRequests.isEmpty()) {
+            summaryRequests.forEach(request -> map.put(request.getChatRoomId(), request));
+        }
+        List<ChatRoom> chatRooms = accessor.list(ChatRoom.class);
+        return chatRooms.stream().filter(chatRoom -> hasMember(chatRoom, accountCode)).map(chatRoom -> {
+            int unread = 0;
+            ChatMessage lastMessage = null;
+            String chatRoomId = chatRoom.getId();
+            if (map.containsKey(chatRoomId)) {
+                ChatRoomSummaryRequest request = map.get(chatRoomId);
+                Direction direction = request.getDirection();
+                if (direction == Direction.FORWARD) {
+                    // 需要取未读消息
+                    String messageId = request.getLastMessageId();
+                    ChatMessage chatMessage = accessor.getById(messageId, ChatMessage.class);
+                    long beginTime = 0;
+                    if (chatMessage != null) {
+                        beginTime = chatMessage.getSentTime() + 1;
+                    }
+                    List<ChatMessage> list = accessor.find(null, GeneralAccessor.ConditionGroup.and(
+                            GeneralAccessor.ConditionTuple.gte("sentTime", beginTime),
+                            GeneralAccessor.ConditionTuple.eq("chatRoom", chatRoom)
+                    ), GeneralAccessor.RecordOrderGroup.group(
+                            GeneralAccessor.RecordOrder.desc("sentTime")
+                    ), ChatMessage.class);
+                    unread = list.size();
+                    if (unread > 0) {
+                        lastMessage = list.get(0);
                     }
                 }
             }
-            return false;
+            return new ChatRoomSummary(chatRoom, unread, lastMessage);
         }).collect(Collectors.toList());
     }
 
@@ -418,6 +470,65 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             });
         }
         return tuples;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see ChatRoomService#getMessagesByRequest(String, String, String, Direction, Pagination)
+     */
+    @Override
+    public List<ChatMessage> getMessagesByRequest(String chatRoomId, String accountCode, String lastMessageId,
+                                                  Direction direction, Pagination pagination) {
+        if (StringUtils.isBlank(chatRoomId) || StringUtils.isBlank(accountCode)) {
+            if (logger.isErrorEnabled()) {
+                logger.error("The chat room's id or the account's code is blank.");
+            }
+            throw new UserInterfaceSystemErrorException(
+                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            );
+        }
+        ChatRoom chatRoom = accessor.getById(chatRoomId, ChatRoom.class);
+        if (chatRoom == null) {
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format("The chat room[%s] not found.", chatRoomId));
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.CHATROOM_NOT_FOUND
+            );
+        }
+        if (!hasMember(chatRoom, accountCode)) {
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format("The account[%s] not in the chat room[%s].", accountCode, chatRoomId));
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.CHATROOM_MEMBER_NOT_FOUND
+            );
+        }
+        long beginTime = -1;
+        if (!StringUtils.isBlank(lastMessageId)) {
+            ChatMessage chatMessage = accessor.getById(lastMessageId, ChatMessage.class);
+            if (chatMessage != null) {
+                beginTime = chatMessage.getSentTime() + 1;
+            }
+        }
+        GeneralAccessor.ConditionGroup group;
+        if (direction == Direction.FORWARD) {
+            // 新消息
+            group = GeneralAccessor.ConditionGroup.and(
+                    GeneralAccessor.ConditionTuple.eq("chatRoom", chatRoom),
+                    GeneralAccessor.ConditionTuple.gte("sentTime", beginTime)
+            );
+        } else {
+            // 旧消息
+            group = GeneralAccessor.ConditionGroup.and(
+                    GeneralAccessor.ConditionTuple.eq("chatRoom", chatRoom),
+                    GeneralAccessor.ConditionTuple.lte("sentTime", beginTime)
+            );
+        }
+        return accessor.find(pagination, group, GeneralAccessor.RecordOrderGroup.group(
+                GeneralAccessor.RecordOrder.asc("sentTime")
+        ), ChatMessage.class);
     }
 
     /**
