@@ -203,7 +203,7 @@ public class ChatRoomServiceResource {
     }
 
     @Path("chatRooms/{chatRoomId}/accounts/{accountCode}/messages")
-    @GET
+    @POST
     @RestAuthenticate
     @SuppressWarnings("unchecked")
     public DataVO<List<ChatMessageVO>> getAllMessagesByRequest(@PathParam("chatRoomId") String chatRoomId,

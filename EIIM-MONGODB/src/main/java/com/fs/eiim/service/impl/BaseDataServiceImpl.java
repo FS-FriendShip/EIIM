@@ -268,9 +268,8 @@ public class BaseDataServiceImpl implements BaseDataService {
         List<Person> persons = accessor.list(Person.class);
         List<PersonAccountTuple> tuples = new ArrayList<>();
         for (Person person : persons) {
-            Account account = accessor.findOne(Collections.singletonList(
-                    GeneralAccessor.ConditionTuple.eq("person", person)
-            ), Account.class);
+            Account account = accessor.findOne(GeneralAccessor.ConditionTuple.eq("person", person),
+                    Account.class);
             tuples.add(PersonAccountTuple.valueOf(person, account, getOrgByPerson(person)));
         }
         return tuples;
@@ -361,9 +360,8 @@ public class BaseDataServiceImpl implements BaseDataService {
                     UserInterfaceRbacErrorException.RbacErrors.USER_NOT_FOUND
             );
         }
-        Account account = accessor.findOne(Collections.singletonList(
-                GeneralAccessor.ConditionTuple.eq("person", person)
-        ), Account.class);
+        Account account = accessor.findOne(GeneralAccessor.ConditionTuple.eq("person", person),
+                Account.class);
         if (account == null) {
             if (logger.isWarnEnabled()) {
                 logger.warn(String.format("The person[%s] not be enabled a account.", person.getFullName()));
@@ -402,9 +400,7 @@ public class BaseDataServiceImpl implements BaseDataService {
                     UserInterfaceRbacErrorException.RbacErrors.ROLE_NOT_FOUND
             );
         }
-        Account account = accessor.findOne(Collections.singletonList(
-                GeneralAccessor.ConditionTuple.eq("person", person)
-        ), Account.class);
+        Account account = accessor.findOne(GeneralAccessor.ConditionTuple.eq("person", person), Account.class);
         if (account == null) {
             // 账户不存在，创建账户
             account = EntityFactory.createEntity(Account.class);

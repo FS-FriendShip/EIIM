@@ -105,31 +105,38 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         }
         List<ChatRoom> chatRooms = accessor.list(ChatRoom.class);
         return chatRooms.stream().filter(chatRoom -> hasMember(chatRoom, accountCode)).map(chatRoom -> {
-            int unread = 0;
+            int unread;
             ChatMessage lastMessage = null;
             String chatRoomId = chatRoom.getId();
+            long sentTime = 0;
+            GeneralAccessor.ConditionTuple sentTimeCond;
             if (map.containsKey(chatRoomId)) {
                 ChatRoomSummaryRequest request = map.get(chatRoomId);
                 Direction direction = request.getDirection();
+                String messageId = request.getLastMessageId();
+                ChatMessage chatMessage = accessor.getById(messageId, ChatMessage.class);
                 if (direction == Direction.FORWARD) {
                     // 需要取未读消息
-                    String messageId = request.getLastMessageId();
-                    ChatMessage chatMessage = accessor.getById(messageId, ChatMessage.class);
-                    long beginTime = 0;
                     if (chatMessage != null) {
-                        beginTime = chatMessage.getSentTime() + 1;
+                        sentTime = chatMessage.getSentTime();
                     }
-                    List<ChatMessage> list = accessor.find(null, GeneralAccessor.ConditionGroup.and(
-                            GeneralAccessor.ConditionTuple.gte("sentTime", beginTime),
-                            GeneralAccessor.ConditionTuple.eq("chatRoom", chatRoom)
-                    ), GeneralAccessor.RecordOrderGroup.group(
-                            GeneralAccessor.RecordOrder.desc("sentTime")
-                    ), ChatMessage.class);
-                    unread = list.size();
-                    if (unread > 0) {
-                        lastMessage = list.get(0);
+                    sentTimeCond = GeneralAccessor.ConditionTuple.gte("sentTime", sentTime + 1);
+                } else {
+                    if (chatMessage != null) {
+                        sentTime = chatMessage.getSentTime();
                     }
+                    sentTimeCond = GeneralAccessor.ConditionTuple.lte("sentTime", sentTime - 1);
                 }
+            } else {
+                sentTimeCond = GeneralAccessor.ConditionTuple.gte("sentTime", sentTime);
+            }
+            List<ChatMessage> list = accessor.find(null, GeneralAccessor.ConditionGroup.and(
+                    sentTimeCond, GeneralAccessor.ConditionTuple.eq("chatRoom", chatRoom)),
+                    GeneralAccessor.RecordOrderGroup.group(GeneralAccessor.RecordOrder.desc("sentTime")),
+                    ChatMessage.class);
+            unread = list.size();
+            if (unread > 0) {
+                lastMessage = list.get(0);
             }
             return new ChatRoomSummary(chatRoom, unread, lastMessage);
         }).collect(Collectors.toList());
@@ -505,11 +512,11 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                     UserInterfaceEiimErrorException.EiimErrors.CHATROOM_MEMBER_NOT_FOUND
             );
         }
-        long beginTime = -1;
+        long sentTime = -1;
         if (!StringUtils.isBlank(lastMessageId)) {
             ChatMessage chatMessage = accessor.getById(lastMessageId, ChatMessage.class);
             if (chatMessage != null) {
-                beginTime = chatMessage.getSentTime() + 1;
+                sentTime = chatMessage.getSentTime();
             }
         }
         GeneralAccessor.ConditionGroup group;
@@ -517,13 +524,13 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             // 新消息
             group = GeneralAccessor.ConditionGroup.and(
                     GeneralAccessor.ConditionTuple.eq("chatRoom", chatRoom),
-                    GeneralAccessor.ConditionTuple.gte("sentTime", beginTime)
+                    GeneralAccessor.ConditionTuple.gte("sentTime", sentTime + 1)
             );
         } else {
             // 旧消息
             group = GeneralAccessor.ConditionGroup.and(
                     GeneralAccessor.ConditionTuple.eq("chatRoom", chatRoom),
-                    GeneralAccessor.ConditionTuple.lte("sentTime", beginTime)
+                    GeneralAccessor.ConditionTuple.lte("sentTime", sentTime - 1)
             );
         }
         return accessor.find(pagination, group, GeneralAccessor.RecordOrderGroup.group(
