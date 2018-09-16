@@ -1,8 +1,10 @@
 package com.fs.eiim.websocket.processor;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fs.eiim.dal.entity.Account;
 import com.fs.eiim.dal.entity.ChatRoom;
 import com.fs.eiim.dal.entity.ChatRoomMember;
+import com.fs.eiim.error.UserInterfaceEiimErrorException;
 import com.fs.eiim.service.ChatRoomService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -79,6 +81,15 @@ public class SendChatMessageProcessor implements MessageProcessor {
                     sessionDataStore.setCurrentUserCode(accountCode);
                     // 调用消息保存服务
                     ChatRoom chatRoom = chatRoomService.saveChatMessage(accountCode, eiimCode, chatRoomId, messageType, message);
+                    Account sender = chatRoomService.getMessageSender(accountCode);
+                    if (sender == null) {
+                        if (logger.isErrorEnabled()) {
+                            logger.error(String.format("The sender[%s] not found.", accountCode));
+                        }
+                        throw new UserInterfaceEiimErrorException(
+                                UserInterfaceEiimErrorException.EiimErrors.ACCOUNT_NOT_FOUND
+                        );
+                    }
                     Set<ChatRoomMember> members = chatRoom.getMembers();
                     // 获取在本聊天室中的在线用户
                     Set<OnlineDevice> onlineDevices = onlineManager.getOnlineDevices(Collections.singletonList(
@@ -106,9 +117,13 @@ public class SendChatMessageProcessor implements MessageProcessor {
                         data.put("chatRoomId", chatRoom.getId());
                         data.put("messageType", messageType);
                         data.put("message", message);
-                        data.put("accountCode", accountCode);
-                        data.put("eiimCode", eiimCode);
                         data.put("sentTime", System.currentTimeMillis());
+                        JSONObject senderData = new JSONObject();
+                        senderData.put("id", sender.getId());
+                        senderData.put("code", sender.getCode());
+                        senderData.put("nickname", sender.getNickName());
+                        senderData.put("avatar", sender.getAvatar());
+                        data.put("sender", senderData);
                         notifyMessage.put("message", data);
                         // 推送聊天数据
                         notifyProcessor.notifyProcess(notifyMessage);

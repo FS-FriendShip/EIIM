@@ -1,9 +1,6 @@
 package com.fs.eiim.service;
 
-import com.fs.eiim.dal.entity.ChatMessage;
-import com.fs.eiim.dal.entity.ChatNotice;
-import com.fs.eiim.dal.entity.ChatRoom;
-import com.fs.eiim.dal.entity.ChatRoomMember;
+import com.fs.eiim.dal.entity.*;
 
 import java.util.List;
 
@@ -22,6 +19,8 @@ public interface ChatRoomService {
                           List<String> delAccountCodes, String creatorCode);
 
     void deleteChatRoom(String chatRoomId, String accountCode);
+
+    Account getMessageSender(String accountCode);
 
     List<ChatRoomMember> getChatRoomMembers(String chatRoomId);
 

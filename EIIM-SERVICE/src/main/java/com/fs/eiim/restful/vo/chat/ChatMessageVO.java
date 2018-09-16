@@ -2,14 +2,13 @@ package com.fs.eiim.restful.vo.chat;
 
 import com.fs.eiim.dal.entity.Account;
 import com.fs.eiim.dal.entity.ChatMessage;
-import com.fs.eiim.restful.vo.account.AccountInfoVO;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChatMessageVO {
     private String id, messageType, message;
-    private AccountInfoVO sender;
+    private MessageSenderVO sender;
     private Long sentTime;
 
     public static ChatMessageVO valueOf(ChatMessage chatMessage) {
@@ -23,14 +22,14 @@ public class ChatMessageVO {
         chatMessageVO.sentTime = chatMessage.getSentTime();
         Account sender = chatMessage.getSender();
         if (sender != null) {
-            chatMessageVO.sender = AccountInfoVO.valueOf(sender);
+            chatMessageVO.sender = MessageSenderVO.valueOf(sender);
         }
         return chatMessageVO;
     }
 
     public static List<ChatMessageVO> valueOf(List<ChatMessage> chatMessages) {
         List<ChatMessageVO> list = new ArrayList<>(chatMessages.size());
-        if (chatMessages != null && !chatMessages.isEmpty()) {
+        if (!chatMessages.isEmpty()) {
             chatMessages.forEach(chatMessage -> list.add(valueOf(chatMessage)));
         }
         return list;
@@ -40,39 +39,19 @@ public class ChatMessageVO {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getMessageType() {
         return messageType;
-    }
-
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public AccountInfoVO getSender() {
+    public MessageSenderVO getSender() {
         return sender;
-    }
-
-    public void setSender(AccountInfoVO sender) {
-        this.sender = sender;
     }
 
     public Long getSentTime() {
         return sentTime;
-    }
-
-    public void setSentTime(Long sentTime) {
-        this.sentTime = sentTime;
     }
 }

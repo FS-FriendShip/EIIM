@@ -205,6 +205,16 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     /**
      * {@inheritDoc}
      *
+     * @see ChatRoomService#getMessageSender(String)
+     */
+    @Override
+    public Account getMessageSender(String accountCode) {
+        return accessor.getByCode(accountCode, Account.class);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
      * @see ChatRoomService#getChatRoomMembers(String)
      */
     @Override

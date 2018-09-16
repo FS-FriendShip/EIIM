@@ -35,6 +35,7 @@ public class UserInterfaceEiimErrorException extends UserInterfaceException {
         ACCOUNT_PASSWORD_STRENGTHEN_LOW("账户密码强度太低。"),
         ACCOUNT_STATE_SAVE_FAIL("保存账户登录状态失败。"),
         ACCOUNT_SAVE_FAIL("保存指定的账户信息失败。"),
+        ACCOUNT_NOT_FOUND("指定的账户不存在。"),
         PASSWORD_CHANGE_FAIL("修改账户密码失败。"),
 
         TOKEN_EXPIRED("账户令牌已经过期。"),

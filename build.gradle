@@ -7,7 +7,7 @@ apply from: './dependencies.gradle'
 apply from: './allprojects.gradle'
 
 project(':EIIM-NOTIFY') {
-    version = '1.0.1'
+    version = '1.0.2'
     description = 'Notify server for EIIM.'
 
     dependencies {
@@ -19,7 +19,7 @@ project(':EIIM-NOTIFY') {
 }
 
 project(':EIIM-SERVICE') {
-    version = '1.0.0'
+    version = '1.0.1'
     description = 'Many RESTful service for EIIM, for any mobile app and web app.'
 
     dependencies {
@@ -41,7 +41,7 @@ project(':EIIM-SERVICE') {
 }
 
 project(':EIIM-MONGODB') {
-    version = '1.0.0'
+    version = '1.0.1'
     description = 'Many entity persist implementation based on mongodb for EIIM.'
 
     dependencies {
