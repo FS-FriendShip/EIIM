@@ -38,6 +38,6 @@ public class EiimServiceConfig {
     @Bean("restfulClassesEiim")
     public List<Class<?>> restfulClassesEiim() {
         return Arrays.asList(PersonServiceResource.class, AccountServiceResource.class, ChatRoomServiceResource.class,
-                OrgServiceResource.class, BaseDataServiceResource.class);
+                OrgServiceResource.class, BaseDataServiceResource.class, FileTransformResource.class);
     }
 }

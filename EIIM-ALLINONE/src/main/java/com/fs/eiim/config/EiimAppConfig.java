@@ -14,7 +14,8 @@ import org.springframework.context.annotation.PropertySource;
         "classpath:cache-ehcache.properties",
         "classpath:cache-redis.properties",
         "classpath:redis.properties",
-        "classpath:auth.properties"
+        "classpath:auth.properties",
+        "classpath:file.properties"
 })
 @Import({
         JwtServiceConfig.class,

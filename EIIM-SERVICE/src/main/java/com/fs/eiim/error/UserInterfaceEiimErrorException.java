@@ -60,6 +60,9 @@ public class UserInterfaceEiimErrorException extends UserInterfaceException {
 
         CHATROOM_NOTICE_SAVE_FAIL("保存指定的聊天室公告失败。"),
 
+        FILE_UPLOAD_FAIL("文件上传保存失败。"),
+        FILE_DOWNLOAD_FAIL("文件下载读取失败。"),
+
         EIIM_OTHER_FAIL("未知的EIIM(企业内部即时通信系统)错误。");
 
         public static final int BASE_ORDINAL = 100;

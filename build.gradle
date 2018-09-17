@@ -19,7 +19,7 @@ project(':EIIM-NOTIFY') {
 }
 
 project(':EIIM-SERVICE') {
-    version = '1.0.1'
+    version = '1.0.2'
     description = 'Many RESTful service for EIIM, for any mobile app and web app.'
 
     dependencies {
@@ -62,7 +62,7 @@ project(':EIIM-MONGODB') {
 }
 
 project(':EIIM-ALLINONE') {
-    version = '1.0.0'
+    version = '1.0.1'
     description = 'All modules in one for EIIM.'
 
     dependencies {
