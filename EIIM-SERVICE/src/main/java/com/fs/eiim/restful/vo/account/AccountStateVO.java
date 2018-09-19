@@ -31,6 +31,14 @@ public class AccountStateVO {
         return list;
     }
 
+    public AccountInfoVO getAccount() {
+        return account;
+    }
+
+    public void setAccount(AccountInfoVO account) {
+        this.account = account;
+    }
+
     public String getStatus() {
         return status;
     }
