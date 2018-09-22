@@ -544,7 +544,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
      * @see ChatRoomService#saveChatMessage(String, String, String, String, String)
      */
     @Override
-    public ChatRoom saveChatMessage(String accoutnCode, String eiimCode, String chatRoomId, String messageType,
+    public ChatMessage saveChatMessage(String accoutnCode, String eiimCode, String chatRoomId, String messageType,
                                     String message) {
         if (StringUtils.isBlank(accoutnCode) || StringUtils.isBlank(chatRoomId) || StringUtils.isBlank(messageType) ||
                 StringUtils.isBlank(message)) {
@@ -581,12 +581,12 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         chatMessage.setSender(sender);
         chatMessage.setSentTime(System.currentTimeMillis());
         try {
-            accessor.save(chatMessage);
+            chatMessage = accessor.save(chatMessage);
             if (logger.isDebugEnabled()) {
                 logger.debug(String.format("Save a chat message successfully, chat room id: %s, account code: %s," +
                         "message type: %s, message: %s.", chatRoomId, accoutnCode, messageType, message));
             }
-            return chatRoom;
+            return chatMessage;
         } catch (Exception ex) {
             if (logger.isErrorEnabled()) {
                 logger.error("Save chat message fail.", ex);

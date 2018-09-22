@@ -2,7 +2,7 @@ package com.fs.eiim.websocket.processor;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fs.eiim.dal.entity.Account;
-import com.fs.eiim.dal.entity.ChatRoom;
+import com.fs.eiim.dal.entity.ChatMessage;
 import com.fs.eiim.dal.entity.ChatRoomMember;
 import com.fs.eiim.error.UserInterfaceEiimErrorException;
 import com.fs.eiim.service.ChatRoomService;
@@ -80,7 +80,7 @@ public class SendChatMessageProcessor implements MessageProcessor {
                 } else {
                     sessionDataStore.setCurrentUserCode(accountCode);
                     // 调用消息保存服务
-                    ChatRoom chatRoom = chatRoomService.saveChatMessage(accountCode, eiimCode, chatRoomId, messageType, message);
+                    ChatMessage chatMessage = chatRoomService.saveChatMessage(accountCode, eiimCode, chatRoomId, messageType, message);
                     Account sender = chatRoomService.getMessageSender(accountCode);
                     if (sender == null) {
                         if (logger.isErrorEnabled()) {
@@ -90,7 +90,7 @@ public class SendChatMessageProcessor implements MessageProcessor {
                                 UserInterfaceEiimErrorException.EiimErrors.ACCOUNT_NOT_FOUND
                         );
                     }
-                    Set<ChatRoomMember> members = chatRoom.getMembers();
+                    Set<ChatRoomMember> members = chatMessage.getChatRoom().getMembers();
                     // 获取在本聊天室中的在线用户
                     Set<OnlineDevice> onlineDevices = onlineManager.getOnlineDevices(Collections.singletonList(
                             onlineDevice -> {
@@ -114,7 +114,8 @@ public class SendChatMessageProcessor implements MessageProcessor {
                         notifyMessage.put("messageId", "chatMessage");
                         notifyMessage.put("version", "1.0");
                         JSONObject data = new JSONObject();
-                        data.put("chatRoomId", chatRoom.getId());
+                        data.put("chatRoomId", chatMessage.getId());
+                        data.put("chatMessageId", chatMessage.getId());
                         data.put("messageType", messageType);
                         data.put("message", message);
                         data.put("sentTime", System.currentTimeMillis());
@@ -125,8 +126,11 @@ public class SendChatMessageProcessor implements MessageProcessor {
                         senderData.put("avatar", sender.getAvatar());
                         data.put("sender", senderData);
                         notifyMessage.put("message", data);
+
+                        JSONObject retPayload = new JSONObject();
+                        retPayload.put("chatMessageId", chatMessage.getId());
                         // 推送聊天数据
-                        notifyProcessor.notifyProcess(notifyMessage);
+                        notifyProcessor.notifyProcess(notifyMessage, retPayload);
                     } else {
                         if (logger.isWarnEnabled()) {
                             logger.warn(String.format("The chat room[%s] has none member online.", chatRoomId));

@@ -38,7 +38,7 @@ public interface ChatRoomService {
     List<ChatMessage> getMessagesByRequest(String chatRoomId, String accountCode, String lastMessageId,
                                            Direction direction, Pagination pagination);
 
-    ChatRoom saveChatMessage(String accoutnCode, String eiimCode, String chatRoomId, String messageType, String message);
+    ChatMessage saveChatMessage(String accoutnCode, String eiimCode, String chatRoomId, String messageType, String message);
 
     List<ChatNotice> getAllChatRoomNotices(String chatRoomId);
 
