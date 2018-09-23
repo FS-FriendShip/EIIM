@@ -414,6 +414,11 @@ public class BaseDataServiceImpl implements BaseDataService {
             account.setPerson(person);
             account.setDesc(person.getFullName());
             account.setValid(true);
+
+            // 如果没有设置avatar，则根据性别设置默认的头像，默认为男士头像
+            if (StringUtils.isBlank(account.getAvatar())) {
+                account.setAvatar(person.getSex() == User.Sex.FEMALE ? "5ba75abf96a54e2a9005968c" : "5ba75ab696a54e2a9005968b");
+            }
             try {
                 accessor.save(account);
                 roleUser.getAccounts().add(account);
