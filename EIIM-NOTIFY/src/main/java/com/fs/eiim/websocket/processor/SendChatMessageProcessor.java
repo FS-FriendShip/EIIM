@@ -2,6 +2,7 @@ package com.fs.eiim.websocket.processor;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fs.eiim.dal.entity.Account;
+import com.fs.eiim.dal.entity.Attachment;
 import com.fs.eiim.dal.entity.ChatMessage;
 import com.fs.eiim.dal.entity.ChatRoomMember;
 import com.fs.eiim.error.UserInterfaceEiimErrorException;
@@ -80,7 +81,8 @@ public class SendChatMessageProcessor implements MessageProcessor {
                 } else {
                     sessionDataStore.setCurrentUserCode(accountCode);
                     // 调用消息保存服务
-                    ChatMessage chatMessage = chatRoomService.saveChatMessage(accountCode, eiimCode, chatRoomId, messageType, message);
+                    ChatMessage chatMessage = chatRoomService.saveChatMessage(accountCode, eiimCode, chatRoomId,
+                            ChatMessage.MessageType.valueOf(messageType), message);
                     Account sender = chatRoomService.getMessageSender(accountCode);
                     if (sender == null) {
                         if (logger.isErrorEnabled()) {
@@ -117,7 +119,17 @@ public class SendChatMessageProcessor implements MessageProcessor {
                         data.put("chatRoomId", chatMessage.getId());
                         data.put("chatMessageId", chatMessage.getId());
                         data.put("messageType", messageType);
-                        data.put("message", message);
+                        JSONObject msg = new JSONObject();
+                        if (ChatMessage.MessageType.valueOf(messageType) == ChatMessage.MessageType.FILE) {
+                            Attachment attachment = chatRoomService.getMessageAttachmentById(message);
+                            msg.put("id", attachment.getId());
+                            msg.put("fileName", attachment.getFileName());
+                            msg.put("fileType", attachment.getFileType());
+                            msg.put("fileSize", attachment.getFileSize());
+                        } else {
+                            msg.put("text", message);
+                        }
+                        data.put("message", msg);
                         data.put("sentTime", System.currentTimeMillis());
                         JSONObject senderData = new JSONObject();
                         senderData.put("id", sender.getId());

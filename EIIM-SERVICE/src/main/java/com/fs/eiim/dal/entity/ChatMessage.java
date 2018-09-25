@@ -21,11 +21,65 @@ public interface ChatMessage extends Base {
 
     void setSentTime(long sentTime);
 
-    String getMessageType();
+    MessageType getMessageType();
 
-    void setMessageType(String messageType);
+    void setMessageType(MessageType messageType);
 
-    String getMessage();
+    Object getMessage();
 
-    void setMessage(String message);
+    void setMessage(Object message);
+
+    Message getMessageByType();
+
+    void setMessageByType(Message message);
+
+    interface Message {
+        //
+    }
+
+    class TextMessage implements Message {
+        private String text;
+
+        public TextMessage(String text) {
+            super();
+            this.text = text;
+        }
+
+        public String getText() {
+            return text;
+        }
+    }
+
+    class FileMessage implements Message {
+        private String id, fileName, fileType;
+        private long fileSize;
+
+        public FileMessage(Attachment attachment) {
+            super();
+            this.id = attachment.getId();
+            this.fileName = attachment.getFileName();
+            this.fileType = attachment.getFileType();
+            this.fileSize = attachment.getFileSize();
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getFileName() {
+            return fileName;
+        }
+
+        public String getFileType() {
+            return fileType;
+        }
+
+        public long getFileSize() {
+            return fileSize;
+        }
+    }
+
+    enum MessageType {
+        TEXT, FILE
+    }
 }
