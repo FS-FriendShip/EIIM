@@ -14,7 +14,17 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class PersonEntity extends UserEntity implements Person {
     @DBRef
     private Org organization;
-    private String title, phone, mobile, email;
+    private String fullName, title, phone, mobile, email;
+
+    @Override
+    public String getFullName() {
+        return this.fullName;
+    }
+
+    @Override
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
 
     /**
      * {@inheritDoc}

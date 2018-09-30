@@ -43,6 +43,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
      * 构造函数
      *
      * @param accessor 字典数据访问接口
+     * @param template MongoDB的操作模板接口
      */
     @Autowired
     public ChatRoomServiceImpl(@Qualifier("generalDictAccessorMongodb") GeneralDictAccessor accessor,
@@ -51,6 +52,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         this.accessor = accessor;
         this.template = template;
     }
+
     /**
      * {@inheritDoc}
      *
@@ -165,7 +167,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     private void transformChatMessage(ChatMessage chatMessage) {
         if (chatMessage != null) {
             if (chatMessage.getMessageType() == ChatMessage.MessageType.TEXT) {
-                chatMessage.setMessageByType(new ChatMessage.TextMessage((String)chatMessage.getMessage()));
+                chatMessage.setMessageByType(new ChatMessage.TextMessage((String) chatMessage.getMessage()));
             } else if (chatMessage.getMessageType() == ChatMessage.MessageType.FILE) {
                 if (chatMessage.getMessage() == null) {
                     if (logger.isErrorEnabled()) {
@@ -507,7 +509,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
         List<ChatMessage> result = new ArrayList<>();
         textMessages.forEach(message -> {
-            message.setMessageByType(new ChatMessage.TextMessage((String)message.getMessage()));
+            message.setMessageByType(new ChatMessage.TextMessage((String) message.getMessage()));
             result.add(message);
         });
         // 再取出文件消息
@@ -515,7 +517,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 .localField("message").foreignField("_id").as("attachments");
         AggregationOperation match = Aggregation.match(Criteria.where("messageType").is("FILE")
                 .andOperator(Criteria.where("chatRoom").is(template.getConverter().toDBRef(chatRoom, null))
-                .andOperator(Criteria.where("sentTime").gte(lastAccessTime))));
+                        .andOperator(Criteria.where("sentTime").gte(lastAccessTime))));
         List<ChatMessage> fileMessages = getFileChatMessageByAggregate(lookup, match);
         if (!fileMessages.isEmpty()) {
             result.addAll(fileMessages);
@@ -531,7 +533,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 .getMappedResults();
         list.forEach(document -> {
             ChatMessage chatMessage = template.getConverter().read(ChatMessage.class, document);
-            List<Document> attachments = (List<Document>)document.get("attachments");
+            List<Document> attachments = (List<Document>) document.get("attachments");
             if (attachments != null && !attachments.isEmpty()) {
                 Attachment attachment = template.getConverter().read(Attachment.class, attachments.get(0));
                 chatMessage.setMessageByType(new ChatMessage.FileMessage(attachment));
@@ -635,7 +637,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 GeneralAccessor.RecordOrder.asc("sentTime")
         ), ChatMessage.class);
         textMessages.forEach(message -> {
-            message.setMessageByType(new ChatMessage.TextMessage((String)message.getMessage()));
+            message.setMessageByType(new ChatMessage.TextMessage((String) message.getMessage()));
             result.add(message);
         });
         // 再取出文件消息

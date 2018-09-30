@@ -8,7 +8,7 @@ import org.mx.comps.rbac.dal.entity.User;
 import org.mx.dal.EntityFactory;
 
 public class PersonFormVO {
-    private String id, firstName, lastName, title, phone, mobile, email, desc;
+    private String id, firstName, lastName, fullName, title, phone, mobile, email, desc;
     private String accountId, nickname, avatar;
     private User.Sex sex = User.Sex.NA;
 
@@ -17,6 +17,7 @@ public class PersonFormVO {
         person.setId(id);
         person.setFirstName(firstName);
         person.setLastName(lastName);
+        person.setFullName(fullName);
         person.setTitle(title);
         person.setPhone(phone);
         person.setMobile(mobile);
@@ -56,6 +57,14 @@ public class PersonFormVO {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getTitle() {

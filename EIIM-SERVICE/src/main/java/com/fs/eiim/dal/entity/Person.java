@@ -9,6 +9,7 @@ import org.mx.comps.rbac.dal.entity.User;
  * Date time 2018/8/8 下午1:03
  */
 public interface Person extends User {
+    void setFullName(String fullName);
     Org getOrganization();
     void setOrganization(Org org);
     String getTitle();
