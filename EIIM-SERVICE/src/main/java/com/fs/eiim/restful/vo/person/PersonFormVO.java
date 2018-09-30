@@ -1,6 +1,7 @@
 package com.fs.eiim.restful.vo.person;
 
 import com.fs.eiim.dal.entity.Account;
+import com.fs.eiim.dal.entity.Org;
 import com.fs.eiim.dal.entity.Person;
 import com.fs.eiim.service.BaseDataService;
 import org.mx.StringUtils;
@@ -8,7 +9,7 @@ import org.mx.comps.rbac.dal.entity.User;
 import org.mx.dal.EntityFactory;
 
 public class PersonFormVO {
-    private String id, firstName, lastName, fullName, title, phone, mobile, email, desc;
+    private String id, orgId, firstName, lastName, fullName, title, phone, mobile, email, desc;
     private String accountId, nickname, avatar;
     private User.Sex sex = User.Sex.NA;
 
@@ -24,6 +25,12 @@ public class PersonFormVO {
         person.setEmail(email);
         person.setDesc(desc);
         person.setSex(sex);
+
+        if (!StringUtils.isBlank(orgId)) {
+            Org org = EntityFactory.createEntity(Org.class);
+            org.setId(orgId);
+            person.setOrganization(org);
+        }
 
         Account account = null;
         if (!StringUtils.isBlank(accountId)) {
@@ -41,6 +48,14 @@ public class PersonFormVO {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
     }
 
     public String getFirstName() {

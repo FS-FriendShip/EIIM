@@ -287,6 +287,18 @@ public class BaseDataServiceImpl implements BaseDataService {
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
             );
         }
+        Org org = null;
+        if (person.getOrganization() != null && !StringUtils.isBlank(person.getOrganization().getId())) {
+            org = accessor.getById(person.getOrganization().getId(), Org.class);
+            if (org == null) {
+                if (logger.isErrorEnabled()) {
+                    logger.error(String.format("The org[%s] not found.", person.getOrganization().getId()));
+                }
+                throw new UserInterfaceEiimErrorException(
+                        UserInterfaceEiimErrorException.EiimErrors.ORG_NOT_FOUND
+                );
+            }
+        }
         if (!StringUtils.isBlank(person.getId())) {
             Person checkedPerson = accessor.getById(person.getId(), Person.class);
             if (checkedPerson != null) {
@@ -301,6 +313,7 @@ public class BaseDataServiceImpl implements BaseDataService {
                 person = checkedPerson;
             }
         }
+        person.setOrganization(org);
         try {
             person = accessor.save(person);
         } catch (Exception ex) {
