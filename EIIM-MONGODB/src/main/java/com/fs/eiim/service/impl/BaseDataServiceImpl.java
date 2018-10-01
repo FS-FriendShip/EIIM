@@ -313,9 +313,13 @@ public class BaseDataServiceImpl implements BaseDataService {
                 person = checkedPerson;
             }
         }
-        person.setOrganization(org);
         try {
             person = accessor.save(person);
+            // 如果指定了组织，则将该人员加入到该组织
+            if (org != null) {
+                org.getEmployees().add(person);
+                accessor.save(org);
+            }
         } catch (Exception ex) {
             if (logger.isErrorEnabled()) {
                 logger.error("Save person info fail.", ex);

@@ -1,7 +1,7 @@
 package com.fs.eiim.dal.entity;
 
 import org.mx.comps.rbac.dal.entity.UserEntity;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document(collection = "person")
 public class PersonEntity extends UserEntity implements Person {
-    @DBRef
+    @Transient
     private Org organization;
     private String fullName, title, phone, mobile, email;
 

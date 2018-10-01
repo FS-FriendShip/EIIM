@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PersonInfoVO {
-    private String id, name, title, phone, mobile, email, desc;
+    private String id, fullName, title, phone, mobile, email, desc;
     private boolean hasAccount = false;
     private User.Sex sex = User.Sex.NA;
     private AccountInfoVO account;
@@ -24,33 +24,16 @@ public class PersonInfoVO {
         }
         PersonInfoVO personInfoVO = new PersonInfoVO();
         personInfoVO.id = user.getId();
-        personInfoVO.name = user.getFullName();
+        personInfoVO.fullName = user.getFullName();
         personInfoVO.desc = user.getDesc();
         personInfoVO.sex = user.getSex();
         personInfoVO.hasAccount = account != null;
-        if (account != null) {
-            personInfoVO.account = AccountInfoVO.valueOf(account);
+        if (user instanceof Person) {
+            personInfoVO.title = ((Person)user).getTitle();
+            personInfoVO.phone = ((Person)user).getPhone();
+            personInfoVO.mobile = ((Person)user).getMobile();
+            personInfoVO.email = ((Person)user).getEmail();
         }
-        if (org != null) {
-            personInfoVO.org = OrgInfoVO.valueOf(org);
-        }
-        return personInfoVO;
-    }
-
-    public static PersonInfoVO valueOf(Person person, Account account, Org org) {
-        if (person == null) {
-            return null;
-        }
-        PersonInfoVO personInfoVO = new PersonInfoVO();
-        personInfoVO.id = person.getId();
-        personInfoVO.name = person.getFullName();
-        personInfoVO.title = person.getTitle();
-        personInfoVO.phone = person.getPhone();
-        personInfoVO.mobile = person.getMobile();
-        personInfoVO.email = person.getEmail();
-        personInfoVO.desc = person.getDesc();
-        personInfoVO.sex = person.getSex();
-        personInfoVO.hasAccount = account != null;
         if (account != null) {
             personInfoVO.account = AccountInfoVO.valueOf(account);
         }
@@ -78,12 +61,12 @@ public class PersonInfoVO {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getTitle() {
