@@ -1,7 +1,9 @@
 package com.fs.eiim.restful.vo.org;
 
 import com.fs.eiim.dal.entity.Org;
+import com.fs.eiim.dal.entity.Person;
 import com.fs.eiim.restful.vo.person.PersonInfoVO;
+import com.fs.eiim.service.BaseDataService;
 import org.mx.comps.rbac.dal.entity.User;
 
 import java.util.ArrayList;
@@ -32,13 +34,36 @@ public class OrgInfoVO {
             orgInfoVO.children = list;
         }
         if (org.getManager() != null) {
-            orgInfoVO.manager = PersonInfoVO.valueOf(org.getManager(), null, null);
+            orgInfoVO.manager = PersonInfoVO.valueOf(
+                    BaseDataService.PersonAccountTuple.valueOf((Person) org.getManager(), null, null)
+            );
         }
         Set<User> employees = org.getEmployees();
         if (employees != null && !employees.isEmpty()) {
             List<PersonInfoVO> list = new ArrayList<>();
-            employees.forEach(employee -> list.add(PersonInfoVO.valueOf(employee, null, null)));
+            employees.forEach(employee -> list.add(PersonInfoVO.valueOf(
+                    BaseDataService.PersonAccountTuple.valueOf((Person) employee, null, null)
+                    ))
+            );
             orgInfoVO.employees = list;
+        }
+        return orgInfoVO;
+    }
+
+    public static OrgInfoVO valueOf(BaseDataService.OrgInfo orgInfo) {
+        if (orgInfo == null) {
+            return null;
+        }
+        OrgInfoVO orgInfoVO = valueOf(orgInfo.getOrg());
+        if (orgInfo.getManager() != null) {
+            orgInfoVO.manager = PersonInfoVO.valueOf(orgInfo.getManager());
+        }
+        if (orgInfo.getEmployees() != null && !orgInfo.getEmployees().isEmpty()) {
+            List<PersonInfoVO> employees = new ArrayList<>();
+            orgInfo.getEmployees().forEach(
+                    employee -> employees.add(PersonInfoVO.valueOf(employee))
+            );
+            orgInfoVO.employees = employees;
         }
         return orgInfoVO;
     }

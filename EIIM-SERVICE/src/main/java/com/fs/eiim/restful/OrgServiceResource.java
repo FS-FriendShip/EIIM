@@ -55,7 +55,7 @@ public class OrgServiceResource {
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
             ));
         }
-        Org org = baseDataService.saveOrgInfo(orgFormVO.get());
+        BaseDataService.OrgInfo org = baseDataService.saveOrgInfo(orgFormVO.get());
         sessionDataStore.removeCurrentUserCode();
         return new DataVO<>(OrgInfoVO.valueOf(org));
     }
@@ -99,7 +99,7 @@ public class OrgServiceResource {
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
             ));
         }
-        Org org = baseDataService.getOrgInfo(orgId);
+        BaseDataService.OrgInfo org = baseDataService.getOrgInfo(orgId);
         return new DataVO<>(OrgInfoVO.valueOf(org));
     }
 }

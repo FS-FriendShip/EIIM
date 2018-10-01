@@ -27,9 +27,9 @@ public interface BaseDataService {
 
     List<Org> getAllOrgs();
 
-    Org saveOrgInfo(Org org);
+    OrgInfo saveOrgInfo(Org org);
 
-    Org getOrgInfo(String orgId);
+    OrgInfo getOrgInfo(String orgId);
 
     List<PersonAccountTuple> getAllPersons();
 
@@ -178,6 +178,31 @@ public interface BaseDataService {
 
         public String getPassword() {
             return password;
+        }
+    }
+
+    class OrgInfo {
+        private Org org;
+        private List<PersonAccountTuple> employees;
+        private PersonAccountTuple manager;
+
+        public OrgInfo(Org org, PersonAccountTuple manager, List<PersonAccountTuple> employees) {
+            super();
+            this.org = org;
+            this.manager = manager;
+            this.employees = employees;
+        }
+
+        public Org getOrg() {
+            return org;
+        }
+
+        public List<PersonAccountTuple> getEmployees() {
+            return employees;
+        }
+
+        public PersonAccountTuple getManager() {
+            return manager;
         }
     }
 }

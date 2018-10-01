@@ -168,7 +168,7 @@ public class BaseDataServiceImpl implements BaseDataService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public Org saveOrgInfo(Org org) {
+    public OrgInfo saveOrgInfo(Org org) {
         Org parent = null;
         if (org.getParent() != null && !StringUtils.isBlank(org.getParent().getId())) {
             parent = accessor.getById(org.getParent().getId(), Org.class);
@@ -233,7 +233,7 @@ public class BaseDataServiceImpl implements BaseDataService {
                 parent.getChildren().add(org);
                 accessor.save(parent);
             }
-            return org;
+            return getOrgInfo(org.getId());
         } catch (Exception ex) {
             if (logger.isErrorEnabled()) {
                 logger.error("Save org fail.", ex);
@@ -245,8 +245,25 @@ public class BaseDataServiceImpl implements BaseDataService {
     }
 
     @Override
-    public Org getOrgInfo(String orgId) {
-        return accessor.getById(orgId, Org.class);
+    public OrgInfo getOrgInfo(String orgId) {
+        Org org = accessor.getById(orgId, Org.class);
+        if (org != null) {
+            PersonAccountTuple manager = null;
+            List<PersonAccountTuple> employees = new ArrayList<>();
+            if (org.getManager() != null && !StringUtils.isBlank(org.getManager().getId())) {
+                manager = getPersonInfo(org.getManager().getId());
+            }
+            if (org.getEmployees() != null && !org.getEmployees().isEmpty()) {
+                org.getEmployees().forEach(employee -> {
+                    if (employee != null && !StringUtils.isBlank(employee.getId())) {
+                        employees.add(getPersonInfo(employee.getId()));
+                    }
+                });
+            }
+            return new OrgInfo(org, manager, employees);
+        } else {
+            return null;
+        }
     }
 
     private Org getOrgByPerson(Person person) {

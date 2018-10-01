@@ -18,22 +18,23 @@ public class PersonInfoVO {
     private AccountInfoVO account;
     private OrgInfoVO org;
 
-    public static PersonInfoVO valueOf(User user, Account account, Org org) {
-        if (user == null) {
+    public static PersonInfoVO valueOf(BaseDataService.PersonAccountTuple tuple) {
+        Person person = tuple.getPerson();
+        Account account = tuple.getAccount();
+        Org org = tuple.getOrg();
+        if (person == null) {
             return null;
         }
         PersonInfoVO personInfoVO = new PersonInfoVO();
-        personInfoVO.id = user.getId();
-        personInfoVO.fullName = user.getFullName();
-        personInfoVO.desc = user.getDesc();
-        personInfoVO.sex = user.getSex();
+        personInfoVO.id = person.getId();
+        personInfoVO.fullName = person.getFullName();
+        personInfoVO.desc = person.getDesc();
+        personInfoVO.sex = person.getSex();
         personInfoVO.hasAccount = account != null;
-        if (user instanceof Person) {
-            personInfoVO.title = ((Person)user).getTitle();
-            personInfoVO.phone = ((Person)user).getPhone();
-            personInfoVO.mobile = ((Person)user).getMobile();
-            personInfoVO.email = ((Person)user).getEmail();
-        }
+        personInfoVO.title = person.getTitle();
+        personInfoVO.phone = person.getPhone();
+        personInfoVO.mobile = person.getMobile();
+        personInfoVO.email = person.getEmail();
         if (account != null) {
             personInfoVO.account = AccountInfoVO.valueOf(account);
         }
@@ -46,9 +47,7 @@ public class PersonInfoVO {
     public static List<PersonInfoVO> valueOf(List<BaseDataService.PersonAccountTuple> tuples) {
         List<PersonInfoVO> persons = new ArrayList<>();
         if (tuples != null && !tuples.isEmpty()) {
-            tuples.forEach(tuple -> persons.add(
-                    PersonInfoVO.valueOf(tuple.getPerson(), tuple.getAccount(), tuple.getOrg()))
-            );
+            tuples.forEach(tuple -> persons.add(PersonInfoVO.valueOf(tuple)));
         }
         return persons;
     }
