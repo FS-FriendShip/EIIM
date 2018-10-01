@@ -111,7 +111,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"12345678\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"12345678\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -121,7 +121,7 @@
       "time" : 3760,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/persons/new?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"id\": \"\",\n\"firstName\": \"明喜\",\n\"lastName\": \"彭\",\n\"sex\": \"MALE\",\n\"title\": \"首席架构师\",\n\"phone\": \"12345678\",\n\"mobile\": \"12345678901\",\n\"email\": \"pengmingxi@dscomm.com.cn\",\n\"desc\": \"我是彭明喜。\"\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"12345678\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/persons/new?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"id\": \"\",\n\"firstName\": \"明喜\",\n\"lastName\": \"彭\",\n\"sex\": \"MALE\",\n\"title\": \"首席架构师\",\n\"phone\": \"12345678\",\n\"mobile\": \"12345678901\",\n\"email\": \"pengmingxi@dscomm.com.cn\",\n\"desc\": \"我是彭明喜。\"\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"12345678\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}\r\n"
     }
   }, {
     "key" : "d438405e-41b6-4c74-b6a7-be60ccdbbc2b",
@@ -142,7 +142,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -152,7 +152,7 @@
       "time" : 15,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nPUT https://localhost:9999/rest/v1/persons/5b7789bd9a27b1a8c109a76d?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"id\": \"\",\n\"firstName\": \"明喜\",\n\"lastName\": \"彭\",\n\"sex\": \"MALE\",\n\"title\": \"首席架构师\",\n\"phone\": \"62738888\",\n\"mobile\": \"12345678901\",\n\"email\": \"pengmingxi@dscomm.com.cn\",\n\"desc\": \"我是彭明喜。\"\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nPUT https://localhost:9999/rest/v1/persons/5b7789bd9a27b1a8c109a76d?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"id\": \"\",\n\"firstName\": \"明喜\",\n\"lastName\": \"彭\",\n\"sex\": \"MALE\",\n\"title\": \"首席架构师\",\n\"phone\": \"62738888\",\n\"mobile\": \"12345678901\",\n\"email\": \"pengmingxi@dscomm.com.cn\",\n\"desc\": \"我是彭明喜。\"\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}\r\n"
     }
   }, {
     "key" : "52985d22-887e-4fb5-a441-13ce527c3ca6",
@@ -173,7 +173,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -183,7 +183,7 @@
       "time" : 13,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nGET https://localhost:9999/rest/v1/persons/5b7789bd9a27b1a8c109a76d?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nGET https://localhost:9999/rest/v1/persons/5b7789bd9a27b1a8c109a76d?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}\r\n"
     }
   }, {
     "key" : "98b95d1c-8ab4-478e-b17f-b92cbf2589bc",
@@ -204,7 +204,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}]}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}]}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -214,7 +214,7 @@
       "time" : 12,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nGET https://localhost:9999/rest/v1/persons?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}]}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nGET https://localhost:9999/rest/v1/persons?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}]}\r\n"
     }
   }, {
     "key" : "616112de-f9e7-460a-aed3-dc39002b83cf",
@@ -297,7 +297,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -307,7 +307,7 @@
       "time" : 529,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nPUT https://localhost:9999/rest/v1/persons/5b7789bd9a27b1a8c109a76d?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"id\": \"\",\n\"firstName\": \"明喜\",\n\"lastName\": \"彭\",\n\"sex\": \"MALE\",\n\"title\": \"首席架构师\",\n\"phone\": \"62738888\",\n\"mobile\": \"12345678901\",\n\"email\": \"pengmingxi@dscomm.com.cn\",\n\"desc\": \"我是彭明喜。\",\n\"accountId\": \"\",\n\"accountCode\": \"pengmx\",\n\"nickname\": \"john.peng\",\n\"avatar\": \"pengmx.img\"\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nPUT https://localhost:9999/rest/v1/persons/5b7789bd9a27b1a8c109a76d?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"id\": \"\",\n\"firstName\": \"明喜\",\n\"lastName\": \"彭\",\n\"sex\": \"MALE\",\n\"title\": \"首席架构师\",\n\"phone\": \"62738888\",\n\"mobile\": \"12345678901\",\n\"email\": \"pengmingxi@dscomm.com.cn\",\n\"desc\": \"我是彭明喜。\",\n\"accountId\": \"\",\n\"accountCode\": \"pengmx\",\n\"nickname\": \"john.peng\",\n\"avatar\": \"pengmx.img\"\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}\r\n"
     }
   }, {
     "key" : "d514cc7d-bc3d-444a-bef6-f2e57bcc6c0a",
@@ -328,7 +328,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -338,7 +338,7 @@
       "time" : 18,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nPUT https://localhost:9999/rest/v1/persons/5b7789bd9a27b1a8c109a76d?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"id\": \"\",\n\"firstName\": \"明喜\",\n\"lastName\": \"彭\",\n\"sex\": \"MALE\",\n\"title\": \"首席架构师\",\n\"phone\": \"62738888\",\n\"mobile\": \"12345678901\",\n\"email\": \"pengmingxi@dscomm.com.cn\",\n\"desc\": \"我是彭明喜。\",\n\"accountId\": \"\",\n\"accountCode\": \"pengmx\",\n\"nickname\": \"john.peng\",\n\"avatar\": \"pengmx.img\"\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nPUT https://localhost:9999/rest/v1/persons/5b7789bd9a27b1a8c109a76d?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"id\": \"\",\n\"firstName\": \"明喜\",\n\"lastName\": \"彭\",\n\"sex\": \"MALE\",\n\"title\": \"首席架构师\",\n\"phone\": \"62738888\",\n\"mobile\": \"12345678901\",\n\"email\": \"pengmingxi@dscomm.com.cn\",\n\"desc\": \"我是彭明喜。\",\n\"accountId\": \"\",\n\"accountCode\": \"pengmx\",\n\"nickname\": \"john.peng\",\n\"avatar\": \"pengmx.img\"\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}\r\n"
     }
   }, {
     "key" : "b327c6d8-ac8b-4ade-b1e4-404c2b926910",
@@ -359,7 +359,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":{\"id\":\"5b778b6c9a27b1aa1839947a\",\"code\":\"EEIM-1\",\"nickname\":\"john.peng\",\"eiimCode\":\"EEIM-1\",\"avatar\":\"pengmx.img\",\"valid\":true,\"person\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null}}}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":{\"id\":\"5b778b6c9a27b1aa1839947a\",\"code\":\"EEIM-1\",\"nickname\":\"john.peng\",\"eiimCode\":\"EEIM-1\",\"avatar\":\"pengmx.img\",\"valid\":true,\"person\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null}}}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -369,7 +369,7 @@
       "time" : 3956,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nPUT https://localhost:9999/rest/v1/persons/5b7789bd9a27b1a8c109a76d?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"id\": \"\",\n\"firstName\": \"明喜\",\n\"lastName\": \"彭\",\n\"sex\": \"MALE\",\n\"title\": \"首席架构师\",\n\"phone\": \"62738888\",\n\"mobile\": \"12345678901\",\n\"email\": \"pengmingxi@dscomm.com.cn\",\n\"desc\": \"我是彭明喜。\",\n\"accountId\": \"5b778b6c9a27b1aa1839947a\",\n\"accountCode\": \"pengmx\",\n\"nickname\": \"john.peng\",\n\"avatar\": \"pengmx.img\"\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":{\"id\":\"5b778b6c9a27b1aa1839947a\",\"code\":\"EEIM-1\",\"nickname\":\"john.peng\",\"eiimCode\":\"EEIM-1\",\"avatar\":\"pengmx.img\",\"valid\":true,\"person\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null}}}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nPUT https://localhost:9999/rest/v1/persons/5b7789bd9a27b1a8c109a76d?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"id\": \"\",\n\"firstName\": \"明喜\",\n\"lastName\": \"彭\",\n\"sex\": \"MALE\",\n\"title\": \"首席架构师\",\n\"phone\": \"62738888\",\n\"mobile\": \"12345678901\",\n\"email\": \"pengmingxi@dscomm.com.cn\",\n\"desc\": \"我是彭明喜。\",\n\"accountId\": \"5b778b6c9a27b1aa1839947a\",\n\"accountCode\": \"pengmx\",\n\"nickname\": \"john.peng\",\n\"avatar\": \"pengmx.img\"\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":{\"id\":\"5b778b6c9a27b1aa1839947a\",\"code\":\"EEIM-1\",\"nickname\":\"john.peng\",\"eiimCode\":\"EEIM-1\",\"avatar\":\"pengmx.img\",\"valid\":true,\"person\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null}}}\r\n"
     }
   }, {
     "key" : "8017b119-1cfa-4d6c-abb1-54c0058447b3",
@@ -390,7 +390,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b778b6c9a27b1aa1839947a\",\"code\":\"EEIM-1\",\"nickname\":\"john.peng\",\"eiimCode\":\"EEIM-1\",\"avatar\":\"pengmx.img\",\"valid\":true,\"person\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null}}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b778b6c9a27b1aa1839947a\",\"code\":\"EEIM-1\",\"nickname\":\"john.peng\",\"eiimCode\":\"EEIM-1\",\"avatar\":\"pengmx.img\",\"valid\":true,\"person\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null}}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -400,7 +400,7 @@
       "time" : 506,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/persons/5b7789bd9a27b1a8c109a76d/enable?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"accountCode\": \"pengmx\",\n\"password\": \"12345678\",\n\"nickname\": \"john.peng\",\n\"avatar\": \"pengmx.png\"\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b778b6c9a27b1aa1839947a\",\"code\":\"EEIM-1\",\"nickname\":\"john.peng\",\"eiimCode\":\"EEIM-1\",\"avatar\":\"pengmx.img\",\"valid\":true,\"person\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null}}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/persons/5b7789bd9a27b1a8c109a76d/enable?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"accountCode\": \"pengmx\",\n\"password\": \"12345678\",\n\"nickname\": \"john.peng\",\n\"avatar\": \"pengmx.png\"\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b778b6c9a27b1aa1839947a\",\"code\":\"EEIM-1\",\"nickname\":\"john.peng\",\"eiimCode\":\"EEIM-1\",\"avatar\":\"pengmx.img\",\"valid\":true,\"person\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null}}\r\n"
     }
   }, {
     "key" : "a949e3a6-3246-4984-a2f8-8bb576977e20",
@@ -452,7 +452,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7795549a27b1ac98d5b640\",\"code\":\"pengmx\",\"nickname\":\"john.peng\",\"eiimCode\":\"EEIM-1\",\"avatar\":\"pengmx.png\",\"valid\":true,\"person\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null}}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7795549a27b1ac98d5b640\",\"code\":\"pengmx\",\"nickname\":\"john.peng\",\"eiimCode\":\"EEIM-1\",\"avatar\":\"pengmx.png\",\"valid\":true,\"person\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null}}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -462,7 +462,7 @@
       "time" : 71,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/persons/5b7789bd9a27b1a8c109a76d/enable?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"accountCode\": \"pengmx\",\n\"password\": \"12345678\",\n\"nickname\": \"john.peng\",\n\"avatar\": \"pengmx.png\"\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7795549a27b1ac98d5b640\",\"code\":\"pengmx\",\"nickname\":\"john.peng\",\"eiimCode\":\"EEIM-1\",\"avatar\":\"pengmx.png\",\"valid\":true,\"person\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null}}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/persons/5b7789bd9a27b1a8c109a76d/enable?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"accountCode\": \"pengmx\",\n\"password\": \"12345678\",\n\"nickname\": \"john.peng\",\n\"avatar\": \"pengmx.png\"\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b7795549a27b1ac98d5b640\",\"code\":\"pengmx\",\"nickname\":\"john.peng\",\"eiimCode\":\"EEIM-1\",\"avatar\":\"pengmx.png\",\"valid\":true,\"person\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null}}\r\n"
     }
   }, {
     "key" : "ea248786-b4c0-4d1a-be47-ce7df670c975",
@@ -474,7 +474,7 @@
     "request" : {
       "url" : "https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator",
       "method" : "POST",
-      "body" : "{\n\"parentId\": \"\",\n\"id\": \"\",\n\"code\": \"ds\",\n\"name\": \"迪爱斯\",\n\"type\": \"internal\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}",
+      "body" : "{\n\"parentId\": \"\",\n\"id\": \"\",\n\"code\": \"ds\",\n\"fullName\": \"迪爱斯\",\n\"type\": \"internal\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}",
       "date" : "2018-08-18 17:00:02.664",
       "headers" : {
         "Accept" : "application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain",
@@ -483,7 +483,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e0379a27b1ac98d5b641\",\"code\":\"ds\",\"name\":\"迪爱斯\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e0379a27b1ac98d5b641\",\"code\":\"ds\",\"fullName\":\"迪爱斯\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -493,7 +493,7 @@
       "time" : 36894,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"parentId\": \"\",\n\"id\": \"\",\n\"code\": \"ds\",\n\"name\": \"迪爱斯\",\n\"type\": \"internal\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e0379a27b1ac98d5b641\",\"code\":\"ds\",\"name\":\"迪爱斯\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"parentId\": \"\",\n\"id\": \"\",\n\"code\": \"ds\",\n\"fullName\": \"迪爱斯\",\n\"type\": \"internal\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e0379a27b1ac98d5b641\",\"code\":\"ds\",\"fullName\":\"迪爱斯\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}\r\n"
     }
   }, {
     "key" : "749b8973-c3ae-40c1-ae14-5267e5d18a94",
@@ -505,7 +505,7 @@
     "request" : {
       "url" : "https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator",
       "method" : "POST",
-      "body" : "{\n\"parentId\": \"5b77e0379a27b1ac98d5b641\",\n\"id\": \"\",\n\"code\": \"zss\",\n\"name\": \"总师室\",\n\"type\": \"internal\",\n\"managerId\": \"﻿5b7789bd9a27b1a8c109a76d\",\n\"employeeIds\": []\n}",
+      "body" : "{\n\"parentId\": \"5b77e0379a27b1ac98d5b641\",\n\"id\": \"\",\n\"code\": \"zss\",\n\"fullName\": \"总师室\",\n\"type\": \"internal\",\n\"managerId\": \"﻿5b7789bd9a27b1a8c109a76d\",\n\"employeeIds\": []\n}",
       "date" : "2018-08-18 17:04:35.011",
       "headers" : {
         "Accept" : "application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain",
@@ -524,7 +524,7 @@
       "time" : 14,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"parentId\": \"5b77e0379a27b1ac98d5b641\",\n\"id\": \"\",\n\"code\": \"zss\",\n\"name\": \"总师室\",\n\"type\": \"internal\",\n\"managerId\": \"﻿5b7789bd9a27b1a8c109a76d\",\n\"employeeIds\": []\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":107,\"errorMessage\":\"指定的人员不存在。\",\"data\":null}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"parentId\": \"5b77e0379a27b1ac98d5b641\",\n\"id\": \"\",\n\"code\": \"zss\",\n\"fullName\": \"总师室\",\n\"type\": \"internal\",\n\"managerId\": \"﻿5b7789bd9a27b1a8c109a76d\",\n\"employeeIds\": []\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":107,\"errorMessage\":\"指定的人员不存在。\",\"data\":null}\r\n"
     }
   }, {
     "key" : "7fda3818-533d-47df-b803-62b0e8a5d336",
@@ -536,7 +536,7 @@
     "request" : {
       "url" : "https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator",
       "method" : "POST",
-      "body" : "{\n\"parentId\": \"5b77e0379a27b1ac98d5b641\",\n\"id\": \"\",\n\"code\": \"zss\",\n\"name\": \"总师室\",\n\"type\": \"internal\",\n\"managerId\": \"﻿5b7789bd9a27b1a8c109a76d\",\n\"employeeIds\": []\n}",
+      "body" : "{\n\"parentId\": \"5b77e0379a27b1ac98d5b641\",\n\"id\": \"\",\n\"code\": \"zss\",\n\"fullName\": \"总师室\",\n\"type\": \"internal\",\n\"managerId\": \"﻿5b7789bd9a27b1a8c109a76d\",\n\"employeeIds\": []\n}",
       "date" : "2018-08-18 17:05:10.679",
       "headers" : {
         "Accept" : "application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain",
@@ -555,7 +555,7 @@
       "time" : 19082,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"parentId\": \"5b77e0379a27b1ac98d5b641\",\n\"id\": \"\",\n\"code\": \"zss\",\n\"name\": \"总师室\",\n\"type\": \"internal\",\n\"managerId\": \"﻿5b7789bd9a27b1a8c109a76d\",\n\"employeeIds\": []\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":107,\"errorMessage\":\"指定的人员不存在。\",\"data\":null}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"parentId\": \"5b77e0379a27b1ac98d5b641\",\n\"id\": \"\",\n\"code\": \"zss\",\n\"fullName\": \"总师室\",\n\"type\": \"internal\",\n\"managerId\": \"﻿5b7789bd9a27b1a8c109a76d\",\n\"employeeIds\": []\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":107,\"errorMessage\":\"指定的人员不存在。\",\"data\":null}\r\n"
     }
   }, {
     "key" : "c7ed24d2-8dd5-4d6f-8ad5-8c5eee7d6ce7",
@@ -567,7 +567,7 @@
     "request" : {
       "url" : "https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator",
       "method" : "POST",
-      "body" : "{\n\"parentId\": \"5b77e0379a27b1ac98d5b641\",\n\"id\": \"\",\n\"code\": \"zss\",\n\"name\": \"总师室\",\n\"type\": \"internal\",\n\"managerId\": \"5b7789bd9a27b1a8c109a76d\",\n\"employeeIds\": []\n}",
+      "body" : "{\n\"parentId\": \"5b77e0379a27b1ac98d5b641\",\n\"id\": \"\",\n\"code\": \"zss\",\n\"fullName\": \"总师室\",\n\"type\": \"internal\",\n\"managerId\": \"5b7789bd9a27b1a8c109a76d\",\n\"employeeIds\": []\n}",
       "date" : "2018-08-18 17:05:44.496",
       "headers" : {
         "Accept" : "application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain",
@@ -576,7 +576,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e1689a27b1ac98d5b642\",\"code\":\"zss\",\"name\":\"总师室\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":null,\"phone\":null,\"mobile\":null,\"email\":null,\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e1689a27b1ac98d5b642\",\"code\":\"zss\",\"fullName\":\"总师室\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":null,\"phone\":null,\"mobile\":null,\"email\":null,\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -586,7 +586,7 @@
       "time" : 21,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"parentId\": \"5b77e0379a27b1ac98d5b641\",\n\"id\": \"\",\n\"code\": \"zss\",\n\"name\": \"总师室\",\n\"type\": \"internal\",\n\"managerId\": \"5b7789bd9a27b1a8c109a76d\",\n\"employeeIds\": []\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e1689a27b1ac98d5b642\",\"code\":\"zss\",\"name\":\"总师室\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":null,\"phone\":null,\"mobile\":null,\"email\":null,\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"parentId\": \"5b77e0379a27b1ac98d5b641\",\n\"id\": \"\",\n\"code\": \"zss\",\n\"fullName\": \"总师室\",\n\"type\": \"internal\",\n\"managerId\": \"5b7789bd9a27b1a8c109a76d\",\n\"employeeIds\": []\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e1689a27b1ac98d5b642\",\"code\":\"zss\",\"fullName\":\"总师室\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":null,\"phone\":null,\"mobile\":null,\"email\":null,\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}}\r\n"
     }
   }, {
     "key" : "544ad9d6-f7a4-4a58-b102-654fc4ea7d3b",
@@ -598,7 +598,7 @@
     "request" : {
       "url" : "https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator",
       "method" : "POST",
-      "body" : "{\n\"parentId\": \"5b77e0379a27b1ac98d5b641\",\n\"id\": \"\",\n\"code\": \"xsb\",\n\"name\": \"销售部\",\n\"type\": \"internal\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}",
+      "body" : "{\n\"parentId\": \"5b77e0379a27b1ac98d5b641\",\n\"id\": \"\",\n\"code\": \"xsb\",\n\"fullName\": \"销售部\",\n\"type\": \"internal\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}",
       "date" : "2018-08-18 17:07:07.115",
       "headers" : {
         "Accept" : "application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain",
@@ -607,7 +607,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e1bb9a27b1ac98d5b643\",\"code\":\"xsb\",\"name\":\"销售部\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e1bb9a27b1ac98d5b643\",\"code\":\"xsb\",\"fullName\":\"销售部\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -617,7 +617,7 @@
       "time" : 24,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"parentId\": \"5b77e0379a27b1ac98d5b641\",\n\"id\": \"\",\n\"code\": \"xsb\",\n\"name\": \"销售部\",\n\"type\": \"internal\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e1bb9a27b1ac98d5b643\",\"code\":\"xsb\",\"name\":\"销售部\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"parentId\": \"5b77e0379a27b1ac98d5b641\",\n\"id\": \"\",\n\"code\": \"xsb\",\n\"fullName\": \"销售部\",\n\"type\": \"internal\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e1bb9a27b1ac98d5b643\",\"code\":\"xsb\",\"fullName\":\"销售部\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}\r\n"
     }
   }, {
     "key" : "85af4700-362f-4da6-9414-a964ee203138",
@@ -629,7 +629,7 @@
     "request" : {
       "url" : "https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator",
       "method" : "POST",
-      "body" : "{\n\"parentId\": \"\",\n\"id\": \"\",\n\"code\": \"partner\",\n\"name\": \"合作伙伴\",\n\"type\": \"partner\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}",
+      "body" : "{\n\"parentId\": \"\",\n\"id\": \"\",\n\"code\": \"partner\",\n\"fullName\": \"合作伙伴\",\n\"type\": \"partner\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}",
       "date" : "2018-08-18 17:08:01.775",
       "headers" : {
         "Accept" : "application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain",
@@ -638,7 +638,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e1f19a27b1ac98d5b644\",\"code\":\"partner\",\"name\":\"合作伙伴\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e1f19a27b1ac98d5b644\",\"code\":\"partner\",\"fullName\":\"合作伙伴\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -648,7 +648,7 @@
       "time" : 12,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"parentId\": \"\",\n\"id\": \"\",\n\"code\": \"partner\",\n\"name\": \"合作伙伴\",\n\"type\": \"partner\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e1f19a27b1ac98d5b644\",\"code\":\"partner\",\"name\":\"合作伙伴\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"parentId\": \"\",\n\"id\": \"\",\n\"code\": \"partner\",\n\"fullName\": \"合作伙伴\",\n\"type\": \"partner\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e1f19a27b1ac98d5b644\",\"code\":\"partner\",\"fullName\":\"合作伙伴\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}\r\n"
     }
   }, {
     "key" : "eda95702-a97c-47e4-a682-7550299bbefc",
@@ -660,7 +660,7 @@
     "request" : {
       "url" : "https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator",
       "method" : "POST",
-      "body" : "{\n\"parentId\": \"5b77e1f19a27b1ac98d5b644\",\n\"id\": \"\",\n\"code\": \"AAAA\",\n\"name\": \"AAAA公司\",\n\"type\": \"partner\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}",
+      "body" : "{\n\"parentId\": \"5b77e1f19a27b1ac98d5b644\",\n\"id\": \"\",\n\"code\": \"AAAA\",\n\"fullName\": \"AAAA公司\",\n\"type\": \"partner\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}",
       "date" : "2018-08-18 17:08:28.472",
       "headers" : {
         "Accept" : "application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain",
@@ -669,7 +669,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e20c9a27b1ac98d5b645\",\"code\":\"AAAA\",\"name\":\"AAAA公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e20c9a27b1ac98d5b645\",\"code\":\"AAAA\",\"fullName\":\"AAAA公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -679,7 +679,7 @@
       "time" : 15,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"parentId\": \"5b77e1f19a27b1ac98d5b644\",\n\"id\": \"\",\n\"code\": \"AAAA\",\n\"name\": \"AAAA公司\",\n\"type\": \"partner\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e20c9a27b1ac98d5b645\",\"code\":\"AAAA\",\"name\":\"AAAA公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"parentId\": \"5b77e1f19a27b1ac98d5b644\",\n\"id\": \"\",\n\"code\": \"AAAA\",\n\"fullName\": \"AAAA公司\",\n\"type\": \"partner\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e20c9a27b1ac98d5b645\",\"code\":\"AAAA\",\"fullName\":\"AAAA公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}\r\n"
     }
   }, {
     "key" : "67798a42-eff0-4884-974f-d418ef542060",
@@ -691,7 +691,7 @@
     "request" : {
       "url" : "https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator",
       "method" : "POST",
-      "body" : "{\n\"parentId\": \"5b77e1f19a27b1ac98d5b644\",\n\"id\": \"\",\n\"code\": \"BBBB\",\n\"name\": \"BBBB公司\",\n\"type\": \"partner\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}",
+      "body" : "{\n\"parentId\": \"5b77e1f19a27b1ac98d5b644\",\n\"id\": \"\",\n\"code\": \"BBBB\",\n\"fullName\": \"BBBB公司\",\n\"type\": \"partner\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}",
       "date" : "2018-08-18 17:08:37.368",
       "headers" : {
         "Accept" : "application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain",
@@ -700,7 +700,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e2159a27b1ac98d5b646\",\"code\":\"BBBB\",\"name\":\"BBBB公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e2159a27b1ac98d5b646\",\"code\":\"BBBB\",\"fullName\":\"BBBB公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -710,7 +710,7 @@
       "time" : 17,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"parentId\": \"5b77e1f19a27b1ac98d5b644\",\n\"id\": \"\",\n\"code\": \"BBBB\",\n\"name\": \"BBBB公司\",\n\"type\": \"partner\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e2159a27b1ac98d5b646\",\"code\":\"BBBB\",\"name\":\"BBBB公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"parentId\": \"5b77e1f19a27b1ac98d5b644\",\n\"id\": \"\",\n\"code\": \"BBBB\",\n\"fullName\": \"BBBB公司\",\n\"type\": \"partner\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e2159a27b1ac98d5b646\",\"code\":\"BBBB\",\"fullName\":\"BBBB公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}\r\n"
     }
   }, {
     "key" : "aa56938d-825e-461f-ba77-1e3f34422439",
@@ -722,7 +722,7 @@
     "request" : {
       "url" : "https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator",
       "method" : "POST",
-      "body" : "{\n\"parentId\": \"5b77e1f19a27b1ac98d5b644\",\n\"id\": \"\",\n\"code\": \"CCCC\",\n\"name\": \"CC公司\",\n\"type\": \"partner\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}",
+      "body" : "{\n\"parentId\": \"5b77e1f19a27b1ac98d5b644\",\n\"id\": \"\",\n\"code\": \"CCCC\",\n\"fullName\": \"CC公司\",\n\"type\": \"partner\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}",
       "date" : "2018-08-18 17:09:30.454",
       "headers" : {
         "Accept" : "application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain",
@@ -731,7 +731,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e24a9a27b1ac98d5b647\",\"code\":\"CCCC\",\"name\":\"CC公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e24a9a27b1ac98d5b647\",\"code\":\"CCCC\",\"fullName\":\"CC公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -741,7 +741,7 @@
       "time" : 18,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"parentId\": \"5b77e1f19a27b1ac98d5b644\",\n\"id\": \"\",\n\"code\": \"CCCC\",\n\"name\": \"CC公司\",\n\"type\": \"partner\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e24a9a27b1ac98d5b647\",\"code\":\"CCCC\",\"name\":\"CC公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nPOST https://localhost:9999/rest/v1/orgs/new?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"parentId\": \"5b77e1f19a27b1ac98d5b644\",\n\"id\": \"\",\n\"code\": \"CCCC\",\n\"fullName\": \"CC公司\",\n\"type\": \"partner\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e24a9a27b1ac98d5b647\",\"code\":\"CCCC\",\"fullName\":\"CC公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}\r\n"
     }
   }, {
     "key" : "08a28a5a-51e1-4e48-ac60-4fd1df41ca2d",
@@ -753,7 +753,7 @@
     "request" : {
       "url" : "https://localhost:9999/rest/v1/orgs/5b77e24a9a27b1ac98d5b647?accountCode=Administrator",
       "method" : "PUT",
-      "body" : "{\n\"parentId\": \"5b77e1f19a27b1ac98d5b644\",\n\"id\": \"5b77e24a9a27b1ac98d5b647\",\n\"code\": \"CCCC\",\n\"name\": \"CCCC公司\",\n\"type\": \"partner\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}",
+      "body" : "{\n\"parentId\": \"5b77e1f19a27b1ac98d5b644\",\n\"id\": \"5b77e24a9a27b1ac98d5b647\",\n\"code\": \"CCCC\",\n\"fullName\": \"CCCC公司\",\n\"type\": \"partner\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}",
       "date" : "2018-08-18 17:09:57.892",
       "headers" : {
         "Accept" : "application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain",
@@ -762,7 +762,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e24a9a27b1ac98d5b647\",\"code\":\"CCCC\",\"name\":\"CCCC公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e24a9a27b1ac98d5b647\",\"code\":\"CCCC\",\"fullName\":\"CCCC公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -772,7 +772,7 @@
       "time" : 25,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nPUT https://localhost:9999/rest/v1/orgs/5b77e24a9a27b1ac98d5b647?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"parentId\": \"5b77e1f19a27b1ac98d5b644\",\n\"id\": \"5b77e24a9a27b1ac98d5b647\",\n\"code\": \"CCCC\",\n\"name\": \"CCCC公司\",\n\"type\": \"partner\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e24a9a27b1ac98d5b647\",\"code\":\"CCCC\",\"name\":\"CCCC公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nPUT https://localhost:9999/rest/v1/orgs/5b77e24a9a27b1ac98d5b647?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n--   BODY   --\r\n{\n\"parentId\": \"5b77e1f19a27b1ac98d5b644\",\n\"id\": \"5b77e24a9a27b1ac98d5b647\",\n\"code\": \"CCCC\",\n\"fullName\": \"CCCC公司\",\n\"type\": \"partner\",\n\"managerId\": \"\",\n\"employeeIds\": []\n}\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e24a9a27b1ac98d5b647\",\"code\":\"CCCC\",\"fullName\":\"CCCC公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}\r\n"
     }
   }, {
     "key" : "f886f613-153b-48da-b399-c9cd2455f72e",
@@ -793,7 +793,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e24a9a27b1ac98d5b647\",\"code\":\"CCCC\",\"name\":\"CCCC公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e24a9a27b1ac98d5b647\",\"code\":\"CCCC\",\"fullName\":\"CCCC公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -803,7 +803,7 @@
       "time" : 14,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nGET https://localhost:9999/rest/v1/orgs/5b77e24a9a27b1ac98d5b647?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e24a9a27b1ac98d5b647\",\"code\":\"CCCC\",\"name\":\"CCCC公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nGET https://localhost:9999/rest/v1/orgs/5b77e24a9a27b1ac98d5b647?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e24a9a27b1ac98d5b647\",\"code\":\"CCCC\",\"fullName\":\"CCCC公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}}\r\n"
     }
   }, {
     "key" : "306343a8-ba8a-4300-9f26-9a3a16f80c62",
@@ -824,7 +824,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e1689a27b1ac98d5b642\",\"code\":\"zss\",\"name\":\"总师室\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":null,\"phone\":null,\"mobile\":null,\"email\":null,\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e1689a27b1ac98d5b642\",\"code\":\"zss\",\"fullName\":\"总师室\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":null,\"phone\":null,\"mobile\":null,\"email\":null,\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -834,7 +834,7 @@
       "time" : 15,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nGET https://localhost:9999/rest/v1/orgs/5b77e1689a27b1ac98d5b642?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e1689a27b1ac98d5b642\",\"code\":\"zss\",\"name\":\"总师室\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":null,\"phone\":null,\"mobile\":null,\"email\":null,\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nGET https://localhost:9999/rest/v1/orgs/5b77e1689a27b1ac98d5b642?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"id\":\"5b77e1689a27b1ac98d5b642\",\"code\":\"zss\",\"fullName\":\"总师室\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":null,\"phone\":null,\"mobile\":null,\"email\":null,\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}}}\r\n"
     }
   }, {
     "key" : "a2156749-3862-45b7-a44a-4b89d884de99",
@@ -855,7 +855,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"id\":\"5b77e0379a27b1ac98d5b641\",\"code\":\"ds\",\"name\":\"迪爱斯\",\"type\":\"internal\",\"desc\":null,\"children\":[{\"id\":\"5b77e1689a27b1ac98d5b642\",\"code\":\"zss\",\"name\":\"总师室\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":null,\"phone\":null,\"mobile\":null,\"email\":null,\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}},{\"id\":\"5b77e1bb9a27b1ac98d5b643\",\"code\":\"xsb\",\"name\":\"销售部\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}],\"employees\":null,\"manager\":null},{\"id\":\"5b77e1f19a27b1ac98d5b644\",\"code\":\"partner\",\"name\":\"合作伙伴\",\"type\":\"partner\",\"desc\":null,\"children\":[{\"id\":\"5b77e20c9a27b1ac98d5b645\",\"code\":\"AAAA\",\"name\":\"AAAA公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null},{\"id\":\"5b77e2159a27b1ac98d5b646\",\"code\":\"BBBB\",\"name\":\"BBBB公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null},{\"id\":\"5b77e24a9a27b1ac98d5b647\",\"code\":\"CCCC\",\"name\":\"CCCC公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}],\"employees\":null,\"manager\":null}]}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"id\":\"5b77e0379a27b1ac98d5b641\",\"code\":\"ds\",\"fullName\":\"迪爱斯\",\"type\":\"internal\",\"desc\":null,\"children\":[{\"id\":\"5b77e1689a27b1ac98d5b642\",\"code\":\"zss\",\"fullName\":\"总师室\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":null,\"phone\":null,\"mobile\":null,\"email\":null,\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}},{\"id\":\"5b77e1bb9a27b1ac98d5b643\",\"code\":\"xsb\",\"fullName\":\"销售部\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}],\"employees\":null,\"manager\":null},{\"id\":\"5b77e1f19a27b1ac98d5b644\",\"code\":\"partner\",\"fullName\":\"合作伙伴\",\"type\":\"partner\",\"desc\":null,\"children\":[{\"id\":\"5b77e20c9a27b1ac98d5b645\",\"code\":\"AAAA\",\"fullName\":\"AAAA公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null},{\"id\":\"5b77e2159a27b1ac98d5b646\",\"code\":\"BBBB\",\"fullName\":\"BBBB公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null},{\"id\":\"5b77e24a9a27b1ac98d5b647\",\"code\":\"CCCC\",\"fullName\":\"CCCC公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}],\"employees\":null,\"manager\":null}]}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -865,7 +865,7 @@
       "time" : 19,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nGET https://localhost:9999/rest/v1/orgs?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"id\":\"5b77e0379a27b1ac98d5b641\",\"code\":\"ds\",\"name\":\"迪爱斯\",\"type\":\"internal\",\"desc\":null,\"children\":[{\"id\":\"5b77e1689a27b1ac98d5b642\",\"code\":\"zss\",\"name\":\"总师室\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":null,\"phone\":null,\"mobile\":null,\"email\":null,\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}},{\"id\":\"5b77e1bb9a27b1ac98d5b643\",\"code\":\"xsb\",\"name\":\"销售部\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}],\"employees\":null,\"manager\":null},{\"id\":\"5b77e1f19a27b1ac98d5b644\",\"code\":\"partner\",\"name\":\"合作伙伴\",\"type\":\"partner\",\"desc\":null,\"children\":[{\"id\":\"5b77e20c9a27b1ac98d5b645\",\"code\":\"AAAA\",\"name\":\"AAAA公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null},{\"id\":\"5b77e2159a27b1ac98d5b646\",\"code\":\"BBBB\",\"name\":\"BBBB公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null},{\"id\":\"5b77e24a9a27b1ac98d5b647\",\"code\":\"CCCC\",\"name\":\"CCCC公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}],\"employees\":null,\"manager\":null}]}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nGET https://localhost:9999/rest/v1/orgs?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"id\":\"5b77e0379a27b1ac98d5b641\",\"code\":\"ds\",\"fullName\":\"迪爱斯\",\"type\":\"internal\",\"desc\":null,\"children\":[{\"id\":\"5b77e1689a27b1ac98d5b642\",\"code\":\"zss\",\"fullName\":\"总师室\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":null,\"phone\":null,\"mobile\":null,\"email\":null,\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}},{\"id\":\"5b77e1bb9a27b1ac98d5b643\",\"code\":\"xsb\",\"fullName\":\"销售部\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}],\"employees\":null,\"manager\":null},{\"id\":\"5b77e1f19a27b1ac98d5b644\",\"code\":\"partner\",\"fullName\":\"合作伙伴\",\"type\":\"partner\",\"desc\":null,\"children\":[{\"id\":\"5b77e20c9a27b1ac98d5b645\",\"code\":\"AAAA\",\"fullName\":\"AAAA公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null},{\"id\":\"5b77e2159a27b1ac98d5b646\",\"code\":\"BBBB\",\"fullName\":\"BBBB公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null},{\"id\":\"5b77e24a9a27b1ac98d5b647\",\"code\":\"CCCC\",\"fullName\":\"CCCC公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}],\"employees\":null,\"manager\":null}]}\r\n"
     }
   }, {
     "key" : "b9c47c6e-93a6-4f4e-9526-2d3984985fe3",
@@ -886,7 +886,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"id\":\"5b77e0379a27b1ac98d5b641\",\"code\":\"ds\",\"name\":\"迪爱斯\",\"type\":\"internal\",\"desc\":null,\"children\":[{\"id\":\"5b77e1689a27b1ac98d5b642\",\"code\":\"zss\",\"name\":\"总师室\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":null,\"phone\":null,\"mobile\":null,\"email\":null,\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}},{\"id\":\"5b77e1bb9a27b1ac98d5b643\",\"code\":\"xsb\",\"name\":\"销售部\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}],\"employees\":null,\"manager\":null},{\"id\":\"5b77e1f19a27b1ac98d5b644\",\"code\":\"partner\",\"name\":\"合作伙伴\",\"type\":\"partner\",\"desc\":null,\"children\":[{\"id\":\"5b77e20c9a27b1ac98d5b645\",\"code\":\"AAAA\",\"name\":\"AAAA公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null},{\"id\":\"5b77e2159a27b1ac98d5b646\",\"code\":\"BBBB\",\"name\":\"BBBB公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null},{\"id\":\"5b77e24a9a27b1ac98d5b647\",\"code\":\"CCCC\",\"name\":\"CCCC公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}],\"employees\":null,\"manager\":null}]}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"id\":\"5b77e0379a27b1ac98d5b641\",\"code\":\"ds\",\"fullName\":\"迪爱斯\",\"type\":\"internal\",\"desc\":null,\"children\":[{\"id\":\"5b77e1689a27b1ac98d5b642\",\"code\":\"zss\",\"fullName\":\"总师室\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":null,\"phone\":null,\"mobile\":null,\"email\":null,\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}},{\"id\":\"5b77e1bb9a27b1ac98d5b643\",\"code\":\"xsb\",\"fullName\":\"销售部\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}],\"employees\":null,\"manager\":null},{\"id\":\"5b77e1f19a27b1ac98d5b644\",\"code\":\"partner\",\"fullName\":\"合作伙伴\",\"type\":\"partner\",\"desc\":null,\"children\":[{\"id\":\"5b77e20c9a27b1ac98d5b645\",\"code\":\"AAAA\",\"fullName\":\"AAAA公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null},{\"id\":\"5b77e2159a27b1ac98d5b646\",\"code\":\"BBBB\",\"fullName\":\"BBBB公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null},{\"id\":\"5b77e24a9a27b1ac98d5b647\",\"code\":\"CCCC\",\"fullName\":\"CCCC公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}],\"employees\":null,\"manager\":null}]}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -896,7 +896,7 @@
       "time" : 52460,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nGET https://localhost:9999/rest/v1/orgs?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"id\":\"5b77e0379a27b1ac98d5b641\",\"code\":\"ds\",\"name\":\"迪爱斯\",\"type\":\"internal\",\"desc\":null,\"children\":[{\"id\":\"5b77e1689a27b1ac98d5b642\",\"code\":\"zss\",\"name\":\"总师室\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":null,\"phone\":null,\"mobile\":null,\"email\":null,\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}},{\"id\":\"5b77e1bb9a27b1ac98d5b643\",\"code\":\"xsb\",\"name\":\"销售部\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}],\"employees\":null,\"manager\":null},{\"id\":\"5b77e1f19a27b1ac98d5b644\",\"code\":\"partner\",\"name\":\"合作伙伴\",\"type\":\"partner\",\"desc\":null,\"children\":[{\"id\":\"5b77e20c9a27b1ac98d5b645\",\"code\":\"AAAA\",\"name\":\"AAAA公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null},{\"id\":\"5b77e2159a27b1ac98d5b646\",\"code\":\"BBBB\",\"name\":\"BBBB公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null},{\"id\":\"5b77e24a9a27b1ac98d5b647\",\"code\":\"CCCC\",\"name\":\"CCCC公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}],\"employees\":null,\"manager\":null}]}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nGET https://localhost:9999/rest/v1/orgs?accountCode=Administrator\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"id\":\"5b77e0379a27b1ac98d5b641\",\"code\":\"ds\",\"fullName\":\"迪爱斯\",\"type\":\"internal\",\"desc\":null,\"children\":[{\"id\":\"5b77e1689a27b1ac98d5b642\",\"code\":\"zss\",\"fullName\":\"总师室\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":null,\"phone\":null,\"mobile\":null,\"email\":null,\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null}},{\"id\":\"5b77e1bb9a27b1ac98d5b643\",\"code\":\"xsb\",\"fullName\":\"销售部\",\"type\":\"internal\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}],\"employees\":null,\"manager\":null},{\"id\":\"5b77e1f19a27b1ac98d5b644\",\"code\":\"partner\",\"fullName\":\"合作伙伴\",\"type\":\"partner\",\"desc\":null,\"children\":[{\"id\":\"5b77e20c9a27b1ac98d5b645\",\"code\":\"AAAA\",\"fullName\":\"AAAA公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null},{\"id\":\"5b77e2159a27b1ac98d5b646\",\"code\":\"BBBB\",\"fullName\":\"BBBB公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null},{\"id\":\"5b77e24a9a27b1ac98d5b647\",\"code\":\"CCCC\",\"fullName\":\"CCCC公司\",\"type\":\"partner\",\"desc\":null,\"children\":null,\"employees\":null,\"manager\":null}],\"employees\":null,\"manager\":null}]}\r\n"
     }
   }, {
     "key" : "69d687a1-66be-484c-8eea-f6f1728b06e9",
@@ -1010,7 +1010,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"id\":\"5b7823dd9a27b1bd78e8382e\",\"name\":\"test chat room\",\"desc\":null,\"creator\":{\"id\":\"5b7795549a27b1ac98d5b640\",\"code\":\"pengmx\",\"nickname\":\"john.peng\",\"eiimCode\":\"EEIM-1\",\"avatar\":\"pengmx.png\",\"valid\":true,\"person\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null},\"members\":[{\"account\":{\"id\":\"5b7807ce9a27b1b69a6a92e0\",\"code\":\"liff\",\"nickname\":\"liff\",\"eiimCode\":\"EEIM-3\",\"avatar\":\"liff.png\",\"valid\":true,\"person\":{\"id\":\"5b7807039a27b1b69a6a92de\",\"name\":\"李 飞虎\",\"title\":\"COO\",\"phone\":\"12345678\",\"mobile\":\"12345678901\",\"email\":\"lff@hotmail.com\",\"desc\":\"我是李飞虎。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null},\"lastAccessTime\":0,\"top\":false},{\"account\":{\"id\":\"5b78078a9a27b1b69a6a92df\",\"code\":\"zhanglp\",\"nickname\":\"zhanglp\",\"eiimCode\":\"EEIM-2\",\"avatar\":\"zhanglp.png\",\"valid\":true,\"person\":{\"id\":\"5b7806df9a27b1b69a6a92dd\",\"name\":\"张 林平\",\"title\":\"CTO\",\"phone\":\"12345678\",\"mobile\":\"12345678901\",\"email\":\"zlpxjz@hotmail.com\",\"desc\":\"我是张林平。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null},\"lastAccessTime\":0,\"top\":false},{\"account\":{\"id\":\"5b7795549a27b1ac98d5b640\",\"code\":\"pengmx\",\"nickname\":\"john.peng\",\"eiimCode\":\"EEIM-1\",\"avatar\":\"pengmx.png\",\"valid\":true,\"person\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null},\"lastAccessTime\":0,\"top\":true}]}]}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"id\":\"5b7823dd9a27b1bd78e8382e\",\"fullName\":\"test chat room\",\"desc\":null,\"creator\":{\"id\":\"5b7795549a27b1ac98d5b640\",\"code\":\"pengmx\",\"nickname\":\"john.peng\",\"eiimCode\":\"EEIM-1\",\"avatar\":\"pengmx.png\",\"valid\":true,\"person\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null},\"members\":[{\"account\":{\"id\":\"5b7807ce9a27b1b69a6a92e0\",\"code\":\"liff\",\"nickname\":\"liff\",\"eiimCode\":\"EEIM-3\",\"avatar\":\"liff.png\",\"valid\":true,\"person\":{\"id\":\"5b7807039a27b1b69a6a92de\",\"fullName\":\"李 飞虎\",\"title\":\"COO\",\"phone\":\"12345678\",\"mobile\":\"12345678901\",\"email\":\"lff@hotmail.com\",\"desc\":\"我是李飞虎。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null},\"lastAccessTime\":0,\"top\":false},{\"account\":{\"id\":\"5b78078a9a27b1b69a6a92df\",\"code\":\"zhanglp\",\"nickname\":\"zhanglp\",\"eiimCode\":\"EEIM-2\",\"avatar\":\"zhanglp.png\",\"valid\":true,\"person\":{\"id\":\"5b7806df9a27b1b69a6a92dd\",\"fullName\":\"张 林平\",\"title\":\"CTO\",\"phone\":\"12345678\",\"mobile\":\"12345678901\",\"email\":\"zlpxjz@hotmail.com\",\"desc\":\"我是张林平。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null},\"lastAccessTime\":0,\"top\":false},{\"account\":{\"id\":\"5b7795549a27b1ac98d5b640\",\"code\":\"pengmx\",\"nickname\":\"john.peng\",\"eiimCode\":\"EEIM-1\",\"avatar\":\"pengmx.png\",\"valid\":true,\"person\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null},\"lastAccessTime\":0,\"top\":true}]}]}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -1020,7 +1020,7 @@
       "time" : 51,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nGET https://localhost:9999/rest/v1/chatRooms/accounts/5b7795549a27b1ac98d5b640?accountCode=pengmx\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"id\":\"5b7823dd9a27b1bd78e8382e\",\"name\":\"test chat room\",\"desc\":null,\"creator\":{\"id\":\"5b7795549a27b1ac98d5b640\",\"code\":\"pengmx\",\"nickname\":\"john.peng\",\"eiimCode\":\"EEIM-1\",\"avatar\":\"pengmx.png\",\"valid\":true,\"person\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null},\"members\":[{\"account\":{\"id\":\"5b7807ce9a27b1b69a6a92e0\",\"code\":\"liff\",\"nickname\":\"liff\",\"eiimCode\":\"EEIM-3\",\"avatar\":\"liff.png\",\"valid\":true,\"person\":{\"id\":\"5b7807039a27b1b69a6a92de\",\"name\":\"李 飞虎\",\"title\":\"COO\",\"phone\":\"12345678\",\"mobile\":\"12345678901\",\"email\":\"lff@hotmail.com\",\"desc\":\"我是李飞虎。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null},\"lastAccessTime\":0,\"top\":false},{\"account\":{\"id\":\"5b78078a9a27b1b69a6a92df\",\"code\":\"zhanglp\",\"nickname\":\"zhanglp\",\"eiimCode\":\"EEIM-2\",\"avatar\":\"zhanglp.png\",\"valid\":true,\"person\":{\"id\":\"5b7806df9a27b1b69a6a92dd\",\"name\":\"张 林平\",\"title\":\"CTO\",\"phone\":\"12345678\",\"mobile\":\"12345678901\",\"email\":\"zlpxjz@hotmail.com\",\"desc\":\"我是张林平。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null},\"lastAccessTime\":0,\"top\":false},{\"account\":{\"id\":\"5b7795549a27b1ac98d5b640\",\"code\":\"pengmx\",\"nickname\":\"john.peng\",\"eiimCode\":\"EEIM-1\",\"avatar\":\"pengmx.png\",\"valid\":true,\"person\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"name\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null},\"lastAccessTime\":0,\"top\":true}]}]}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nGET https://localhost:9999/rest/v1/chatRooms/accounts/5b7795549a27b1ac98d5b640?accountCode=pengmx\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"id\":\"5b7823dd9a27b1bd78e8382e\",\"fullName\":\"test chat room\",\"desc\":null,\"creator\":{\"id\":\"5b7795549a27b1ac98d5b640\",\"code\":\"pengmx\",\"nickname\":\"john.peng\",\"eiimCode\":\"EEIM-1\",\"avatar\":\"pengmx.png\",\"valid\":true,\"person\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null},\"members\":[{\"account\":{\"id\":\"5b7807ce9a27b1b69a6a92e0\",\"code\":\"liff\",\"nickname\":\"liff\",\"eiimCode\":\"EEIM-3\",\"avatar\":\"liff.png\",\"valid\":true,\"person\":{\"id\":\"5b7807039a27b1b69a6a92de\",\"fullName\":\"李 飞虎\",\"title\":\"COO\",\"phone\":\"12345678\",\"mobile\":\"12345678901\",\"email\":\"lff@hotmail.com\",\"desc\":\"我是李飞虎。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null},\"lastAccessTime\":0,\"top\":false},{\"account\":{\"id\":\"5b78078a9a27b1b69a6a92df\",\"code\":\"zhanglp\",\"nickname\":\"zhanglp\",\"eiimCode\":\"EEIM-2\",\"avatar\":\"zhanglp.png\",\"valid\":true,\"person\":{\"id\":\"5b7806df9a27b1b69a6a92dd\",\"fullName\":\"张 林平\",\"title\":\"CTO\",\"phone\":\"12345678\",\"mobile\":\"12345678901\",\"email\":\"zlpxjz@hotmail.com\",\"desc\":\"我是张林平。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null},\"lastAccessTime\":0,\"top\":false},{\"account\":{\"id\":\"5b7795549a27b1ac98d5b640\",\"code\":\"pengmx\",\"nickname\":\"john.peng\",\"eiimCode\":\"EEIM-1\",\"avatar\":\"pengmx.png\",\"valid\":true,\"person\":{\"id\":\"5b7789bd9a27b1a8c109a76d\",\"fullName\":\"彭 明喜\",\"title\":\"首席架构师\",\"phone\":\"62738888\",\"mobile\":\"12345678901\",\"email\":\"pengmingxi@dscomm.com.cn\",\"desc\":\"我是彭明喜。\",\"sex\":\"MALE\",\"account\":null},\"roles\":null},\"lastAccessTime\":0,\"top\":true}]}]}\r\n"
     }
   }, {
     "key" : "8a3ef7cc-414b-4aa2-a011-eaf0c9cd304e",
@@ -1103,7 +1103,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"id\":\"5b7782649a27b1a7e432ec1c\",\"code\":\"account.status\",\"name\":\"账户状态\",\"items\":[{\"code\":\"stepOut\",\"name\":\"暂时离开\",\"value\":\"stepOut\",\"parentCode\":null},{\"code\":\"offline\",\"name\":\"离线\",\"value\":\"offline\",\"parentCode\":null},{\"code\":\"hidden\",\"name\":\"隐身\",\"value\":\"hidden\",\"parentCode\":null},{\"code\":\"online\",\"name\":\"在线\",\"value\":\"online\",\"parentCode\":null}]}]}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"id\":\"5b7782649a27b1a7e432ec1c\",\"code\":\"account.status\",\"fullName\":\"账户状态\",\"items\":[{\"code\":\"stepOut\",\"fullName\":\"暂时离开\",\"value\":\"stepOut\",\"parentCode\":null},{\"code\":\"offline\",\"fullName\":\"离线\",\"value\":\"offline\",\"parentCode\":null},{\"code\":\"hidden\",\"fullName\":\"隐身\",\"value\":\"hidden\",\"parentCode\":null},{\"code\":\"online\",\"fullName\":\"在线\",\"value\":\"online\",\"parentCode\":null}]}]}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -1113,7 +1113,7 @@
       "time" : 580,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nGET https://localhost:9999/rest/v1/baseDatas?accountCode=pengmx\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"id\":\"5b7782649a27b1a7e432ec1c\",\"code\":\"account.status\",\"name\":\"账户状态\",\"items\":[{\"code\":\"stepOut\",\"name\":\"暂时离开\",\"value\":\"stepOut\",\"parentCode\":null},{\"code\":\"offline\",\"name\":\"离线\",\"value\":\"offline\",\"parentCode\":null},{\"code\":\"hidden\",\"name\":\"隐身\",\"value\":\"hidden\",\"parentCode\":null},{\"code\":\"online\",\"name\":\"在线\",\"value\":\"online\",\"parentCode\":null}]}]}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nGET https://localhost:9999/rest/v1/baseDatas?accountCode=pengmx\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"id\":\"5b7782649a27b1a7e432ec1c\",\"code\":\"account.status\",\"fullName\":\"账户状态\",\"items\":[{\"code\":\"stepOut\",\"fullName\":\"暂时离开\",\"value\":\"stepOut\",\"parentCode\":null},{\"code\":\"offline\",\"fullName\":\"离线\",\"value\":\"offline\",\"parentCode\":null},{\"code\":\"hidden\",\"fullName\":\"隐身\",\"value\":\"hidden\",\"parentCode\":null},{\"code\":\"online\",\"fullName\":\"在线\",\"value\":\"online\",\"parentCode\":null}]}]}\r\n"
     }
   }, {
     "key" : "1fe9a14b-17fa-48bd-86d3-0aebe07aabc4",
@@ -1134,7 +1134,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"code\":\"stepOut\",\"name\":\"暂时离开\",\"value\":\"stepOut\",\"parentCode\":null},{\"code\":\"offline\",\"name\":\"离线\",\"value\":\"offline\",\"parentCode\":null},{\"code\":\"hidden\",\"name\":\"隐身\",\"value\":\"hidden\",\"parentCode\":null},{\"code\":\"online\",\"name\":\"在线\",\"value\":\"online\",\"parentCode\":null}]}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"code\":\"stepOut\",\"fullName\":\"暂时离开\",\"value\":\"stepOut\",\"parentCode\":null},{\"code\":\"offline\",\"fullName\":\"离线\",\"value\":\"offline\",\"parentCode\":null},{\"code\":\"hidden\",\"fullName\":\"隐身\",\"value\":\"hidden\",\"parentCode\":null},{\"code\":\"online\",\"fullName\":\"在线\",\"value\":\"online\",\"parentCode\":null}]}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -1144,7 +1144,7 @@
       "time" : 28,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nGET https://localhost:9999/rest/v1/baseDatas/account.status?accountCode=pengmx\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"code\":\"stepOut\",\"name\":\"暂时离开\",\"value\":\"stepOut\",\"parentCode\":null},{\"code\":\"offline\",\"name\":\"离线\",\"value\":\"offline\",\"parentCode\":null},{\"code\":\"hidden\",\"name\":\"隐身\",\"value\":\"hidden\",\"parentCode\":null},{\"code\":\"online\",\"name\":\"在线\",\"value\":\"online\",\"parentCode\":null}]}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nGET https://localhost:9999/rest/v1/baseDatas/account.status?accountCode=pengmx\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":[{\"code\":\"stepOut\",\"fullName\":\"暂时离开\",\"value\":\"stepOut\",\"parentCode\":null},{\"code\":\"offline\",\"fullName\":\"离线\",\"value\":\"offline\",\"parentCode\":null},{\"code\":\"hidden\",\"fullName\":\"隐身\",\"value\":\"hidden\",\"parentCode\":null},{\"code\":\"online\",\"fullName\":\"在线\",\"value\":\"online\",\"parentCode\":null}]}\r\n"
     }
   }, {
     "key" : "bbba980c-9c7c-43d6-a1c5-05935a868896",
@@ -1165,7 +1165,7 @@
       "cookies" : { }
     },
     "response" : {
-      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"code\":\"hidden\",\"name\":\"隐身\",\"value\":\"hidden\",\"parentCode\":null}}",
+      "body" : "{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"code\":\"hidden\",\"fullName\":\"隐身\",\"value\":\"hidden\",\"parentCode\":null}}",
       "headers" : {
         "Transfer-Encoding" : "chunked",
         "Server" : "Jetty(9.4.8.v20171121)",
@@ -1175,7 +1175,7 @@
       "time" : 18,
       "status" : "HTTP/1.1 200 ",
       "statusCode" : 200,
-      "raw_text" : "== REQUEST  ==\r\n\r\nGET https://localhost:9999/rest/v1/baseDatas/account.status/items/hidden?accountCode=pengmx\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"code\":\"hidden\",\"name\":\"隐身\",\"value\":\"hidden\",\"parentCode\":null}}\r\n"
+      "raw_text" : "== REQUEST  ==\r\n\r\nGET https://localhost:9999/rest/v1/baseDatas/account.status/items/hidden?accountCode=pengmx\r\n\r\n-- HEADERS  --\r\nAccept : application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain\r\nContent-Type : application/json; charset=UTF-8\r\n\r\n== RESPONSE ==\r\n\r\nHTTP/1.1 200 \r\n\r\n-- HEADERS  --\r\nTransfer-Encoding : chunked\r\nServer : Jetty(9.4.8.v20171121)\r\nContent-Type : application/json\r\n\r\n--   BODY   --\r\n{\"errorCode\":0,\"errorMessage\":null,\"data\":{\"code\":\"hidden\",\"fullName\":\"隐身\",\"value\":\"hidden\",\"parentCode\":null}}\r\n"
     }
   } ]
 }
