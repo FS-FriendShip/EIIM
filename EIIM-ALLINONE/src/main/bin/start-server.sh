@@ -1,7 +1,7 @@
 #!/bin/bash
 
 JAVA_CMD="/opt/jdk"
-EIIM_HOME="/opt/EII-ALLINONE"
+EIIM_HOME="/Users/tony/workspace/git/EIIM/EII-ALLINONE"
 
 CLASSPATH="$EIIM_HOME/conf/."
 for jarFile in $EIIM_HOME/libs/*.jar; do

@@ -1,0 +1,50 @@
+#contact img {
+  width: 32px;
+  height: 32px;
+  display: block;
+  margin-right: 10px
+}
+
+#contact .initial-bar {
+  position: fixed;
+  top: 50%;
+  font-size: 11px;
+  line-height: 1.2;
+  right: 2px;
+  width: 10px;
+  -webkit-transform: translate3d(0, -50%, 0);
+  transform: translate3d(0, -50%, 0)
+}
+
+#contact .initial-bar span {
+  display: block;
+  text-align: left
+}
+
+#contact-detail .contact-section {
+  margin-top: 25px
+}
+
+#contact-detail .contact-section .contact-master {
+  padding: 25px 15px;
+  background-color: #fff
+}
+
+#contact-detail .contact-section .contact-item {
+  margin-top: 0px
+}
+
+#contact-detail .contact-section .contact-button {
+  margin-top: 0px;
+  width: 90%;
+  align: center
+}
+
+.contact-section {
+  margin-top:25px;
+}
+
+.section-label{
+  margin-top:25px;
+  padding-left:10px;
+}
