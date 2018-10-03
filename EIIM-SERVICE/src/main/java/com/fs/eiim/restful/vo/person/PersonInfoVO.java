@@ -12,45 +12,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PersonInfoVO {
-    private String id, name, title, phone, mobile, email, desc;
+    private String id, fullName, title, phone, mobile, email, desc;
     private boolean hasAccount = false;
     private User.Sex sex = User.Sex.NA;
     private AccountInfoVO account;
     private OrgInfoVO org;
 
-    public static PersonInfoVO valueOf(User user, Account account, Org org) {
-        if (user == null) {
-            return null;
-        }
-        PersonInfoVO personInfoVO = new PersonInfoVO();
-        personInfoVO.id = user.getId();
-        personInfoVO.name = user.getFullName();
-        personInfoVO.desc = user.getDesc();
-        personInfoVO.sex = user.getSex();
-        personInfoVO.hasAccount = account != null;
-        if (account != null) {
-            personInfoVO.account = AccountInfoVO.valueOf(account);
-        }
-        if (org != null) {
-            personInfoVO.org = OrgInfoVO.valueOf(org);
-        }
-        return personInfoVO;
-    }
-
-    public static PersonInfoVO valueOf(Person person, Account account, Org org) {
+    public static PersonInfoVO valueOf(BaseDataService.PersonAccountTuple tuple) {
+        Person person = tuple.getPerson();
+        Account account = tuple.getAccount();
+        Org org = tuple.getOrg();
         if (person == null) {
             return null;
         }
         PersonInfoVO personInfoVO = new PersonInfoVO();
         personInfoVO.id = person.getId();
-        personInfoVO.name = person.getFullName();
+        personInfoVO.fullName = person.getFullName();
+        personInfoVO.desc = person.getDesc();
+        personInfoVO.sex = person.getSex();
+        personInfoVO.hasAccount = account != null;
         personInfoVO.title = person.getTitle();
         personInfoVO.phone = person.getPhone();
         personInfoVO.mobile = person.getMobile();
         personInfoVO.email = person.getEmail();
-        personInfoVO.desc = person.getDesc();
-        personInfoVO.sex = person.getSex();
-        personInfoVO.hasAccount = account != null;
         if (account != null) {
             personInfoVO.account = AccountInfoVO.valueOf(account);
         }
@@ -63,9 +47,7 @@ public class PersonInfoVO {
     public static List<PersonInfoVO> valueOf(List<BaseDataService.PersonAccountTuple> tuples) {
         List<PersonInfoVO> persons = new ArrayList<>();
         if (tuples != null && !tuples.isEmpty()) {
-            tuples.forEach(tuple -> persons.add(
-                    PersonInfoVO.valueOf(tuple.getPerson(), tuple.getAccount(), tuple.getOrg()))
-            );
+            tuples.forEach(tuple -> persons.add(PersonInfoVO.valueOf(tuple)));
         }
         return persons;
     }
@@ -78,12 +60,12 @@ public class PersonInfoVO {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getTitle() {

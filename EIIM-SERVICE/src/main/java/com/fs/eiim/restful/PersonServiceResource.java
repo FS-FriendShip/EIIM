@@ -59,7 +59,7 @@ public class PersonServiceResource {
         }
         BaseDataService.PersonAccountTuple tuple = baseDataService.savePersonInfo(personFormVO.get());
         sessionDataStore.removeCurrentUserCode();
-        return new DataVO<>(PersonInfoVO.valueOf(tuple.getPerson(), tuple.getAccount(), tuple.getOrg()));
+        return new DataVO<>(PersonInfoVO.valueOf(tuple));
     }
 
     @Path("persons/new")
@@ -106,7 +106,7 @@ public class PersonServiceResource {
             ));
         }
         BaseDataService.PersonAccountTuple tuple = baseDataService.getPersonInfo(personId);
-        return new DataVO<>(PersonInfoVO.valueOf(tuple.getPerson(), tuple.getAccount(), tuple.getOrg()));
+        return new DataVO<>(PersonInfoVO.valueOf(tuple));
     }
 
     @Path("persons/{personId}/enable")

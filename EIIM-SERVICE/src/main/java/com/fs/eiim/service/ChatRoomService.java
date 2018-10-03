@@ -25,6 +25,8 @@ public interface ChatRoomService {
 
     Account getMessageSender(String accountCode);
 
+    Attachment getMessageAttachmentById(String id);
+
     List<ChatRoomMember> getChatRoomMembers(String chatRoomId);
 
     ChatRoomMember topChatRoom(String chatRoomId, String accountCode, boolean isTop);
@@ -38,7 +40,7 @@ public interface ChatRoomService {
     List<ChatMessage> getMessagesByRequest(String chatRoomId, String accountCode, String lastMessageId,
                                            Direction direction, Pagination pagination);
 
-    ChatRoom saveChatMessage(String accoutnCode, String eiimCode, String chatRoomId, String messageType, String message);
+    ChatMessage saveChatMessage(String accoutnCode, String eiimCode, String chatRoomId, ChatMessage.MessageType messageType, String message);
 
     List<ChatNotice> getAllChatRoomNotices(String chatRoomId);
 

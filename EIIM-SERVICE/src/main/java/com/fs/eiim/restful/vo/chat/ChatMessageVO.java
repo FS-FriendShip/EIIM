@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatMessageVO {
-    private String id, messageType, message;
+    private String id;
+    private ChatMessage.MessageType messageType;
+    private ChatMessage.Message message;
     private MessageSenderVO sender;
     private Long sentTime;
 
@@ -18,7 +20,7 @@ public class ChatMessageVO {
         ChatMessageVO chatMessageVO = new ChatMessageVO();
         chatMessageVO.id = chatMessage.getId();
         chatMessageVO.messageType = chatMessage.getMessageType();
-        chatMessageVO.message = chatMessage.getMessage();
+        chatMessageVO.message = chatMessage.getMessageByType();
         chatMessageVO.sentTime = chatMessage.getSentTime();
         Account sender = chatMessage.getSender();
         if (sender != null) {
@@ -39,11 +41,11 @@ public class ChatMessageVO {
         return id;
     }
 
-    public String getMessageType() {
+    public ChatMessage.MessageType getMessageType() {
         return messageType;
     }
 
-    public String getMessage() {
+    public ChatMessage.Message getMessage() {
         return message;
     }
 

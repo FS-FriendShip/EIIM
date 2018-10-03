@@ -5,6 +5,8 @@ import com.fs.eiim.error.UserInterfaceEiimErrorException;
 import com.fs.eiim.service.ChatRoomService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.mx.StringUtils;
 import org.mx.comps.rbac.error.UserInterfaceRbacErrorException;
 import org.mx.dal.EntityFactory;
@@ -14,6 +16,11 @@ import org.mx.dal.service.GeneralDictAccessor;
 import org.mx.error.UserInterfaceSystemErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.aggregation.LookupOperation;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -30,16 +37,30 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     private static final Log logger = LogFactory.getLog(ChatRoomServiceImpl.class);
 
     private GeneralDictAccessor accessor;
+    private MongoTemplate template;
 
     /**
      * 构造函数
      *
      * @param accessor 字典数据访问接口
+     * @param template MongoDB的操作模板接口
      */
     @Autowired
-    public ChatRoomServiceImpl(@Qualifier("generalDictAccessorMongodb") GeneralDictAccessor accessor) {
+    public ChatRoomServiceImpl(@Qualifier("generalDictAccessorMongodb") GeneralDictAccessor accessor,
+                               MongoTemplate template) {
         super();
         this.accessor = accessor;
+        this.template = template;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see ChatRoomService#getMessageAttachmentById(String)
+     */
+    @Override
+    public Attachment getMessageAttachmentById(String id) {
+        return accessor.getById(id, Attachment.class);
     }
 
     /**
@@ -137,9 +158,41 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             unread = list.size();
             if (unread > 0) {
                 lastMessage = list.get(0);
+                transformChatMessage(lastMessage);
             }
             return new ChatRoomSummary(chatRoom, unread, lastMessage);
         }).collect(Collectors.toList());
+    }
+
+    private void transformChatMessage(ChatMessage chatMessage) {
+        if (chatMessage != null) {
+            if (chatMessage.getMessageType() == ChatMessage.MessageType.TEXT) {
+                chatMessage.setMessageByType(new ChatMessage.TextMessage((String) chatMessage.getMessage()));
+            } else if (chatMessage.getMessageType() == ChatMessage.MessageType.FILE) {
+                if (chatMessage.getMessage() == null) {
+                    if (logger.isErrorEnabled()) {
+                        logger.error("The attachment's id is null.");
+                    }
+                    throw new UserInterfaceSystemErrorException(
+                            UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+                    );
+                }
+                String id = chatMessage.getMessage().toString();
+                Attachment attachment = accessor.getById(id, Attachment.class);
+                if (attachment != null) {
+                    chatMessage.setMessageByType(new ChatMessage.FileMessage(attachment));
+                } else {
+                    if (logger.isWarnEnabled()) {
+                        logger.warn(String.format("The attachment[%s] not found.", id));
+                    }
+                }
+            } else {
+                if (logger.isWarnEnabled()) {
+                    logger.warn(String.format("Unsupported message type: %s.",
+                            chatMessage.getMessageType()));
+                }
+            }
+        }
     }
 
     /**
@@ -447,10 +500,47 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 }
             }
         }
-        return accessor.find(GeneralAccessor.ConditionGroup.and(
+        // 先取出文本消息
+        List<ChatMessage> textMessages = accessor.find(GeneralAccessor.ConditionGroup.and(
                 GeneralAccessor.ConditionTuple.eq("chatRoom", chatRoom),
-                GeneralAccessor.ConditionTuple.gte("sentTime", lastAccessTime)
+                GeneralAccessor.ConditionTuple.gte("sentTime", lastAccessTime),
+                GeneralAccessor.ConditionTuple.eq("messageType", ChatMessage.MessageType.TEXT)
         ), ChatMessage.class);
+
+        List<ChatMessage> result = new ArrayList<>();
+        textMessages.forEach(message -> {
+            message.setMessageByType(new ChatMessage.TextMessage((String) message.getMessage()));
+            result.add(message);
+        });
+        // 再取出文件消息
+        LookupOperation lookup = LookupOperation.newLookup().from("attachment")
+                .localField("message").foreignField("_id").as("attachments");
+        AggregationOperation match = Aggregation.match(Criteria.where("messageType").is("FILE")
+                .andOperator(Criteria.where("chatRoom").is(template.getConverter().toDBRef(chatRoom, null))
+                        .andOperator(Criteria.where("sentTime").gte(lastAccessTime))));
+        List<ChatMessage> fileMessages = getFileChatMessageByAggregate(lookup, match);
+        if (!fileMessages.isEmpty()) {
+            result.addAll(fileMessages);
+        }
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<ChatMessage> getFileChatMessageByAggregate(LookupOperation lookup, AggregationOperation match) {
+        List<ChatMessage> result = new ArrayList<>();
+        Aggregation aggregation = Aggregation.newAggregation(lookup, match);
+        List<Document> list = template.aggregate(aggregation, "chatMessage", Document.class)
+                .getMappedResults();
+        list.forEach(document -> {
+            ChatMessage chatMessage = template.getConverter().read(ChatMessage.class, document);
+            List<Document> attachments = (List<Document>) document.get("attachments");
+            if (attachments != null && !attachments.isEmpty()) {
+                Attachment attachment = template.getConverter().read(Attachment.class, attachments.get(0));
+                chatMessage.setMessageByType(new ChatMessage.FileMessage(attachment));
+                result.add(chatMessage);
+            }
+        });
+        return result;
     }
 
     /**
@@ -520,33 +610,55 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             }
         }
         GeneralAccessor.ConditionGroup group;
+        AggregationOperation match;
         if (direction == Direction.FORWARD) {
             // 新消息
             group = GeneralAccessor.ConditionGroup.and(
                     GeneralAccessor.ConditionTuple.eq("chatRoom", chatRoom),
-                    GeneralAccessor.ConditionTuple.gte("sentTime", sentTime + 1)
+                    GeneralAccessor.ConditionTuple.gte("sentTime", sentTime + 1),
+                    GeneralAccessor.ConditionTuple.eq("messageType", "TEXT")
             );
+            match = Aggregation.match(Criteria.where("messageType").is("FILE")
+                    .andOperator(Criteria.where("chatRoom").is(template.getConverter().toDBRef(chatRoom, null))
+                            .andOperator(Criteria.where("sentTime").gte(sentTime + 1))));
         } else {
             // 旧消息
             group = GeneralAccessor.ConditionGroup.and(
                     GeneralAccessor.ConditionTuple.eq("chatRoom", chatRoom),
-                    GeneralAccessor.ConditionTuple.lte("sentTime", sentTime - 1)
+                    GeneralAccessor.ConditionTuple.lte("sentTime", sentTime - 1),
+                    GeneralAccessor.ConditionTuple.eq("messageType", "TEXT")
             );
+            match = Aggregation.match(Criteria.where("messageType").is("FILE")
+                    .andOperator(Criteria.where("chatRoom").is(template.getConverter().toDBRef(chatRoom, null))
+                            .andOperator(Criteria.where("sentTime").lte(sentTime - 1))));
         }
-        return accessor.find(pagination, group, GeneralAccessor.RecordOrderGroup.group(
+        List<ChatMessage> result = new ArrayList<>();
+        List<ChatMessage> textMessages = accessor.find(pagination, group, GeneralAccessor.RecordOrderGroup.group(
                 GeneralAccessor.RecordOrder.asc("sentTime")
         ), ChatMessage.class);
+        textMessages.forEach(message -> {
+            message.setMessageByType(new ChatMessage.TextMessage((String) message.getMessage()));
+            result.add(message);
+        });
+        // 再取出文件消息
+        LookupOperation lookup = LookupOperation.newLookup().from("attachment")
+                .localField("message").foreignField("_id").as("attachments");
+        List<ChatMessage> fileMessages = getFileChatMessageByAggregate(lookup, match);
+        if (!fileMessages.isEmpty()) {
+            result.addAll(fileMessages);
+        }
+        return result;
     }
 
     /**
      * {@inheritDoc}
      *
-     * @see ChatRoomService#saveChatMessage(String, String, String, String, String)
+     * @see ChatRoomService#saveChatMessage(String, String, String, ChatMessage.MessageType, String)
      */
     @Override
-    public ChatRoom saveChatMessage(String accoutnCode, String eiimCode, String chatRoomId, String messageType,
-                                    String message) {
-        if (StringUtils.isBlank(accoutnCode) || StringUtils.isBlank(chatRoomId) || StringUtils.isBlank(messageType) ||
+    public ChatMessage saveChatMessage(String accoutnCode, String eiimCode, String chatRoomId, ChatMessage.MessageType messageType,
+                                       String message) {
+        if (StringUtils.isBlank(accoutnCode) || StringUtils.isBlank(chatRoomId) || messageType == null ||
                 StringUtils.isBlank(message)) {
             if (logger.isErrorEnabled()) {
                 logger.error(String.format("Any parameter invalid, account code: %s, chat room id: %s, " +
@@ -576,17 +688,22 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         }
         ChatMessage chatMessage = EntityFactory.createEntity(ChatMessage.class);
         chatMessage.setChatRoom(chatRoom);
-        chatMessage.setMessage(message);
         chatMessage.setMessageType(messageType);
+        if (messageType == ChatMessage.MessageType.FILE) {
+            chatMessage.setMessage(new ObjectId(message));
+        } else {
+            chatMessage.setMessage(message);
+        }
         chatMessage.setSender(sender);
         chatMessage.setSentTime(System.currentTimeMillis());
         try {
-            accessor.save(chatMessage);
+            chatMessage = accessor.save(chatMessage);
+            transformChatMessage(chatMessage);
             if (logger.isDebugEnabled()) {
                 logger.debug(String.format("Save a chat message successfully, chat room id: %s, account code: %s," +
                         "message type: %s, message: %s.", chatRoomId, accoutnCode, messageType, message));
             }
-            return chatRoom;
+            return chatMessage;
         } catch (Exception ex) {
             if (logger.isErrorEnabled()) {
                 logger.error("Save chat message fail.", ex);

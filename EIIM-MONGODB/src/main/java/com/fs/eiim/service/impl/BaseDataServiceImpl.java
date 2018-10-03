@@ -168,7 +168,7 @@ public class BaseDataServiceImpl implements BaseDataService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public Org saveOrgInfo(Org org) {
+    public OrgInfo saveOrgInfo(Org org) {
         Org parent = null;
         if (org.getParent() != null && !StringUtils.isBlank(org.getParent().getId())) {
             parent = accessor.getById(org.getParent().getId(), Org.class);
@@ -233,7 +233,7 @@ public class BaseDataServiceImpl implements BaseDataService {
                 parent.getChildren().add(org);
                 accessor.save(parent);
             }
-            return org;
+            return getOrgInfo(org.getId());
         } catch (Exception ex) {
             if (logger.isErrorEnabled()) {
                 logger.error("Save org fail.", ex);
@@ -245,8 +245,25 @@ public class BaseDataServiceImpl implements BaseDataService {
     }
 
     @Override
-    public Org getOrgInfo(String orgId) {
-        return accessor.getById(orgId, Org.class);
+    public OrgInfo getOrgInfo(String orgId) {
+        Org org = accessor.getById(orgId, Org.class);
+        if (org != null) {
+            PersonAccountTuple manager = null;
+            List<PersonAccountTuple> employees = new ArrayList<>();
+            if (org.getManager() != null && !StringUtils.isBlank(org.getManager().getId())) {
+                manager = getPersonInfo(org.getManager().getId());
+            }
+            if (org.getEmployees() != null && !org.getEmployees().isEmpty()) {
+                org.getEmployees().forEach(employee -> {
+                    if (employee != null && !StringUtils.isBlank(employee.getId())) {
+                        employees.add(getPersonInfo(employee.getId()));
+                    }
+                });
+            }
+            return new OrgInfo(org, manager, employees);
+        } else {
+            return null;
+        }
     }
 
     private Org getOrgByPerson(Person person) {
@@ -287,6 +304,18 @@ public class BaseDataServiceImpl implements BaseDataService {
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
             );
         }
+        Org org = null;
+        if (person.getOrganization() != null && !StringUtils.isBlank(person.getOrganization().getId())) {
+            org = accessor.getById(person.getOrganization().getId(), Org.class);
+            if (org == null) {
+                if (logger.isErrorEnabled()) {
+                    logger.error(String.format("The org[%s] not found.", person.getOrganization().getId()));
+                }
+                throw new UserInterfaceEiimErrorException(
+                        UserInterfaceEiimErrorException.EiimErrors.ORG_NOT_FOUND
+                );
+            }
+        }
         if (!StringUtils.isBlank(person.getId())) {
             Person checkedPerson = accessor.getById(person.getId(), Person.class);
             if (checkedPerson != null) {
@@ -303,6 +332,11 @@ public class BaseDataServiceImpl implements BaseDataService {
         }
         try {
             person = accessor.save(person);
+            // 如果指定了组织，则将该人员加入到该组织
+            if (org != null) {
+                org.getEmployees().add(person);
+                accessor.save(org);
+            }
         } catch (Exception ex) {
             if (logger.isErrorEnabled()) {
                 logger.error("Save person info fail.", ex);
@@ -414,6 +448,11 @@ public class BaseDataServiceImpl implements BaseDataService {
             account.setPerson(person);
             account.setDesc(person.getFullName());
             account.setValid(true);
+
+            // 如果没有设置avatar，则根据性别设置默认的头像，默认为男士头像
+            if (StringUtils.isBlank(account.getAvatar())) {
+                account.setAvatar(person.getSex() == User.Sex.FEMALE ? "5ba75abf96a54e2a9005968c" : "5ba75ab696a54e2a9005968b");
+            }
             try {
                 accessor.save(account);
                 roleUser.getAccounts().add(account);

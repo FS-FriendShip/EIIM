@@ -4,6 +4,7 @@ import com.fs.eiim.dal.entity.Account;
 import com.fs.eiim.dal.entity.Person;
 import com.fs.eiim.restful.vo.person.PersonInfoVO;
 import com.fs.eiim.restful.vo.role.RoleInfoVO;
+import com.fs.eiim.service.BaseDataService;
 import org.mx.comps.rbac.dal.entity.Role;
 
 import java.util.ArrayList;
@@ -30,7 +31,9 @@ public class AccountInfoVO {
         // 处理人员信息
         Person person = account.getPerson();
         if (person != null) {
-            accountInfoVO.person = PersonInfoVO.valueOf(person, null, null);
+            accountInfoVO.person = PersonInfoVO.valueOf(
+                    BaseDataService.PersonAccountTuple.valueOf(person, null, null)
+            );
         }
         // 处理账户角色
         Set<Role> roles = account.getRoles();

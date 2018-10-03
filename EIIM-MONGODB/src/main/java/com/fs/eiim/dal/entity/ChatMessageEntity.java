@@ -1,6 +1,7 @@
 package com.fs.eiim.dal.entity;
 
 import org.mx.dal.entity.MongoBaseEntity;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -17,7 +18,10 @@ public class ChatMessageEntity extends MongoBaseEntity implements ChatMessage {
     @DBRef
     private Account sender;
     private long sentTime = System.currentTimeMillis();
-    private String messageType, message;
+    private MessageType messageType = MessageType.TEXT;
+    private Object message;
+    @Transient
+    private Message messageByType;
 
     /**
      * {@inheritDoc}
@@ -85,18 +89,38 @@ public class ChatMessageEntity extends MongoBaseEntity implements ChatMessage {
      * @see ChatMessage#getMessageType()
      */
     @Override
-    public String getMessageType() {
+    public MessageType getMessageType() {
         return messageType;
     }
 
     /**
      * {@inheritDoc}
      *
-     * @see ChatMessage#setMessageType(String)
+     * @see ChatMessage#setMessageType(MessageType)
      */
     @Override
-    public void setMessageType(String messageType) {
+    public void setMessageType(MessageType messageType) {
         this.messageType = messageType;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see ChatMessage#getMessageType()
+     */
+    @Override
+    public Message getMessageByType() {
+        return messageByType;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see ChatMessage#setMessageByType(Message)
+     */
+    @Override
+    public void setMessageByType(Message messageByType) {
+        this.messageByType = messageByType;
     }
 
     /**
@@ -105,17 +129,17 @@ public class ChatMessageEntity extends MongoBaseEntity implements ChatMessage {
      * @see ChatMessage#getMessage()
      */
     @Override
-    public String getMessage() {
+    public Object getMessage() {
         return message;
     }
 
     /**
      * {@inheritDoc}
      *
-     * @see ChatMessage#setMessage(String)
+     * @see ChatMessage#setMessage(Object)
      */
     @Override
-    public void setMessage(String message) {
+    public void setMessage(Object message) {
         this.message = message;
     }
 }
