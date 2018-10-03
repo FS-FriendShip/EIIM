@@ -77,6 +77,15 @@ export default {
     localStorage.setItem('Chatrooms', JSON.stringify(state.chatrooms))
   },
 
+  [types.UPDATE_CHATROOM_MEMBER] (state, chatroom) {
+    let _session = state.chatrooms.filter(item => item.id === chatroom.id)
+    if (_session) {
+      _session.members = chatroom.members
+
+      localStorage.setItem('Chatrooms', JSON.stringify(state.chatrooms))
+    }
+  },
+
   /**
    * 添加聊天信息
    * @param state

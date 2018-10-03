@@ -34,12 +34,21 @@ export default {
   },
 
   /**
-   * 创建聊天室
+   * 新开一个聊天室
    * @param chatRoom
    * @returns {Promise}
    */
   createChatrooms (chatRoom) {
     return post('/v1/chatRooms/new', chatRoom)
+  },
+
+  /**
+   * 添加或者移除聊天室中的成员
+   * @param chatRoom
+   * @returns {Promise}
+   */
+  updateChatroomMembers (chatRoom) {
+    return update('v1/chatRooms/' + chatRoom.id + '/members', chatRoom)
   },
 
   /**

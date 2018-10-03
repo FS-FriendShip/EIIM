@@ -46,6 +46,17 @@ export default {
   },
 
   /**
+   * 聊天室添加或者移除成员
+   * @param commit
+   * @param session
+   */
+  api_update_chatroom_members: ({commit}, session) => {
+    api.updateChatroomMembers(session).then(res => {
+      commit(types.UPDATE_CHATROOM_MEMBER, session)
+    })
+  },
+
+  /**
    * 删除指定会话
    * @param commit
    * @param session
