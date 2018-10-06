@@ -30,6 +30,7 @@ project(':EIIM-SERVICE') {
                 libs.'log4j-jcl',
                 libs.'log4j-slf4j-impl',
                 libs.'slf4j-api',
+                libs.graphql,
                 libs.'mx-utils',
                 libs.'mx-spring',
                 libs.'mx-jwt-utils',
