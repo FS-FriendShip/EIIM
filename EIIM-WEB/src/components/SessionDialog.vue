@@ -51,7 +51,9 @@ export default {
     return {
       key: null,
       visible: this.show,
-      sessionMemberList: []
+      sessionMemberList: [],
+      isNew: true,
+      isGroup: false
     }
   },
 
@@ -85,10 +87,11 @@ export default {
      *
      * */
     createSession () {
-      let session = {}
+      let session = this.session ? this.session : {}
       let name = ''
       let accountCodes = [this.GLOBAL.account.accountCode]
 
+      console.log(this.sessionMemberList)
       this.sessionMemberList.forEach(member => {
         name += member.name
         accountCodes.push(member.account.code)
@@ -101,9 +104,16 @@ export default {
       }
       session.name = name
       session.accountCodes = accountCodes
-      this.$store.dispatch('chatroom/api_new_chatroom', session).then((data) => {
-        this.dialogVisible = false
-      })
+
+      if (this.isNew || (!this.isGroup() && session.accountCodes.length > 2)) {
+        this.$store.dispatch('chatroom/api_new_chatroom', session).then((data) => {
+          this.dialogVisible = false
+        })
+      } else {
+        this.$store.dispatch('chatroom/api_update_chatroom_members', session).then((data) => {
+          this.dialogVisible = false
+        })
+      }
     },
 
     /**
@@ -137,6 +147,8 @@ export default {
       }
 
       if (this.session) {
+        this.isNew = false
+        this.isGroup = this.session.members.length > 2
         this.session.members.forEach(item => {
           this.sessionMemberList.push(item.account)
         })
