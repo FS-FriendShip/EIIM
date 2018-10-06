@@ -116,7 +116,7 @@ public class SendChatMessageProcessor implements MessageProcessor {
                         notifyMessage.put("messageId", "chatMessage");
                         notifyMessage.put("version", "1.0");
                         JSONObject data = new JSONObject();
-                        data.put("chatRoomId", chatMessage.getId());
+                        data.put("chatRoomId", chatMessage.getChatRoom().getId());
                         data.put("chatMessageId", chatMessage.getId());
                         data.put("messageType", messageType);
                         JSONObject msg = new JSONObject();
