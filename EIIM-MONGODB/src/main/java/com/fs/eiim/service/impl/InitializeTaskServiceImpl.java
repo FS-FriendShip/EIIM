@@ -2,21 +2,32 @@ package com.fs.eiim.service.impl;
 
 import com.fs.eiim.dal.entity.Account;
 import com.fs.eiim.dal.entity.BaseData;
+import com.fs.eiim.error.UserInterfaceEiimErrorException;
 import com.fs.eiim.service.InitializeTaskService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mx.DigestUtils;
+import org.mx.FileUtils;
 import org.mx.comps.rbac.dal.entity.Role;
 import org.mx.dal.EntityFactory;
 import org.mx.dal.service.GeneralDictAccessor;
 import org.mx.dal.session.SessionDataStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @Component("initializeTaskService")
 public class InitializeTaskServiceImpl implements InitializeTaskService {
     private static final Log logger = LogFactory.getLog(InitializeTaskServiceImpl.class);
+
+    @Value("${upload.root:upload}")
+    private String uploadRootPath;
 
     private SessionDataStore sessionDataStore;
     private GeneralDictAccessor accessor;
@@ -72,6 +83,32 @@ public class InitializeTaskServiceImpl implements InitializeTaskService {
         }
     }
 
+    private void initializeAvatar(String uuid) {
+        String path = String.format("%s/%s", uploadRootPath, uuid.substring(0, 2));
+        String name = uuid.substring(2);
+        if (Files.exists(Paths.get(path, name))) {
+            if (logger.isDebugEnabled()) {
+                logger.debug(String.format("The file[%s/%s] has existed.", path, name));
+            }
+            return;
+        }
+        InputStream in = InitializeTaskServiceImpl.class.getResourceAsStream(String.format("/avatar/%s", uuid));
+        try {
+            FileUtils.saveFile(path, name, in);
+            if (logger.isDebugEnabled()) {
+                logger.debug(String.format("Upload the file[%s] successfully, path: %s/%s.",
+                        uuid, path, name));
+            }
+        } catch (IOException ex) {
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format("Save the file[%s] from input stream fail.", path));
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.FILE_UPLOAD_FAIL
+            );
+        }
+    }
+
     private void initializeAdministratorAccount() {
         Role roleAdmin = accessor.getByCode("Administrator", Role.class);
 
@@ -81,6 +118,7 @@ public class InitializeTaskServiceImpl implements InitializeTaskService {
             admin.setCode("Administrator");
             admin.setNickName("Administrator");
             admin.setName("系统管理员");
+            admin.setAvatar("5ba75abf96a54e2a9005968b");
             admin.setPassword(DigestUtils.md5("edmund-EIIM"));
             admin.getRoles().add(roleAdmin);
             accessor.save(admin);
@@ -115,6 +153,10 @@ public class InitializeTaskServiceImpl implements InitializeTaskService {
 
         // 初始化 角色
         initializeRoles();
+
+        // 初始化 默认头像：男性-5ba75ab696a54e2a9005968b | 女性-5ba75abf96a54e2a9005968c
+        initializeAvatar("5ba75ab696a54e2a9005968b");
+        initializeAvatar("5ba75abf96a54e2a9005968c");
 
         // 初始化 管理员
         initializeAdministratorAccount();
