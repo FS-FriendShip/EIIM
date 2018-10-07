@@ -3,11 +3,11 @@ export default {
     return state.account.accountCode
   },
 
-  account: state => {
+  api_get_account: state => {
     return state.account.account
   },
 
-  getCurrentUser: state => {
+  api_current_account: state => {
     if (localStorage.getItem('account-key')) {
       let account = JSON.parse(localStorage.getItem('account-key')).account
       return account

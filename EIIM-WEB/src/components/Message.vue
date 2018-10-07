@@ -2,34 +2,31 @@
   <div class="message">
     <ul v-if="session">
       <li v-for="item in session.messages" :key="item.id">
-        <!--<p class="time">-->
-          <!--<span>{{ item.sentTime | time }}</span>-->
-        <!--</p>-->
-        <div class="main" v-if = "item.sender" :class="{ self: item.owner == 'self' }">
-          <img class="avatar" width="30" height="30" :src="item.owner == 'self' ? user.account.avatar : item.sender.avatar"/>
+        <p v-if="item.showTime" class="time">
+          <span>{{ item.sentTime | formatDate}}</span>
+        </p>
+        <div class="main" v-if = "item.sender" :class="item.owner==='self'?'self':'other'">
+          <img class="avatar avatar-medium" :src="item.sender.avatar"/>
           <div v-if="item.messageType=='TEXT'" class="text">{{ item.message.text }}</div>
           <div v-else-if="item.messageType=='FILE' && ['png','jpg'].includes(item.message.fileType)" class="file-img">
             <img :src="'/rest/v1/download/'+item.message.id"/>
           </div>
-          <div v-else-if="item.messageType=='FILE' && ['xls','xlsx'].includes(item.message.fileType)" class="file">
-            <div class="file-excel">
-              <div class="file-name">
-                {{item.message.fileName}}
+          <div v-else-if="item.messageType=='FILE'" class="file">
+            <a style=" text-decoration: none;"  :href="'/rest/v1/download/' + item.message.id">
+              <div style="float:left;">
+                <img v-if="['xls','xlsx'].includes(item.message.fileType)" src="../assets/file_excel.png" height="60px" width="60px">
+                <img v-else-if="['doc','docx'].includes(item.message.fileType)" src="../assets/file_word.png" height="60px" width="60px">
               </div>
-              <div class="file-size">
-                {{item.message.fileSize}}
+              <div style="padding-left:20px">
+                <span class="file-name">
+                  {{item.message.fileName}}
+                </span>
+                <br/>
+                <span class="file-size">
+                  {{item.message.fileSize}}
+                </span>
               </div>
-            </div>
-          </div>
-          <div v-else-if="item.messageType=='FILE' && ['doc','docx'].includes(item.message.fileType)" class="file">
-            <div class="file-word">
-              <div class="file-name">
-                {{item.message.fileName}}
-              </div>
-              <div class="file-size">
-                {{item.message.fileSize}}
-              </div>
-            </div>
+            </a>
           </div>
         </div>
       </li>
@@ -39,6 +36,7 @@
 
 <script>
 import {mapGetters} from 'vuex'
+import {dateFormat} from '../common/utils'
 
 export default {
   name: 'Message',
@@ -52,11 +50,9 @@ export default {
 
   filters: {
     // 将日期过滤为 hour:minutes
-    time (date) {
-      if (typeof date === 'string') {
-        date = new Date(date)
-      }
-      return date.getHours() + ':' + date.getMinutes()
+    formatDate (time) {
+      var date = new Date(time)
+      return dateFormat(date, 'yyyy-MM-dd hh:mm')
     }
   },
   directives: {
@@ -71,6 +67,21 @@ export default {
 </script>
 
 <style lang="less" scoped>
+  a:link {
+    font-size: 12px;
+    color: #000000;
+    text-decoration: none;
+  }
+  a:visited {
+    font-size: 12px;
+    color: #000000;
+    text-decoration: none;
+  }
+  a:hover {
+    font-size: 12px;
+    color: #000000;
+    text-decoration: none;
+  }
   .message {
     padding: 20px;
     overflow-y: scroll;
@@ -119,6 +130,37 @@ export default {
       }
     }
 
+    .file {
+      display: inline-block;
+      position: relative;
+      padding: 10px;
+      width: 300px;
+      height: 80px;
+      line-height: 2.5;
+      font-size: 12px;
+      text-align: left;
+      word-break: break-all;
+      background-color: #fff;
+      border-radius: 4px;
+
+      .file-excel {
+        background-image: url('../assets/file_excel.png');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: right;
+        background-size: 80px 40px;
+      }
+
+      &:before {
+        content: " ";
+        position: absolute;
+        top: 9px;
+        right: 100%;
+        border: 6px solid transparent;
+        border-right-color: #fff;
+      }
+    }
+
     .self {
       text-align: right;
 
@@ -139,35 +181,19 @@ export default {
       }
 
       .file {
-        background-color: #b2e281;
+        background-color: #fff;
 
         &:before {
           right: inherit;
           left: 100%;
           border-right-color: transparent;
-          border-left-color: #b2e281;
-        }
-
-        .file-excel {
-          background-image: url('../assets/file_excel.png');
-          background-repeat: no-repeat;
-          background-attachment: fixed;
-          background-position: right;
-          background-size: 80px 40px;
-        }
-
-        .file-word {
-          background: #fff url(../assets/file_word.png) no-repeat fixed right;
-        }
-
-        .file-name {
-          font-size: 12px;
-        }
-
-        .file-size {
-          font-sie: 10px;
+          border-left-color: #fff;
         }
       }
+    }
+
+    .other {
+      text-align: left;
     }
   }
 </style>

@@ -5,7 +5,7 @@
       <el-main style="padding:5px">
         <ul>
           <li v-for="item in session.members"  :key="item.account.id" class="user-wrap">
-            <img class="avatar" width="30" height="30" :src="item.account.avatar">
+            <img class="avatar-small" :src="'/rest/v1/download/' + item.account.id">
             <p class="name">{{item.account.nickname}}</p>
           </li>
         </ul>
@@ -25,7 +25,6 @@ export default {
   data () {
     return {
       sessionDialogVisible: false,
-
       activeSession: null
     }
   },
@@ -40,7 +39,9 @@ export default {
     },
 
     showSessionDialog () {
-      this.sessionDialogVisible = true
+      this.$store.dispatch('contact/api_get_contacts').then((data) => {
+        this.sessionDialogVisible = true
+      })
     },
 
     resetDialogVisible (visible) {

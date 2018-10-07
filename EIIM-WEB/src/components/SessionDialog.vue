@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="session-options">
     <el-dialog title="聊天室成员" :visible.sync="visible" @close="closeDialog">
       <el-row>
         <el-col :span="8">
@@ -9,22 +9,22 @@
 
           <ul style="height:400px; margin-top: 20px; overflow: auto">
             <li v-for="item in availableUserList" :key="item.id" class="user-wrap">
-              <img class="avatar" width="30" height="30" :src="item.avatar">
-              <p class="name">{{item.fullName}}</p>
-              <el-checkbox width="10%" :key="item.id" @change="selectUser(item.id)"></el-checkbox>
+              <img class="avatar-small" :src="'/rest/v1/download/' + item.id">
+              <p class="name">{{item.account.nickname}}</p>
+              <el-checkbox v-model="item.checked" :name="item.id" width="10%" :key="item.id" @change="selectUser(item)"></el-checkbox>
             </li>
           </ul>
         </el-col>
         <el-col :span = "8">
           <div class="grid-content" style="height: 30px;"></div>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="8" class="selected-list">
           <el-row>
-            <el-col :span="24"><div class="grid-content" style="height: 30px;"></div></el-col>
+            <el-col :span="24"><div class="list-title">已选择联系人</div></el-col>
           </el-row>
           <ul style="margin-top: 20px">
-            <li v-for="item in sessionMemberList" :key="item.id" class="user-wrap">
-              <img class="avatar" width="30" height="30" :src="item.avatar">
+            <li v-if="sessionMemberList" v-for="item in sessionMemberList" :key="item.id" class="user-wrap">
+              <img class="avatar-small" :src="'/rest/v1/download/' + item.id">
               <p class="name">{{item.nickname}}</p>
               <i class="el-icon-remove" @click="unselectUser(item.id)"></i>
             </li>
@@ -57,17 +57,22 @@ export default {
     }
   },
 
+  created () {
+    this.sessionMemberList = []
+  },
+
   methods: {
     /**
      *
      *
      **/
-    selectUser (value) {
-      this.sessionMemberList.push(this.availableUserList.find(item => {
-        if (item.id === value) {
-          return item.account
-        }
-      }))
+    selectUser (item) {
+      if (item.checked) {
+        this.sessionMemberList.push(item.account)
+      } else {
+        let index = this.sessionMemberList.findIndex(member => member.id === item.id)
+        this.sessionMemberList.splice(index, 1)
+      }
     },
 
     /**
@@ -80,6 +85,12 @@ export default {
       this.sessionMemberList.splice(index, 1)
 
       // 重置checkbox选中状态
+      let allMembers = this.availableUserList
+      allMembers.forEach(item => {
+        if (item.account.id === value) {
+          item.checked = false
+        }
+      })
     },
 
     /**
@@ -88,13 +99,13 @@ export default {
      * */
     createSession () {
       let session = this.session ? this.session : {}
-      let name = ''
+      let names = ''
       let accountCodes = [this.GLOBAL.account.accountCode]
 
-      console.log(this.sessionMemberList)
       this.sessionMemberList.forEach(member => {
-        name += member.name
-        accountCodes.push(member.account.code)
+        console.log(member)
+        names += member.nickname
+        accountCodes.push(member.code)
       })
 
       if (accountCodes.length === 1) {
@@ -102,14 +113,16 @@ export default {
 
         return
       }
-      session.name = name
+      session.name = names
       session.accountCodes = accountCodes
 
-      if (this.isNew || (!this.isGroup() && session.accountCodes.length > 2)) {
+      if (this.isNew || (!this.isGroup && session.accountCodes.length > 2)) {
+        console.log('create new session')
         this.$store.dispatch('chatroom/api_new_chatroom', session).then((data) => {
           this.dialogVisible = false
         })
       } else {
+        console.log('update session members')
         this.$store.dispatch('chatroom/api_update_chatroom_members', session).then((data) => {
           this.dialogVisible = false
         })
@@ -130,7 +143,10 @@ export default {
       default: false
     },
 
-    session: null
+    session: {
+      type: Object,
+      default: null
+    }
   },
 
   /**
@@ -141,12 +157,13 @@ export default {
       this.visible = this.show
     },
 
+    /**
+     * 监控session属性的变化
+     */
     session () {
-      if (this.sessionMemberList) {
-        this.sessionMemberList.splice(0, this.sessionMemberList.length)
-      }
-
+      console.log(this.session)
       if (this.session) {
+        this.sessionMemberList = []
         this.isNew = false
         this.isGroup = this.session.members.length > 2
         this.session.members.forEach(item => {
@@ -169,7 +186,7 @@ export default {
     border: solid 1px #3a3a3a;
     border-radius: 4px;
     outline: none;
-    background-color: #26292E;
+    background-color: #fff;
   }
 
   .el-dialog .el-dialog__header {
@@ -185,5 +202,11 @@ export default {
   .user-wrap .name{
     padding-left:20px;
     width: 70%;
+  }
+
+  #session-options .selected-list .list-title{
+    height: 30px;
+    font-weight:bolder;
+    font-size:16px;
   }
 </style>

@@ -1,3 +1,4 @@
+import {dateFormat} from '../../common/utils'
 export default {
   /**
    * 初始化聊天室信息。在系统启动时候调用
@@ -6,7 +7,6 @@ export default {
    */
   api_get_chatrooms: (state, getters) => {
     let chatrooms = state.chatrooms
-
     return chatrooms
   },
 
@@ -18,11 +18,26 @@ export default {
    */
   api_get_chatroom: (state, getters) => {
     let roomId = state.selectedSessionId
-    if (!roomId) {
-      return state.chatrooms[0]
-    } else {
-      return state.chatrooms.find(room => room.id === roomId)
+    let chatroom = state.chatrooms[0]
+
+    if (roomId) {
+      chatroom = state.chatrooms.find(room => room.id === roomId)
     }
+
+    let sentTime = ''
+    if (chatroom.messages) {
+      chatroom.messages.forEach(message => {
+        let dateTime = new Date(message.sentTime)
+        if (sentTime === dateFormat(dateTime, 'yyyy-MM-dd hh:mm')) {
+          message.showTime = false
+        } else {
+          message.showTime = true
+          sentTime = dateFormat(dateTime, 'yyyy-MM-dd hh:mm')
+        }
+      })
+    }
+
+    return chatroom
   },
 
   /**

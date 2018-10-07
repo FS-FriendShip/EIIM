@@ -2,21 +2,21 @@ import axios from 'axios'
 
 // 创建axios实例 application/x-www-data-urlencoded  application/json
 axios.defaults.timeout = 5000
-// axios.defaults.baseURL = 'http://localhost:9999/rest'
+// axios.defaults.baseURL = 'http://121.40.51.91:8088/rest'
 axios.defaults.baseURL = '/rest'
 
-let ACCOUNT = (function () {
+var getAccount = function () {
   let account = localStorage.getItem('account-key') ? JSON.parse(localStorage.getItem('account-key')) : {}
   if (account) {
     return account.account
   }
   return undefined
-})()
+}
 
 // http request 拦截器
 axios.interceptors.request.use(
   config => {
-    console.log(config)
+    console.log(config.url)
     // const token = getCookie('名称');注意使用的时候需要引入cookie方法，推荐js-cookie
     if (config.url.includes('v1/upload')) {
       config.headers = {
@@ -28,11 +28,16 @@ axios.interceptors.request.use(
         'Content-Type': 'application/json'
       }
     }
-    if (ACCOUNT) {
-      config.headers.token = ACCOUNT.token
-      config.headers.deviceId = ACCOUNT.deviceKey + '.pc'
+
+    if (!config.url.includes('login')) {
+      try {
+        let account = getAccount()
+        config.headers.token = account.token
+        config.headers.deviceId = account.deviceKey + '.pc'
+      } catch (err) {
+        console.log(err)
+      }
     }
-    console.log(config)
     return config
   },
   error => {
@@ -120,9 +125,11 @@ axios.interceptors.response.use(
  */
 
 export function get (url, params = {}) {
-  if (ACCOUNT) {
+  let account = getAccount()
+
+  if (account) {
     if (url.indexOf('?') <= 0) {
-      url = url + '?accountCode=' + ACCOUNT.account.code
+      url = url + '?accountCode=' + account.account.code
     }
   }
   return new Promise((resolve, reject) => {
@@ -146,9 +153,10 @@ export function get (url, params = {}) {
  */
 
 export function post (url, data = {}) {
-  if (ACCOUNT) {
+  let account = getAccount()
+  if (account) {
     if (url.indexOf('?') <= 0) {
-      url = url + '?accountCode=' + ACCOUNT.account.code
+      url = url + '?accountCode=' + account.account.code
     }
   }
   return new Promise((resolve, reject) => {
@@ -169,9 +177,10 @@ export function post (url, data = {}) {
  */
 
 export function update (url, data = {}) {
-  if (ACCOUNT) {
+  let account = getAccount()
+  if (account) {
     if (url.indexOf('?') <= 0) {
-      url = url + '?accountCode=' + ACCOUNT.account.code
+      url = url + '?accountCode=' + account.account.code
     }
   }
   return new Promise((resolve, reject) => {
@@ -192,9 +201,10 @@ export function update (url, data = {}) {
  */
 
 export function remove (url, data = {}) {
-  if (ACCOUNT) {
+  let account = getAccount()
+  if (account) {
     if (url.indexOf('?') <= 0) {
-      url = url + '?accountCode=' + ACCOUNT.account.code
+      url = url + '?accountCode=' + account.account.code
     }
   }
   return new Promise((resolve, reject) => {

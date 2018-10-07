@@ -93,18 +93,26 @@ export default {
    */
   [types.UPDATE_CHATROOM_MESSAGE] (state, message) {
     let roomId = message.chatRoomId
-    let chatrooms = state.chatrooms
-    chatrooms.forEach(chatroom => {
-      if (chatroom.id === roomId) {
-        chatroom.messages.push(message)
-      }
-    })
-
-    state.chatrooms = chatrooms
+    let chatroom = state.chatrooms.filter(room => room.id === roomId)[0]
+    chatroom.messages.push(message)
     localStorage.setItem('Chatrooms', JSON.stringify(state.chatrooms))
   },
 
   [types.SELECT_CHATROOM] (state, roomId) {
     state.selectedSessionId = roomId
+  },
+
+  [types.CLEAR_CACHE] (state) {
+    state.chatrooms = []
+    localStorage.removeItem('Chatrooms')
+  },
+
+  [types.TOP_CHATROOM] (state, sessionId) {
+    let index = state.chatrooms.findIndex(item => item.id === sessionId)
+    let chatroom = state.chatrooms[index]
+
+    state.chatrooms.splice(index, 1)
+    state.chatrooms.splice(0, 0, chatroom)
+    localStorage.setItem('Chatrooms', JSON.stringify(state.chatrooms))
   }
 }

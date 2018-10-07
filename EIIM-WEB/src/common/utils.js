@@ -1,16 +1,4 @@
-export default{
-  name: 'constant',
-  appName: '若信',
-  client: 'pc',
-  title: {
-    Contact: '通讯录'
-  },
-  account: {},
-
-  selectedSessionId: null
-}
-
-export function formatDate (date, fmt) {
+export function dateFormat (date, fmt) {
   if (/(y+)/.test(fmt)) {
     fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
   }
@@ -24,7 +12,7 @@ export function formatDate (date, fmt) {
   for (let k in o) {
     if (new RegExp(`(${k})`).test(fmt)) {
       let str = o[k] + ''
-      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : padLeftZero(str))
+      fmt = fmt.replace(RegExp.$1, RegExp.$1.length === 1 ? str : padLeftZero(str))
     }
   }
   return fmt

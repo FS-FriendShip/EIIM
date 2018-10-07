@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/views/Login'
-import Main from '@/views/Main'
+import Login from '@/views/Login'
+import ChatMain from '@/views/chat/Main'
 import AdminMain from '@/views/admin/Main'
 
 Vue.use(Router)
@@ -11,18 +11,21 @@ export default new Router({
     {
       path: '',
       name: 'Login',
-      component: HelloWorld
+      meta: {auth: true, keepAlive: false},
+      component: Login
     },
 
     {
-      path: '/Main',
-      name: 'Main',
-      component: Main
+      path: '/Chat',
+      name: 'Chat',
+      meta: {auth: true, keepAlive: true},
+      component: ChatMain
     },
 
     {
-      path: '/admin',
+      path: '/Admin',
       name: 'Admin',
+      meta: {auth: true, keepAlive: true},
       component: AdminMain
     }
   ]
