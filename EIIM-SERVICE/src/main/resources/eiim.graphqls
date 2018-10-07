@@ -1,0 +1,98 @@
+schema {
+    query: QueryType
+}
+
+type QueryType {
+    person(id: String): Person
+    role(id: String): Role
+    account(id: String): Account
+    accountList: [Account]
+    org(id: String): Org
+    accountState(id: String): AccountState
+    attachment(id: String): Attachment
+    chatRoom(id: String): ChatRoom
+    chatNotice(id: String): ChatNotice
+    chatMessage(id: String): ChatMessage
+    chatRoomMember(id: String): ChatRoomMember
+    accredit(id: String): Accredit
+    baseData(id: String): BaseData
+    baseDataItem(id: String): BaseDataItem
+}
+
+enum Sex {
+    MALE, FEMALE, NA
+}
+
+type Person {
+    id: String
+    firstName: String
+    middleName: String
+    lastName: String
+    fullName: String
+    title: String
+    phone: String
+    mobile: String
+    email: String
+    desc: String
+    sex: Sex
+    birthday: Int
+    station: String
+}
+
+type Role {
+    id: String
+    code: String
+    name: String
+    desc: String
+}
+
+type Account {
+    id: String
+    code: String
+    name: String
+    desc: String
+    password: String
+    person: Person
+    roles: [Role]
+    favoriteTools: String
+}
+
+type Org {
+    id: String
+}
+
+type AccountState {
+    id: String
+}
+
+type Attachment {
+    id: String
+}
+
+type ChatRoom {
+    id: String
+}
+
+type ChatNotice {
+    id: String
+}
+
+type ChatMessage {
+    id: String
+}
+
+type ChatRoomMember {
+    id: String
+}
+
+type Accredit {
+    id: String
+}
+
+type BaseData {
+    id: String
+}
+
+type BaseDataItem {
+    id: String
+}
