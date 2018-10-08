@@ -36,7 +36,7 @@ public class PersonInfoVO {
         personInfoVO.mobile = person.getMobile();
         personInfoVO.email = person.getEmail();
         if (account != null) {
-            personInfoVO.account = AccountInfoVO.valueOf(account);
+            personInfoVO.account = AccountInfoVO.valueOf(account, tuple.getAccountState());
         }
         if (org != null) {
             personInfoVO.org = OrgInfoVO.valueOf(org);

@@ -124,7 +124,7 @@ public class PersonServiceResource {
         BaseDataService.PersonAccountTuple tuple = baseDataService.enablePersonAccount(personId,
                 accountInitialInfoVO.get());
         sessionDataStore.removeCurrentUserCode();
-        return new DataVO<>(AccountInfoVO.valueOf(tuple.getAccount()));
+        return new DataVO<>(AccountInfoVO.valueOf(tuple.getAccount(), tuple.getAccountState()));
     }
 
     @Path("persons/account/password")
