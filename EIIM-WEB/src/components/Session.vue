@@ -1,31 +1,28 @@
 <template>
   <div class="list">
-    <header>
-      <el-row>
-        <input class="search" type="text" v-model="key" placeholder="search user..." @keyup="onKeyup">
-        <el-button icon="iconfont icon-add" circle="true" @click="showSessionDialog"></el-button>
-      </el-row>
-    </header>
+    <el-container>
+      <el-header style="padding:10px">
+        <el-row>
+          <input class="search" type="text" v-model="key" placeholder="search user..." @keyup="searchSession">
+          <el-button icon="iconfont icon-add" circle="true" @click="showSessionDialog"></el-button>
+        </el-row>
+      </el-header>
 
-    <ul>
-      <li v-for="item in sessions"  @click="selectSession(item.id)" :key="item.id" @contextmenu="showMenu">
-        <vue-context-menu v-if="item.members.length > 2" :contextMenuData="contextMenuData"
-                          @topSession="topSession(item.id)"
-                          @quietSession="quietSession(item.id)"
-                          @deleteSession="deleteSession(item.id)">
+      <el-main style="padding:10px">
+        <vue-context-menu :contextMenuData="contextMenuData"
+                          @topSession="topSession"
+                          @deleteSession="deleteSession">
         </vue-context-menu>
 
-        <vue-context-menu v-if="item.members.length <= 2" :contextMenuData="contextMenuData"
-                          @topSession="topSession(item.id)"
-                          @quietSession="quietSession(item.id)"
-                          @showSession="showSession(item.id)"
-                          @deleteSession="deleteSession(item.id)">
-        </vue-context-menu>
-
-        <img class="avatar" width="30" height="30" :src="'/rest/v1/download/' + item.id">
-        <p class="name">{{item.name}}</p>
-      </li>
-    </ul>
+        <el-row class="session-item" :gutter="50" v-for="item in sessions"  @click.native="selectSession(item.id)" :key="item.id" @contextmenu.native="showMenu(item.id)">
+          <el-col :span="4"><img class="avatar-large" :src="'/rest/v1/download/' + item.id"></el-col>
+          <el-col :span="20">
+            <span>{{item.name}}</span>
+            <p>{{item.latestMessage}}</p>
+          </el-col>
+        </el-row>
+      </el-main>
+    </el-container>
 
     <SessionDialog v-on:resetDialogVisible="resetDialogVisible" :show.sync="sessionDialogVisible"></SessionDialog>
   </div>
@@ -42,6 +39,7 @@ export default {
     return {
       key: null,
       sessionDialogVisible: false,
+      contextMenuItemId: null,
       contextMenuData: {
         menuName: 'session-menu',
         // The coordinates of the display(菜单显示的位置)
@@ -53,22 +51,12 @@ export default {
         menulists: [
           {
             fnHandler: 'topSession', // Binding events(绑定事件)
-            icoName: 'fa fa-home fa-fw', // icon (icon图标 )
+            icoName: 'iconfont icon-zhiding', // icon (icon图标 )
             btnName: '置顶' // The name of the menu option (菜单名称)
           },
           {
-            fnHandler: 'quietSession',
-            icoName: 'fa fa-home fa-fw',
-            btnName: '消息免打扰'
-          },
-          {
-            fnHandler: 'showSession',
-            icoName: 'fa fa-home fa-fw',
-            btnName: '查看详细资料'
-          },
-          {
             fnHandler: 'deleteSession',
-            icoName: 'fa fa-home fa-fw',
+            icoName: 'iconfont icon-shangchu',
             btnName: '删除'
           }
         ]
@@ -81,7 +69,8 @@ export default {
   },
 
   methods: {
-    showMenu () {
+    showMenu (itemId) {
+      this.contextMenuItemId = itemId
       event.preventDefault()
       var x = event.clientX
       var y = event.clientY
@@ -90,24 +79,23 @@ export default {
         x, y
       }
     },
-    topSession (roomId) {
-      alert(1)
-    },
-    quietSession (roomId) {
-      alert(1)
-    },
-    showSession (roomId) {
-      alert(1)
+
+    /**
+     *
+     * */
+    topSession () {
+      this.$store.dispatch('chatroom/api_top_session', this.contextMenuItemId)
     },
 
     /**
      *
      */
-    deleteSession (sessionId) {
-      this.$store.dispatch('chatroom/api_delete_chatroom', sessionId)
+    deleteSession () {
+      this.$store.dispatch('chatroom/api_delete_chatroom', this.contextMenuItemId)
     },
 
     selectSession (sessionId) {
+      console.log(sessionId)
       this.$store.dispatch('chatroom/api_select_chatroom', sessionId)
     },
 
@@ -121,10 +109,10 @@ export default {
       this.sessionDialogVisible = visible
     },
 
-    onKeyup (e) {
+    searchSession (e) {
       let key = this.key
       if (key) {
-        this.sessions.filter(session => {
+        this.sessions = this.sessions.filter(session => {
           return session.name.includes(key)
         })
       }
@@ -135,8 +123,8 @@ export default {
 
 <style scoped lang="less">
   .list {
-    li {
-      padding: 12px 15px;
+    .session-item {
+      padding:5px 0px;
       border-bottom: 1px solid #292C33;
       cursor: pointer;
       transition: background-color .1s;
@@ -171,5 +159,13 @@ export default {
     border-radius: 4px;
     outline: none;
     background-color: #26292E;
+  }
+
+  .session-item .title {
+    /*font-weight: bolder;*/
+  }
+
+  .session-item .subtitle {
+    /*font-weight: lighter;*/
   }
 </style>

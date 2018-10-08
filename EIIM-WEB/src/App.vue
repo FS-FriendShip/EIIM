@@ -86,4 +86,19 @@ export default {
     text-align: center;
     color: #2c3e50;
   }
+
+  .avatar-small {
+    width: 30px;
+    height: 30px;
+  }
+
+  .avatar-medium {
+    width: 40px;
+    height: 40px;
+  }
+
+  .avatar-large {
+    width: 50px;
+    height: 50px;
+  }
 </style>

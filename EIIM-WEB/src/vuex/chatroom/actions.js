@@ -3,14 +3,19 @@ import * as types from './types'
 import websocket from '../../api/websocket'
 
 export default {
+  api_clear_cache: ({commit}) => {
+    commit(types.CLEAR_CACHE)
+  },
+
   /**
    * 获取用户聊天室
    * @param commit
    * @param account
    */
   api_get_chatrooms: ({commit}, account) => {
-    let accountCode = account.accountCode
+    let accountCode = account.code
     api.getChatrooms(accountCode).then(res => {
+      console.log(res)
       commit(types.UPDATE_CHATROOM, {chatrooms: res.data, accountCode: accountCode})
     })
   },
@@ -144,5 +149,14 @@ export default {
     return api.uploadFile(formData).then(res => {
       return res.data
     })
+  },
+
+  /**
+   * 置顶
+   * @param commit
+   * @param data
+   */
+  api_top_session: ({commit}, sessionId) => {
+    commit(types.TOP_CHATROOM, sessionId)
   }
 }

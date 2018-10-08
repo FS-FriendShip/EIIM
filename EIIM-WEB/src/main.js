@@ -16,6 +16,21 @@ Vue.prototype.GLOBAL = global_
 Vue.use(VueContextMenu)
 Vue.use(ElementUI)
 
+router.beforeEach((to, from, next) => {
+  console.log(to)
+  if (to.matched.some(m => m.meta.auth)) {
+    if (to.name === 'Login') {
+      next()
+    } else {
+      if (localStorage.getItem('account-key')) {
+        next()
+      } else {
+        next({name: 'Login'})
+      }
+    }
+  }
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

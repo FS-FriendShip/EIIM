@@ -7,9 +7,9 @@
 
     <el-main class="message-main">
       <el-row class="message-header" align="middle">
-        <el-col :span="22" :class="'header-item'"><div class="grid-content">{{session?session.name:''}}</div></el-col>
+        <el-col :span="22" :class="'header-item'"><div class="session-name">{{session?session.name:''}}</div></el-col>
         <el-col :span="2" :class="'header-item'">
-          <i class="el-icon-more" @click="toggleSessionInfo"></i>
+          <i class="iconfont icon-Set-up" @click="toggleSessionInfo"></i>
         </el-col>
       </el-row>
       <el-row class="message-body">
@@ -24,12 +24,12 @@
 </template>
 
 <script>
-import Profile from '../components/Profile'
-import Session from '../components/Session'
-import MessageSend from '../components/MessageSend'
-import Message from '../components/Message'
-import SessionInfo from '../components/SessionInfo'
-import websocket from '../api/websocket'
+import Profile from '../../components/Profile'
+import Session from '../../components/Session'
+import MessageSend from '../../components/MessageSend'
+import Message from '../../components/Message'
+import SessionInfo from '../../components/SessionInfo'
+import websocket from '../../api/websocket'
 import {mapGetters} from 'vuex'
 
 export default {
@@ -49,20 +49,16 @@ export default {
   },
 
   created  () {
-    let account = this.GLOBAL.account
-    if (account === undefined) {
-      this.$router.push({path: '/'})
-      return
-    }
-
+    let account = this.user
+    this.GLOBAL.account = account
     websocket.initWebSocket(account)
 
     // 获取聊天室信息
-    this.$store.dispatch('chatroom/api_get_chatrooms', account)
+    this.$store.dispatch('chatroom/api_get_chatrooms', account.account)
   },
 
   computed: {
-    ...mapGetters({session: 'chatroom/api_get_chatroom', user: 'account/getCurrentUser'})
+    ...mapGetters({session: 'chatroom/api_get_chatroom', user: 'account/api_current_account'})
   },
 
   directives: {
@@ -144,6 +140,15 @@ export default {
     line-height: 30px;
     padding: 10px 20px;
     text-align: left;
+  }
+
+  #Main .message-main .message-header .header-item .session-name {
+    font-weight: bolder;
+    font-size: 18px;
+  }
+
+  #Main .message-main .message-header .header-item .icon-Set-up {
+    font-size: 24px;
   }
 
   #Main .message-main .message-body{

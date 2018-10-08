@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 export default {
   name: 'Login',
   data () {
@@ -35,8 +36,15 @@ export default {
     }
   },
 
+  computed: {
+    ...mapGetters({account: 'account/api_get_account'})
+  },
+
   methods: {
     doLogin: function () {
+      this.$store.dispatch('account/api_clear_cache')
+      this.$store.dispatch('chatroom/api_clear_cache')
+
       this.$refs['LoginForm'].validate((valid) => {
         if (valid) {
           this.$store.dispatch('account/api_account_login', this.login).then((data) => {
@@ -45,13 +53,34 @@ export default {
             if (data.accountCode === 'Administrator') {
               this.$router.push({name: 'Admin'})
             } else {
-              this.$router.push({name: 'Main'})
+              this.$router.push({name: 'Chat'})
             }
           })
         } else {
           return false
         }
       })
+    }
+  },
+
+  beforeRouteEnter (to, from, next) {
+    if (from.name) {
+      next()
+    } else {
+      let account = localStorage.getItem('account-key') ? JSON.parse(localStorage.getItem('account-key')) : {}
+      if (account) {
+        next(vm => {
+          vm.GLOBAL.account = account
+
+          if (account.accountCode === 'Administrator') {
+            vm.$router.push({name: 'Admin'})
+          } else {
+            vm.$router.push({name: 'Chat'})
+          }
+        })
+      } else {
+        next()
+      }
     }
   }
 }

@@ -1,9 +1,14 @@
 <template>
   <div class="card">
-    <header>
-      <img class="avatar" width="40" height="40" :src="currentUser.avatar">
-      <p class="name">{{currentUser.nickname}}</p>
-    </header>
+    <vue-context-menu :contextMenuData="contextMenuData" @quit="quit">
+    </vue-context-menu>
+
+    <el-row @contextmenu.native="showMenu">
+      <el-col :span="4"><img class="avatar-large" :src="'/rest/v1/download/'"></el-col>
+      <el-col :span="20">
+        <!--<p class="name">{{currentUser.nickname}}</p>-->
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -12,8 +17,47 @@ import {mapGetters} from 'vuex'
 
 export default {
   name: 'Profile',
+
+  data () {
+    return {
+      contextMenuData: {
+        menuName: 'session-menu',
+        axis: {
+          x: null,
+          y: null
+        },
+        // Menu options (菜单选项)
+        menulists: [
+          {
+            fnHandler: 'quit',
+            icoName: 'iconfont icon-tuichu',
+            btnName: '登出'
+          }
+        ]
+      }
+    }
+  },
+
+  methods: {
+    showMenu () {
+      event.preventDefault()
+      var x = event.clientX
+      var y = event.clientY
+      // Get the current location
+      this.contextMenuData.axis = {
+        x, y
+      }
+    },
+
+    quit () {
+      this.$store.dispatch('account/api_account_logout', this.currentUser.account).then(res =>
+        this.$router.push({name: 'Login'})
+      )
+    }
+  },
+
   computed: {
-    ...mapGetters({currentUser: 'account/getCurrentUser'})
+    ...mapGetters({currentUser: 'account/api_current_account'})
   }
 }
 </script>

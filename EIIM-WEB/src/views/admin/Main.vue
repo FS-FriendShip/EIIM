@@ -12,7 +12,7 @@
           <el-row>
             <el-button type="primary" icon="iconfont icon-add" @click="showOrg">新增</el-button>
           </el-row>
-          <el-table :data="orgs" @show-header="false" @row-click="selectOrg" :row-style="selectedHighlight" :row-class-name="tableRowClassName" >
+          <el-table v-if="orgs && orgs.length > 0"  :data="orgs" @show-header="false" @row-click="selectOrg" :row-style="selectedHighlight" :row-class-name="tableRowClassName" >
             <el-table-column align="left" prop="name">
             </el-table-column>
 
@@ -34,7 +34,7 @@
               <el-button type="danger" icon="iconfont icon-shangchu" circle>删除员工</el-button>
             </el-header>
             <el-main>
-              <el-table :data="org.employees" tooltip-effect="dark" @row-dblclick="handleUserEdit">
+              <el-table v-if="org" :data="org.employees" tooltip-effect="dark" @row-dblclick="handleUserEdit">
                 <el-table-column type="selection" mini-width="5%"></el-table-column>
                 <el-table-column prop="fullName" label="姓名" mini-width="15%"></el-table-column>
                 <el-table-column prop="title" label="职务" mini-width="20%"></el-table-column>
@@ -106,7 +106,7 @@ export default {
    *
    */
   computed: {
-    ...mapGetters({orgs: 'contact/api_get_orgs', org: 'contact/api_get_org', account: 'account/account'})
+    ...mapGetters({orgs: 'contact/api_get_orgs', org: 'contact/api_get_org', account: 'account/api_get_account'})
   },
 
   methods: {
@@ -182,10 +182,9 @@ export default {
     },
 
     logout: function () {
-      this.$router.push({name: 'Login'})
-      // this.$store.dispatch('account/api_account_logout').then((data) => {
-      //       this.$router.push({name: 'Login'})
-      // })
+      this.$store.dispatch('account/api_account_logout', this.GLOBAL.account.account).then(res =>
+        this.$router.push({name: 'Login'})
+      )
     }
   }
 }

@@ -1,20 +1,11 @@
 export default {
-  contactsInitialList: state => {
-    let initialList = []
-    let allContacts = state.contacts
-    let max = allContacts.length
-    for (var i = 0; i < max; i++) {
-      if (initialList.indexOf(allContacts[i].initial) === -1) {
-        initialList.push(allContacts[i].initial)
-      }
-    }
-    return initialList.sort()
-  },
-
   // 将联系人根据首字母进行分类
   api_get_contacts: (state, getters) => {
     let contactsList = state.contacts
-
+    contactsList.forEach(item => {
+      item.checked = false
+      return item
+    })
     return contactsList.filter(item => item.account)
   },
 
@@ -48,16 +39,19 @@ export default {
     let orgId = state.selectedOrgId
     let org
 
-    if (!orgId) {
-      org = state.orgs[0]
-    } else {
-      org = state.orgs.filter(org => org.id === orgId)[0]
+    if (state.orgs.length > 0) {
+      if (!orgId) {
+        org = state.orgs[0]
+      } else {
+        org = state.orgs.filter(org => org.id === orgId)[0]
+      }
+
+      if (!org.employees) {
+        org.employees = []
+      }
     }
 
-    if (!org.employees) {
-      org.employees = []
-    }
-
+    console.log(org)
     return org
   }
 }
