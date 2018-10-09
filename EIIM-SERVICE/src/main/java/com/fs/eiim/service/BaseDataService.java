@@ -40,6 +40,8 @@ public interface BaseDataService {
 
     PersonAccountTuple enablePersonAccount(String personId, AccountInitialInfo accountInfo);
 
+    PersonAccountTuple validPersonAccount(String personId, boolean valid);
+
     void changeAccountPassword(String accountCode, String oldPassword, String newPassword);
 
     class BaseData {

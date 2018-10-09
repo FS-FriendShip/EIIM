@@ -127,6 +127,23 @@ public class PersonServiceResource {
         return new DataVO<>(AccountInfoVO.valueOf(tuple.getAccount(), tuple.getAccountState()));
     }
 
+    @Path("persons/{personId}/valid")
+    @GET
+    public DataVO<AccountInfoVO> validPersonAccount(@PathParam("personId") String personId,
+                                                    @QueryParam("accountCode") String accountCode,
+                                                    @QueryParam("valid") boolean valid) {
+        if (StringUtils.isBlank(personId)) {
+            return new DataVO<>(new UserInterfaceSystemErrorException(
+                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            ));
+        }
+        sessionDataStore.setCurrentUserCode(accountCode);
+        BaseDataService.PersonAccountTuple tuple = baseDataService.validPersonAccount(personId,
+                valid);
+        sessionDataStore.removeCurrentUserCode();
+        return new DataVO<>(AccountInfoVO.valueOf(tuple.getAccount(), tuple.getAccountState()));
+    }
+
     @Path("persons/account/password")
     @PUT
     @RestAuthenticate

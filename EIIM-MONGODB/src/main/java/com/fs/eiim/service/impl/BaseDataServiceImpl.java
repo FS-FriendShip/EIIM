@@ -399,12 +399,14 @@ public class BaseDataServiceImpl implements BaseDataService {
         }
         Account account = accessor.findOne(GeneralAccessor.ConditionTuple.eq("person", person),
                 Account.class);
-        if (account == null) {
+        AccountState accountState = null;
+        if (account != null) {
+            accountState = accountService.getAccountStateByAccountId(account.getId());
+        } else {
             if (logger.isWarnEnabled()) {
                 logger.warn(String.format("The person[%s] not be enabled a account.", person.getFullName()));
             }
         }
-        AccountState accountState = accountService.getAccountStateByAccountId(account.getId());
         return PersonAccountTuple.valueOf(person, account, accountState, getOrgByPerson(person));
     }
 
@@ -465,7 +467,7 @@ public class BaseDataServiceImpl implements BaseDataService {
                     logger.debug(String.format("Enable persion[%s]'s account sccuessfully, the eiim code: %s.",
                             person.getFullName(), account.getEiimCode()));
                 }
-                return PersonAccountTuple.valueOf(person, account, getOrgByPerson(person));
+                return PersonAccountTuple.valueOf(person, account, null, getOrgByPerson(person));
             } catch (Exception ex) {
                 if (logger.isErrorEnabled()) {
                     logger.error("Save account info fail.", ex);
@@ -484,6 +486,46 @@ public class BaseDataServiceImpl implements BaseDataService {
                     UserInterfaceRbacErrorException.RbacErrors.ACCOUNT_HAS_EXIST
             );
         }
+    }
+
+    @Override
+    public PersonAccountTuple validPersonAccount(String personId, boolean valid) {
+        if (StringUtils.isBlank(personId)) {
+            if (logger.isErrorEnabled()) {
+                logger.error("The person's id is blank.");
+            }
+            throw new UserInterfaceSystemErrorException(
+                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            );
+        }
+        Person person = accessor.getById(personId, Person.class);
+        if (person == null) {
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format("The person[%s] not found.", personId));
+            }
+            throw new UserInterfaceRbacErrorException(
+                    UserInterfaceRbacErrorException.RbacErrors.USER_NOT_FOUND
+            );
+        }
+        Account account = accessor.findOne(GeneralAccessor.ConditionTuple.eq("person", person), Account.class);
+        if (account == null) {
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format("The person[%s] not enable the account, please enable it at first.", person.getId()));
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.ACCOUNT_NOT_FOUND
+            );
+        }
+        if (valid == account.isValid()) {
+            if (logger.isWarnEnabled()) {
+                logger.warn(String.format("The account[%s]'s valid: %s, input valid: %s.",
+                        account.getId(), account.isValid(), valid));
+            }
+        } else {
+            account.setValid(valid);
+            account = accessor.save(account);
+        }
+        return PersonAccountTuple.valueOf(person, account, null, getOrgByPerson(person));
     }
 
     private boolean passwordStrength(String password) {
