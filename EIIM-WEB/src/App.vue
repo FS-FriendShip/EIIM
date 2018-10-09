@@ -22,9 +22,10 @@ export default {
   /**
    *
    */
-  created () {
+  beforecreate () {
     let path = this.$route.path
-    let admin = '/admin'
+    let admin = '/Admin'
+
     if (path.substr(0, admin.length) === admin) {
       this.admin = true
     } else {

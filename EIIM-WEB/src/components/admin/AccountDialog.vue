@@ -95,6 +95,7 @@ export default {
 
   methods: {
     saveAccountInfo (formName) {
+      console.log(this.account)
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.$store.dispatch('account/api_account_save', {personId: this.account.personId, account: {accountCode: this.account.accountCode, password: this.account.password}}).then(this.closeDialog)
@@ -131,7 +132,7 @@ export default {
         if (!this.context.data.account) {
           this.account.accountCode = this.context.data.mobile
           this.account.nickname = this.context.data.fullName
-          this.account.avatar = this.contex.data.fullName + '.png'
+          this.account.avatar = this.context.data.fullName + '.png'
         } else {
           this.account.accountCode = this.context.data.accountCode
         }

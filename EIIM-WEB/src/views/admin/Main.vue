@@ -44,18 +44,18 @@
                 <el-table-column label="操作" mini-width="10%">
                   <template slot-scope="scope">
                     <el-button
-                      size="mini"
+                      size="mini" v-if="!scope.row.account"
                       @click="showAccount(scope.$index, scope.row)">帐号</el-button>
-                    <el-button
-                      icon="iconfont icon-qiyong"
-                      size="mini"
-                      type="danger" v_if="scope.row.account"
-                      @click="handleDeleteOrg(scope.$index, scope.row)">启用</el-button>
                     <el-button
                       icon="iconfont icon-ban"
                       size="mini"
-                      type="danger" v_if="scope.row.account"
-                      @click="handleDeleteOrg(scope.$index, scope.row)">禁用</el-button>
+                      type="danger" v-else-if="scope.row.account.state"
+                      @click="disableAccount(scope.$index, scope.row)">禁用</el-button>
+                    <el-button
+                      icon="iconfont icon-qiyong"
+                      size="mini"
+                      type="danger" v-else
+                      @click="enableAccount(scope.$index, scope.row)">启用</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -99,21 +99,24 @@ export default {
    *
    */
   created  () {
-    this.$store.dispatch('contact/api_init_orgs')
+    this.$store.dispatch('contact/api_init_orgs').then(res => {
+      let org = res.data[0]
+      this.selectOrg({id: org.id, index: 0})
+    })
   },
 
   /**
    *
    */
   computed: {
-    ...mapGetters({orgs: 'contact/api_get_orgs', org: 'contact/api_get_org', account: 'account/api_get_account'})
+    ...mapGetters({orgs: 'contact/api_get_orgs', org: 'contact/api_get_org', account: 'account/api_get_account', currentUser: 'account/api_current_account'})
   },
 
   methods: {
     selectOrg: function (row) {
       this.getIndex = row.index
       this.selectedOrgId = row.id
-      this.$store.dispatch('contact/api_select_org', row.id)
+      this.$store.dispatch('contact/api_get_org', row.id)
     },
 
     showOrg: function () {
@@ -181,8 +184,39 @@ export default {
       this.showAccountDialog = visible
     },
 
+    /**
+     * 禁用帐号
+     *
+     * */
+    disableAccount (index, row) {
+      let org = this.org
+      row.orgId = org.id
+      row.account.state = false
+
+      this.$store.dispatch('account/api_account_disable', row).then(res => {
+        this.store.dispatch('contact/api_update_employee', row)
+      })
+    },
+
+    /**
+     * 启用帐号ß
+     *
+     * */
+    enableAccount (index, row) {
+      let org = this.org
+      row.orgId = org.id
+      row.account.state = true
+
+      this.$store.dispatch('account/api_account_enable', row).then(res => {
+        this.$store.dispatch('contact/api_update_employee', row)
+      })
+    },
+
+    /**
+     *
+     */
     logout: function () {
-      this.$store.dispatch('account/api_account_logout', this.GLOBAL.account.account).then(res =>
+      this.$store.dispatch('account/api_account_logout', this.currentUser.account).then(res =>
         this.$router.push({name: 'Login'})
       )
     }

@@ -35,5 +35,19 @@ export default {
     return api.saveAccountInfo(data.personId, data.account).then(res => {
       return res.data
     })
+  },
+
+  api_account_enable: ({commit}, data) => {
+    return data
+    // return api.enableAccountInfo(data.personId, data.account).then(res => {
+    //   return res.data
+    // })
+  },
+
+  api_account_disable: ({commit}, data) => {
+    return data
+    // return api.disableAccountInfo(data.personId, data.account).then(res => {
+    //   return res.data
+    // })
   }
 }
