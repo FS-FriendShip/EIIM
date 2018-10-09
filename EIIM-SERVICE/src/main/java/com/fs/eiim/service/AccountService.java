@@ -17,5 +17,7 @@ public interface AccountService {
 
     void logout(String accountId);
 
+    AccountState getAccountStateByAccountId(String accountId);
+
     List<AccountState> getAllAccountsStatus();
 }

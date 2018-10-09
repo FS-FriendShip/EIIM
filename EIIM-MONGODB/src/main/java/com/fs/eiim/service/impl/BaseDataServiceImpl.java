@@ -1,10 +1,8 @@
 package com.fs.eiim.service.impl;
 
-import com.fs.eiim.dal.entity.Account;
-import com.fs.eiim.dal.entity.Org;
-import com.fs.eiim.dal.entity.OrgEntity;
-import com.fs.eiim.dal.entity.Person;
+import com.fs.eiim.dal.entity.*;
 import com.fs.eiim.error.UserInterfaceEiimErrorException;
+import com.fs.eiim.service.AccountService;
 import com.fs.eiim.service.BaseDataCacheService;
 import com.fs.eiim.service.BaseDataService;
 import org.apache.commons.logging.Log;
@@ -44,6 +42,7 @@ public class BaseDataServiceImpl implements BaseDataService {
 
     private GeneralDictAccessor accessor;
     private BaseDataCacheService baseDataCacheService;
+    private AccountService accountService;
 
     private MongoTemplate mongoTemplate;
 
@@ -52,14 +51,18 @@ public class BaseDataServiceImpl implements BaseDataService {
      *
      * @param accessor             数据库访问接口
      * @param baseDataCacheService 基础字典数据缓存服务接口
+     * @param accountService       账户服务接口
      * @param mongoTemplate        Mongodb操作模版
      */
     @Autowired
     public BaseDataServiceImpl(@Qualifier("generalDictAccessorMongodb") GeneralDictAccessor accessor,
-                               BaseDataCacheService baseDataCacheService, MongoTemplate mongoTemplate) {
+                               BaseDataCacheService baseDataCacheService,
+                               AccountService accountService,
+                               MongoTemplate mongoTemplate) {
         super();
         this.accessor = accessor;
         this.baseDataCacheService = baseDataCacheService;
+        this.accountService = accountService;
         this.mongoTemplate = mongoTemplate;
     }
 
@@ -401,7 +404,8 @@ public class BaseDataServiceImpl implements BaseDataService {
                 logger.warn(String.format("The person[%s] not be enabled a account.", person.getFullName()));
             }
         }
-        return PersonAccountTuple.valueOf(person, account, getOrgByPerson(person));
+        AccountState accountState = accountService.getAccountStateByAccountId(account.getId());
+        return PersonAccountTuple.valueOf(person, account, accountState, getOrgByPerson(person));
     }
 
     @Override

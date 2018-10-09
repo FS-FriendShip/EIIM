@@ -1,6 +1,7 @@
 package com.fs.eiim.service;
 
 import com.fs.eiim.dal.entity.Account;
+import com.fs.eiim.dal.entity.AccountState;
 import com.fs.eiim.dal.entity.Org;
 import com.fs.eiim.dal.entity.Person;
 
@@ -127,17 +128,23 @@ public interface BaseDataService {
     class PersonAccountTuple {
         private Person person;
         private Account account;
+        private AccountState accountState;
         private Org org;
 
-        private PersonAccountTuple(Person person, Account account, Org org) {
+        private PersonAccountTuple(Person person, Account account, AccountState accountState, Org org) {
             super();
             this.person = person;
             this.account = account;
+            this.accountState = accountState;
             this.org = org;
         }
 
         public static PersonAccountTuple valueOf(Person person, Account account, Org org) {
-            return new PersonAccountTuple(person, account, org);
+            return new PersonAccountTuple(person, account, null, org);
+        }
+
+        public static PersonAccountTuple valueOf(Person person, Account account, AccountState accountState, Org org) {
+            return new PersonAccountTuple(person, account, accountState, org);
         }
 
         public Person getPerson() {
@@ -146,6 +153,10 @@ public interface BaseDataService {
 
         public Account getAccount() {
             return account;
+        }
+
+        public AccountState getAccountState() {
+            return accountState;
         }
 
         public Org getOrg() {

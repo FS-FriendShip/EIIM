@@ -18,7 +18,7 @@ public class ChatRoomMemberVO {
         }
         ChatRoomMemberVO chatRoomMemberVO = new ChatRoomMemberVO();
         chatRoomMemberVO.status = member.getStatus();
-        chatRoomMemberVO.account = AccountInfoVO.valueOf(member.getAccount());
+        chatRoomMemberVO.account = AccountInfoVO.valueOf(member.getAccount(), null);
         chatRoomMemberVO.lastAccessTime = member.getLastAccessTime();
         chatRoomMemberVO.isTop = member.isTop();
         return chatRoomMemberVO;

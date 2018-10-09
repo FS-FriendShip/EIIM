@@ -24,7 +24,7 @@ public class ChatRoomInfoVO {
 
         Account creator = chatRoom.getCreator();
         if (creator != null) {
-            chatRoomInfoVO.creator = AccountInfoVO.valueOf(creator);
+            chatRoomInfoVO.creator = AccountInfoVO.valueOf(creator, null);
         }
 
         Set<ChatRoomMember> members = chatRoom.getMembers();

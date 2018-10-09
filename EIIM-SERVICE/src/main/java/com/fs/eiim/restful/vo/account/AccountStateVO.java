@@ -15,7 +15,7 @@ public class AccountStateVO {
             return null;
         }
         AccountStateVO accountStateVO = new AccountStateVO();
-        accountStateVO.account = AccountInfoVO.valueOf(accountState.getAccount());
+        accountStateVO.account = AccountInfoVO.valueOf(accountState.getAccount(), accountState);
         accountStateVO.status = accountState.getStatus();
         accountStateVO.token = accountState.getToken();
         accountStateVO.loginTime = accountState.getLoginTime();

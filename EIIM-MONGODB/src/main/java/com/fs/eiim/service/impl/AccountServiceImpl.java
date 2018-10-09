@@ -41,7 +41,25 @@ public class AccountServiceImpl implements AccountService {
         this.jwtService = jwtService;
     }
 
-    private AccountState getAccountState(Account account) {
+    @Override
+    public AccountState getAccountStateByAccountId(String accountId) {
+        if (StringUtils.isBlank(accountId)) {
+            if (logger.isErrorEnabled()) {
+                logger.error("The account's id is blank.");
+            }
+            throw new UserInterfaceSystemErrorException(
+                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            );
+        }
+        Account account = accessor.getById(accountId, Account.class);
+        if (account == null) {
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format("The account[%s] not found.", accountId));
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.ACCOUNT_NOT_FOUND
+            );
+        }
         List<AccountState> accountStates = accessor.find(
                 GeneralAccessor.ConditionTuple.eq("account", account), AccountState.class);
         if (accountStates != null && accountStates.size() > 0) {
@@ -87,7 +105,7 @@ public class AccountServiceImpl implements AccountService {
         String token = jwtService.signToken(accountCode);
 
         // 记录登录状态
-        AccountState accountState = getAccountState(account);
+        AccountState accountState = getAccountStateByAccountId(account.getId());
         if (accountState == null) {
             // 首次登录
             accountState = EntityFactory.createEntity(AccountState.class);
@@ -132,7 +150,7 @@ public class AccountServiceImpl implements AccountService {
                 throw new UserInterfaceRbacErrorException(UserInterfaceRbacErrorException.RbacErrors.ACCOUNT_NOT_FOUND);
             }
             // 记录登录状态
-            return getAccountState(account);
+            return getAccountStateByAccountId(account.getId());
         } else {
             // 验证失败
             if (logger.isErrorEnabled()) {
@@ -159,7 +177,7 @@ public class AccountServiceImpl implements AccountService {
             }
             throw new UserInterfaceRbacErrorException(UserInterfaceRbacErrorException.RbacErrors.ACCOUNT_NOT_FOUND);
         }
-        AccountState accountState = getAccountState(account);
+        AccountState accountState = getAccountStateByAccountId(account.getId());
         if (accountState == null) {
             // 没有登录过，数据异常
             if (logger.isErrorEnabled()) {

@@ -1,6 +1,7 @@
 package com.fs.eiim.restful.vo.account;
 
 import com.fs.eiim.dal.entity.Account;
+import com.fs.eiim.dal.entity.AccountState;
 import com.fs.eiim.dal.entity.Person;
 import com.fs.eiim.restful.vo.person.PersonInfoVO;
 import com.fs.eiim.restful.vo.role.RoleInfoVO;
@@ -16,8 +17,9 @@ public class AccountInfoVO {
     private boolean valid = false;
     private PersonInfoVO person;
     private List<RoleInfoVO> roles;
+    private AccountStateVO state;
 
-    public static AccountInfoVO valueOf(Account account) {
+    public static AccountInfoVO valueOf(Account account, AccountState accountState) {
         if (account == null) {
             return null;
         }
@@ -28,6 +30,14 @@ public class AccountInfoVO {
         accountInfoVO.eiimCode = account.getEiimCode();
         accountInfoVO.avatar = account.getAvatar();
         accountInfoVO.valid = account.isValid();
+        if (accountState != null) {
+            AccountStateVO accountStateVO = new AccountStateVO();
+            accountStateVO.setStatus(accountState.getStatus());
+            accountStateVO.setToken(accountState.getToken());
+            accountStateVO.setLoginTime(accountState.getLoginTime());
+            accountStateVO.setLogoutTime(accountState.getLogoutTime());
+            accountInfoVO.state = accountStateVO;
+        }
         // 处理人员信息
         Person person = account.getPerson();
         if (person != null) {
@@ -106,5 +116,13 @@ public class AccountInfoVO {
 
     public void setRoles(List<RoleInfoVO> roles) {
         this.roles = roles;
+    }
+
+    public AccountStateVO getState() {
+        return state;
+    }
+
+    public void setState(AccountStateVO state) {
+        this.state = state;
     }
 }
