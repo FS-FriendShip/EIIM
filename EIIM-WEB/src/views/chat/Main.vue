@@ -51,7 +51,7 @@ export default {
   created  () {
     let account = this.user
     this.GLOBAL.account = account
-    websocket.initWebSocket(account)
+    websocket.initWebSocket()
 
     // 获取聊天室信息
     this.$store.dispatch('chatroom/api_get_chatrooms', account.account)
@@ -107,6 +107,7 @@ export default {
   #Main {
     overflow: none;
     border-radius: 3px;
+    margin:50px 50px;
   }
 
   #Main .el-aside {

@@ -2,7 +2,7 @@
   <div id="org_form">
     <el-dialog title="组织信息" :visible.sync="visible" center  @close="closeDialog">
       <el-form ref="OrgForm" :model="org" label-width="100px">
-        <el-form-item label="组织名称" prop="orgName" :rules="[{required: true, message: '组织名称不能为空'}]">
+        <el-form-item label="组织名称" :rules="[{required: true, message: '组织名称不能为空'}]">
           <el-input v-model="org.name"></el-input>
         </el-form-item>
 
@@ -22,7 +22,6 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
 export default {
   name: 'OrgForm',
 
@@ -36,13 +35,6 @@ export default {
         type: 'internal'
       }
     }
-  },
-
-  /**
-   *
-   */
-  computed: {
-    ...mapGetters({orgs: 'contact/api_get_orgs'})
   },
 
   methods: {
@@ -73,7 +65,7 @@ export default {
       default: false
     },
 
-    ßcontext: null
+    context: null
   },
 
   watch: {
@@ -82,14 +74,13 @@ export default {
     },
 
     context () {
-      console.log(this.context)
       if (this.context.type === 'ORG') {
         if (this.context.action === 'edit') {
-          let existed = this.orgs.filter(org => org.id === this.context.data.orgId)
-          this.org.id = existed[0].id
-          this.org.code = existed[0].code
-          this.org.name = existed[0].name
-          this.org.type = existed[0].type
+          let existed = this.context.data
+          this.org.id = existed.id
+          this.org.code = existed.code
+          this.org.name = existed.name
+          this.org.type = existed.type
         }
       }
     }

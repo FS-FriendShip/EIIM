@@ -31,7 +31,7 @@ export default {
    * @returns {Promise}
    */
   enableAccountInfo (personId, account) {
-    return post('/v1/persons/' + personId + '/enable', account)
+    return get('/v1/persons/' + personId + '/valid?valid=true')
   },
 
   /**
@@ -41,7 +41,7 @@ export default {
    * @returns {Promise}
    */
   disableAccountInfo  (personId, account) {
-    return post('/v1/persons/' + personId + '/enable', account)
+    return get('/v1/persons/' + personId + '/valid?valid=false')
   },
 
   /**
@@ -108,8 +108,13 @@ export default {
     }
   },
 
+  /**
+   *
+   * @param orgId
+   * @returns {boolean}
+   */
   delOrg (orgId) {
-    // return update('/v1/orgs/' + org.id, org)
+    return remove('/v1/orgs/' + orgId)
   },
 
   saveUser (user) {

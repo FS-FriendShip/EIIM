@@ -42,7 +42,7 @@ export default {
   name: 'Message',
 
   computed: {
-    ...mapGetters({session: 'chatroom/api_get_chatroom', user: 'account/getCurrentUser'})
+    ...mapGetters({session: 'chatroom/api_get_chatroom', user: 'account/api_current_account'})
   },
 
   created () {

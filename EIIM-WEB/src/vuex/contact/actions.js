@@ -79,8 +79,9 @@ export default {
    * @param commit
    */
   api_delete_org: ({commit}, orgId) => {
+    console.log(orgId)
     return api.delOrg(orgId).then(res => {
-      // commit(types.UPDATE_ORG, res.data)
+      commit(types.UPDATE_ORG, res.data)
     })
   },
 

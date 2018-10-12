@@ -5,7 +5,7 @@ export default {
   data () {
     return {
       websocket: null,
-      account: null
+      account: localStorage.getItem('account-key') ? JSON.parse(localStorage.getItem('account-key')).account : {}
     }
   },
 
@@ -13,37 +13,38 @@ export default {
     this.websocket.close()
   },
 
-  initWebSocket (account) { // 初始化weosocket
-    if (!this.websocket || this.websocket.readyState !== 1) {
+  initWebSocket () { // 初始化weosocket
+    if (localStorage.getItem('account-key')) {
+      let account = JSON.parse(localStorage.getItem('account-key')).account
       this.account = account
-
-      const wsuri = 'ws://localhost:9997/notify' // ws地址
-      // const wsuri = 'ws://121.40.51.91:8188/notify'
-      this.websocket = new WebSocket(wsuri)
-      this.websocket.onopen = () => {
-        this.register()
-        console.log('WebSocket连接成功')
-      }
-
-      this.websocket.onerror = this.websocketonerror
-
-      this.websocket.onmessage = (e) => {
-        let data = JSON.parse(e.data)
-        let messageId = data.messageId
-
-        // 聊天信息处理
-        if (messageId === 'chatMessage') {
-          let message = data.message
-          if (message.sender.code === this.account.accountCode) {
-            message.owner = 'self'
-          }
-
-          console.log(message)
-          store.dispatch('chatroom/update_chatroom_message', message)
+      if (!this.websocket || this.websocket.readyState !== 1) {
+        const wsuri = 'ws://localhost:9997/notify' // ws地址
+        // const wsuri = 'ws://121.40.51.91:8188/notify'
+        this.websocket = new WebSocket(wsuri)
+        this.websocket.onopen = () => {
+          this.register()
+          console.log('WebSocket连接成功')
         }
-      }
 
-      this.websocket.onclose = this.websocketclose
+        this.websocket.onerror = this.websocketonerror
+
+        this.websocket.onmessage = (e) => {
+          let data = JSON.parse(e.data)
+          let messageId = data.messageId
+
+          // 聊天信息处理
+          if (messageId === 'chatMessage') {
+            let message = data.message
+            if (message.sender.code === this.account.account.code) {
+              message.owner = 'self'
+            }
+
+            store.dispatch('chatroom/update_chatroom_message', message)
+          }
+        }
+
+        this.websocket.onclose = this.websocketclose
+      }
     }
   },
 
@@ -51,7 +52,8 @@ export default {
    * 注册
    */
   register () {
-    let accountCode = this.account.accountCode
+    console.log(this.account)
+    let accountCode = this.account.account.code
     let token = this.account.token
 
     let register = {
@@ -97,14 +99,13 @@ export default {
   },
 
   websocketonmessage (e) { // 数据接收
-    console.log(this.account)
     let data = JSON.parse(e.data)
     let messageId = data.messageId
 
     // 聊天信息处理
     if (messageId === 'chatMessage') {
       let message = data.message
-      if (message.sender.code === this.account.accountCode) {
+      if (message.sender.code === this.account.account.code) {
         message.owner = 'self'
       }
       store.dispatch('chatroom/update_chatroom_message', message)
@@ -112,7 +113,7 @@ export default {
   },
 
   send (content) { // 数据发送
-    let accountCode = this.account.accountCode
+    let accountCode = this.account.account.code
 
     content.deviceId = accountCode + '.pc'
     content.accountCode = accountCode

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { Message } from 'element-ui'
 
 // 创建axios实例 application/x-www-data-urlencoded  application/json
 axios.defaults.timeout = 5000
@@ -56,9 +57,10 @@ axios.interceptors.response.use(
         querry: {redirect: this.$route.currentRoute.fullPath}// 从哪个页面跳转
       })
     } else if (errorCode !== 0) {
-      alert(response.data.errorMessage)
+      Message.error(response.data.errorMessage)
       throw new Error(response.data.errorMessage)
     }
+
     return response
   },
   error => {

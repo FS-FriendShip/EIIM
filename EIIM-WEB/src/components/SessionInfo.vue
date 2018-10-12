@@ -1,10 +1,10 @@
 <template>
-  <div id="SessionInfo" class="SessionInfo" v-if="session">
+  <div id="SessionInfo" class="SessionInfo" v-if="activeSession">
     <el-container>
       <el-header height="40px"><el-button class="button-add" icon="iconfont icon-add" @click="showSessionDialog">添加成员</el-button></el-header>
       <el-main style="padding:5px">
         <ul>
-          <li v-for="item in session.members"  :key="item.account.id" class="user-wrap">
+          <li v-for="item in activeSession.members"  :key="item.account.id" class="user-wrap">
             <img class="avatar-small" :src="'/rest/v1/download/' + item.account.id">
             <p class="name">{{item.account.nickname}}</p>
           </li>
@@ -51,7 +51,13 @@ export default {
 
   watch: {
     session () {
-      this.activeSession = this.session
+      if (this.session) {
+        this.activeSession = this.session
+      } else {
+        this.activeSession = {}
+      }
+
+      console.log(this.activeSession)
     }
   }
 }

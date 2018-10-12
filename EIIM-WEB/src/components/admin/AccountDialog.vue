@@ -2,6 +2,10 @@
   <div id="AccountDialog">
     <el-dialog title="帐号信息" :visible.sync="visible" center  @close="closeDialog">
       <el-form ref="accountForm" :model="account" status-icon label-width="100px" :rules="validateRules">
+        <el-form-item label="姓名">
+          <el-input v-model="account.nickname" :disabled="true"></el-input>
+        </el-form-item>
+
         <el-form-item label="用户名">
           <el-input v-model="account.accountCode" :disabled="true"></el-input>
         </el-form-item>
@@ -95,10 +99,9 @@ export default {
 
   methods: {
     saveAccountInfo (formName) {
-      console.log(this.account)
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$store.dispatch('account/api_account_save', {personId: this.account.personId, account: {accountCode: this.account.accountCode, password: this.account.password}}).then(this.closeDialog)
+          this.$store.dispatch('account/api_account_save', {personId: this.account.personId, account: {accountCode: this.account.accountCode, password: this.account.password, nickname: this.account.nickname, avatar: this.account.accountCode + '.png'}}).then(this.closeDialog)
         } else {
           return false
         }
@@ -129,6 +132,7 @@ export default {
 
     context () {
       if (this.context.type === 'ACCOUNT') {
+        console.log(this.context.data)
         if (!this.context.data.account) {
           this.account.accountCode = this.context.data.mobile
           this.account.nickname = this.context.data.fullName

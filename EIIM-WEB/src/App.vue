@@ -1,37 +1,12 @@
 <template>
-  <div v-if="admin" id="admin">
-    <router-view/>
-  </div>
-
-  <div v-else id="app">
-    <el-row align="middle">
-    <router-view/>
-    </el-row>
+  <div>
+    <router-view />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App',
-  data () {
-    return {
-      admin: false // 管理页
-    }
-  },
-
-  /**
-   *
-   */
-  beforecreate () {
-    let path = this.$route.path
-    let admin = '/Admin'
-
-    if (path.substr(0, admin.length) === admin) {
-      this.admin = true
-    } else {
-      this.admin = false
-    }
-  }
+  name: 'App'
 }
 </script>
 
@@ -44,12 +19,12 @@ export default {
   }
   body, html {
     height: 100%;
-    overflow: hidden;
-  }
-  body, ul {
+    width: 100%;
     margin: 0;
     padding: 0;
+    overflow: hidden;
   }
+
   body {
     color: #4d4d4d;
     font: 14px/1.4em 'Helvetica Neue', Helvetica, 'Microsoft Yahei', Arial, sans-serif;
@@ -57,35 +32,9 @@ export default {
     background-size: cover;
     font-smoothing: antialiased;
   }
-  ul {
-    list-style: none;
-  }
 
-  #app {
-     margin: 5% 10%;
-
-     border-color: #fff;
-     overflow: hidden;
-     border-radius: 3px;
-
-     font-family: 'Avenir', Helvetica, Arial, sans-serif;
-     -webkit-font-smoothing: antialiased;
-     -moz-osx-font-smoothing: grayscale;
-     text-align: center;
-     color: #2c3e50;
-   }
-
-  #admin {
-    height:100%;
-    border-color: #fff;
-    overflow: hidden;
-    border-radius: 3px;
-
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
+  li {
+    list-style:none;
   }
 
   .avatar-small {

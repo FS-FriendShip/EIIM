@@ -33,21 +33,25 @@ export default {
    */
   api_account_save: ({commit}, data) => {
     return api.saveAccountInfo(data.personId, data.account).then(res => {
-      return res.data
+      if (res.errorCode === 0) {
+        return res.data
+      }
     })
   },
 
   api_account_enable: ({commit}, data) => {
-    return data
-    // return api.enableAccountInfo(data.personId, data.account).then(res => {
-    //   return res.data
-    // })
+    console.log(data)
+    // return data
+    return api.enableAccountInfo(data.id, data.account.code).then(res => {
+      return res.data
+    })
   },
 
   api_account_disable: ({commit}, data) => {
-    return data
-    // return api.disableAccountInfo(data.personId, data.account).then(res => {
-    //   return res.data
-    // })
+    console.log(data)
+    // return data
+    return api.disableAccountInfo(data.id, data.account.code).then(res => {
+      return res.data
+    })
   }
 }

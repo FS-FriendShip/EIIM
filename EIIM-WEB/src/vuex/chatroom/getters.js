@@ -18,23 +18,26 @@ export default {
    */
   api_get_chatroom: (state, getters) => {
     let roomId = state.selectedSessionId
-    let chatroom = state.chatrooms[0]
-
+    let chatroom = {}
     if (roomId) {
-      chatroom = state.chatrooms.find(room => room.id === roomId)
-    }
+      chatroom = state.chatrooms[0]
 
-    let sentTime = ''
-    if (chatroom.messages) {
-      chatroom.messages.forEach(message => {
-        let dateTime = new Date(message.sentTime)
-        if (sentTime === dateFormat(dateTime, 'yyyy-MM-dd hh:mm')) {
-          message.showTime = false
-        } else {
-          message.showTime = true
-          sentTime = dateFormat(dateTime, 'yyyy-MM-dd hh:mm')
-        }
-      })
+      if (roomId) {
+        chatroom = state.chatrooms.find(room => room.id === roomId)
+      }
+
+      let sentTime = ''
+      if (chatroom.messages) {
+        chatroom.messages.forEach(message => {
+          let dateTime = new Date(message.sentTime)
+          if (sentTime === dateFormat(dateTime, 'yyyy-MM-dd hh:mm')) {
+            message.showTime = false
+          } else {
+            message.showTime = true
+            sentTime = dateFormat(dateTime, 'yyyy-MM-dd hh:mm')
+          }
+        })
+      }
     }
 
     return chatroom
