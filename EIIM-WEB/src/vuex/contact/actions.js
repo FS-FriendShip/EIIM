@@ -25,12 +25,26 @@ export default {
   },
 
   /**
+   *
+   * @param commit
+   * @param orgId
+   * @returns {Promise<T>}
+   */
+  api_get_org: ({commit}, orgId) => {
+    return api.getOrg(orgId).then(res => {
+      commit(types.UPDATE_ORG, res.data)
+    })
+  },
+
+  /**
    * 获取组织架构信息
    * @param commit
    */
   api_init_orgs: ({commit}) => {
     return api.getOrgs().then(res => {
       commit(types.INIT_ORGS, res.data)
+
+      return res
     })
   },
 
@@ -86,5 +100,14 @@ export default {
         commit(types.CREATE_USER, res.data)
       })
     }
+  },
+
+  /**
+   *
+   * @param commit
+   * @param employee
+   */
+  api_update_employee: ({commit}, employee) => {
+    commit(types.UPDATE_USER, employee)
   }
 }

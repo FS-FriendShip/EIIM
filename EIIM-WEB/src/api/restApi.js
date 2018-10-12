@@ -25,6 +25,26 @@ export default {
   },
 
   /**
+   * 启用帐号
+   * @param personId
+   * @param account
+   * @returns {Promise}
+   */
+  enableAccountInfo (personId, account) {
+    return post('/v1/persons/' + personId + '/enable', account)
+  },
+
+  /**
+   * 禁用帐号
+   * @param personId
+   * @param account
+   * @returns {Promise}
+   */
+  disableAccountInfo  (personId, account) {
+    return post('/v1/persons/' + personId + '/enable', account)
+  },
+
+  /**
    * 获取所有聊天室列表信息
    * @param accountCode
    * @returns {*}
@@ -64,6 +84,15 @@ export default {
    */
   getOrgs () {
     return get('/v1/orgs')
+  },
+
+  /**
+   *
+   * @param orgId
+   * @returns {Promise}
+   */
+  getOrg (orgId) {
+    return get('/v1/orgs/' + orgId)
   },
 
   /**

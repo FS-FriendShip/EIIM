@@ -9,7 +9,7 @@ export default {
     let orgId = user.orgId
     let org = state.orgs.find(org => org.id === orgId)
     let index = org.employees.findIndex(item => item.id === user.id)
-    org.splice(index, 1, user)
+    org.employees.splice(index, 1, user)
   },
 
   [types.CREATE_USER] (state, user) {
@@ -37,8 +37,8 @@ export default {
   },
 
   [types.UPDATE_ORG] (state, org) {
-    let orgId = org.id
-    let index = state.orgs.findIndex(item => item.id === orgId)
+    state.selectedOrgId = org.id
+    let index = state.orgs.findIndex(item => item.id === org.id)
     state.orgs.splice(index, 1, org)
   }
 }
