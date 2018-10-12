@@ -31,6 +31,7 @@ public class UserInterfaceEiimErrorException extends UserInterfaceException {
     public enum EiimErrors implements UserInterfaceError {
         ACCOUNT_BLANK_CODE("账户代码为空。"),
         ACCOUNT_BLANK_TOKEN("账户令牌为空。"),
+        ACCOUNT_INVALID("指定的账户已经被禁用。"),
         ACCOUNT_BLANK_PASSWORD("账户密码为空。"),
         ACCOUNT_PASSWORD_STRENGTHEN_LOW("账户密码强度太低。"),
         ACCOUNT_STATE_SAVE_FAIL("保存账户登录状态失败。"),
