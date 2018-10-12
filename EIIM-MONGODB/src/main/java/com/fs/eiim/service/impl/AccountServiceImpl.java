@@ -237,6 +237,36 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public void resetPassword(String accountId, String password) {
+        if (StringUtils.isBlank(accountId)) {
+            if (logger.isErrorEnabled()) {
+                logger.error("The account's id is blank.");
+            }
+            throw new UserInterfaceSystemErrorException(UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM);
+        }
+        Account account = accessor.getById(accountId, Account.class);
+        if (account == null) {
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format("The account[%s] not found.", accountId));
+            }
+            throw new UserInterfaceRbacErrorException(UserInterfaceRbacErrorException.RbacErrors.ACCOUNT_NOT_FOUND);
+        }
+        if (!account.isValid()) {
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format("The account[%s] is invalid.", account.getId()));
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.ACCOUNT_INVALID
+            );
+        }
+        account.setPassword(DigestUtils.md5(password));
+        accessor.save(account);
+        if (logger.isDebugEnabled()) {
+            logger.debug(String.format("Reset the account[%s]'s password successfully.", accountId));
+        }
+    }
+
+    @Override
     public Account getAccountById(String accountId) {
         if (StringUtils.isBlank(accountId)) {
             if (logger.isErrorEnabled()) {

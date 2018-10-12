@@ -5,6 +5,7 @@ import com.fs.eiim.dal.entity.AccountState;
 import com.fs.eiim.restful.vo.account.AccountInfoVO;
 import com.fs.eiim.restful.vo.account.AccountStateVO;
 import com.fs.eiim.restful.vo.account.AuthenticationVO;
+import com.fs.eiim.restful.vo.account.PasswordInfoVO;
 import com.fs.eiim.service.AccountService;
 import org.mx.dal.session.SessionDataStore;
 import org.mx.error.UserInterfaceSystemErrorException;
@@ -74,6 +75,23 @@ public class AccountServiceResource {
         Account account = accountService.valid(accountId, valid);
         sessionDataStore.removeCurrentUserCode();
         return new DataVO<>(AccountInfoVO.valueOf(account, null));
+    }
+
+    @Path("accounts/{accountId}/reset")
+    @RestAuthenticate
+    @PUT
+    public DataVO<Boolean> resetPassword(@PathParam("accountId") String accountId,
+                                         @QueryParam("accountCode") String accountCode,
+                                         PasswordInfoVO passwordInfoVO) {
+        if (passwordInfoVO == null) {
+            throw new UserInterfaceSystemErrorException(
+                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            );
+        }
+        sessionDataStore.setCurrentUserCode(accountCode);
+        accountService.resetPassword(accountId, passwordInfoVO.getNewPassword());
+        sessionDataStore.removeCurrentUserCode();
+        return new DataVO<>(true);
     }
 
     @Path("accounts/{accountId}")

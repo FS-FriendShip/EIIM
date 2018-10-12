@@ -22,6 +22,8 @@ public interface AccountService {
 
     Account valid(String accountId, boolean valid);
 
+    void resetPassword(String accountId, String password);
+
     Account getAccountById(String accountId);
 
     List<AccountState> getAllAccountsStatus();
