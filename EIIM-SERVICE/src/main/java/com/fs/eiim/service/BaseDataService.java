@@ -30,6 +30,8 @@ public interface BaseDataService {
 
     OrgInfo saveOrgInfo(Org org);
 
+    OrgInfo validOrg(String orgId, boolean valid);
+
     OrgInfo getOrgInfo(String orgId);
 
     List<PersonAccountTuple> getAllPersons();

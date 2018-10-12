@@ -248,7 +248,64 @@ public class BaseDataServiceImpl implements BaseDataService {
     }
 
     @Override
+    public OrgInfo validOrg(String orgId, boolean valid) {
+        if (StringUtils.isBlank(orgId)) {
+            if (logger.isErrorEnabled()) {
+                logger.error("The org's id is blank.");
+            }
+            throw new UserInterfaceSystemErrorException(
+                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            );
+        }
+        Org org = accessor.getById(orgId, Org.class);
+        if (org == null) {
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format("The org[%s] not found.", orgId));
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.ORG_NOT_FOUND
+            );
+        }
+        if (valid == org.isValid()) {
+            if (logger.isWarnEnabled()) {
+                logger.warn(String.format("The org[%s] is %s, input: %s.", orgId, org.isValid(), valid));
+            }
+        } else {
+            org.setValid(valid);
+            org = accessor.save(org);
+            // 如果valid = false，则处理下级节点
+            if (!valid) {
+                Set<Org> children = org.getChildren();
+                if (children != null && !children.isEmpty()) {
+                    children.forEach(child -> validOrg(child.getId(), valid));
+                }
+            }
+        }
+        PersonAccountTuple manager = null;
+        List<PersonAccountTuple> employees = new ArrayList<>();
+        if (org.getManager() != null && !StringUtils.isBlank(org.getManager().getId())) {
+            manager = getPersonInfo(org.getManager().getId());
+        }
+        if (org.getEmployees() != null && !org.getEmployees().isEmpty()) {
+            org.getEmployees().forEach(employee -> {
+                if (employee != null && !StringUtils.isBlank(employee.getId())) {
+                    employees.add(getPersonInfo(employee.getId()));
+                }
+            });
+        }
+        return new OrgInfo(org, manager, employees);
+    }
+
+    @Override
     public OrgInfo getOrgInfo(String orgId) {
+        if (StringUtils.isBlank(orgId)) {
+            if (logger.isErrorEnabled()) {
+                logger.error("The org's id is blank.");
+            }
+            throw new UserInterfaceSystemErrorException(
+                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            );
+        }
         Org org = accessor.getById(orgId, Org.class);
         if (org != null) {
             PersonAccountTuple manager = null;
