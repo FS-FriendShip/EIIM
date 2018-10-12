@@ -22,5 +22,7 @@ public interface AccountService {
 
     Account valid(String accountId, boolean valid);
 
+    Account getAccountById(String accountId);
+
     List<AccountState> getAllAccountsStatus();
 }

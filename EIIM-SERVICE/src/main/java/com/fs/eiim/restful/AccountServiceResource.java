@@ -76,6 +76,13 @@ public class AccountServiceResource {
         return new DataVO<>(AccountInfoVO.valueOf(account, null));
     }
 
+    @Path("accounts/{accountId}")
+    @GET
+    public DataVO<AccountInfoVO> getAccount(@PathParam("accountId") String accountId) {
+        Account account = accountService.getAccountById(accountId);
+        return new DataVO<>(AccountInfoVO.valueOf(account, null));
+    }
+
     @Path("accounts/status")
     @GET
     @RestAuthenticate

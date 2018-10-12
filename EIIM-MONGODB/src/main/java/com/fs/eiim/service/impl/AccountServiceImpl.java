@@ -237,6 +237,17 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public Account getAccountById(String accountId) {
+        if (StringUtils.isBlank(accountId)) {
+            if (logger.isErrorEnabled()) {
+                logger.error("The account's id is blank.");
+            }
+            throw new UserInterfaceSystemErrorException(UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM);
+        }
+        return accessor.getById(accountId, Account.class);
+    }
+
+    @Override
     public List<AccountState> getAllAccountsStatus() {
         return accessor.list(AccountState.class);
     }
