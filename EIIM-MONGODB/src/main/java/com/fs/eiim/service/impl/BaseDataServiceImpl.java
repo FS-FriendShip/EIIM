@@ -247,6 +247,7 @@ public class BaseDataServiceImpl implements BaseDataService {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public OrgInfo validOrg(String orgId, boolean valid) {
         if (StringUtils.isBlank(orgId)) {
@@ -277,7 +278,7 @@ public class BaseDataServiceImpl implements BaseDataService {
             if (!valid) {
                 Set<Org> children = org.getChildren();
                 if (children != null && !children.isEmpty()) {
-                    children.forEach(child -> validOrg(child.getId(), valid));
+                    children.forEach(child -> validOrg(child.getId(), false));
                 }
             }
         }
