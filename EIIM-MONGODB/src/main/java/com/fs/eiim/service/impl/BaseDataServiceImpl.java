@@ -507,23 +507,30 @@ public class BaseDataServiceImpl implements BaseDataService {
                     UserInterfaceRbacErrorException.RbacErrors.USER_NOT_FOUND
             );
         }
-        Account account = accessor.findOne(GeneralAccessor.ConditionTuple.eq("person", person), Account.class);
-        if (account == null) {
-            if (logger.isErrorEnabled()) {
-                logger.error(String.format("The person[%s] not enable the account, please enable it at first.", person.getId()));
-            }
-            throw new UserInterfaceEiimErrorException(
-                    UserInterfaceEiimErrorException.EiimErrors.ACCOUNT_NOT_FOUND
-            );
-        }
-        if (valid == account.isValid()) {
+        if (valid == person.isValid()) {
             if (logger.isWarnEnabled()) {
-                logger.warn(String.format("The account[%s]'s valid: %s, input valid: %s.",
-                        account.getId(), account.isValid(), valid));
+                logger.warn(String.format("The person[%s]'s valid: %s, input valid: %s.",
+                        person.getId(), person.isValid(), valid));
             }
         } else {
-            account.setValid(valid);
-            account = accessor.save(account);
+            person.setValid(valid);
+            person = accessor.save(person);
+        }
+        Account account = accessor.findOne(GeneralAccessor.ConditionTuple.eq("person", person), Account.class);
+        if (account == null) {
+            if (logger.isWarnEnabled()) {
+                logger.warn(String.format("The person[%s] not enable the account, please enable it at first.", person.getId()));
+            }
+        } else {
+            if (valid == account.isValid()) {
+                if (logger.isWarnEnabled()) {
+                    logger.warn(String.format("The account[%s]'s valid: %s, input valid: %s.",
+                            account.getId(), account.isValid(), valid));
+                }
+            } else {
+                account.setValid(valid);
+                account = accessor.save(account);
+            }
         }
         return PersonAccountTuple.valueOf(person, account, null, getOrgByPerson(person));
     }

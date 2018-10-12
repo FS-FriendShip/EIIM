@@ -208,7 +208,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account invalid(String accountId) {
+    public Account valid(String accountId, boolean valid) {
         if (StringUtils.isBlank(accountId)) {
             if (logger.isErrorEnabled()) {
                 logger.error("The account's id is blank.");
@@ -222,18 +222,16 @@ public class AccountServiceImpl implements AccountService {
             }
             throw new UserInterfaceRbacErrorException(UserInterfaceRbacErrorException.RbacErrors.ACCOUNT_NOT_FOUND);
         }
-        if (!account.isValid()) {
-            if (logger.isErrorEnabled()) {
-                logger.error(String.format("The account[%s] is invalid.", account.getId()));
+        if (valid == account.isValid()) {
+            if (logger.isWarnEnabled()) {
+                logger.warn(String.format("The account[%s] is %s, input: %s.", account.getId(), account.isValid(), valid));
             }
-            throw new UserInterfaceEiimErrorException(
-                    UserInterfaceEiimErrorException.EiimErrors.ACCOUNT_INVALID
-            );
-        }
-        account.setValid(false);
-        account = accessor.save(account);
-        if (logger.isDebugEnabled()) {
-            logger.debug(String.format("The account[%s] is invalid.", accountId));
+        } else {
+            account.setValid(valid);
+            account = accessor.save(account);
+            if (logger.isDebugEnabled()) {
+                logger.debug(String.format("The account[%s] is %s.", accountId, account.isValid()));
+            }
         }
         return account;
     }

@@ -20,7 +20,7 @@ public interface AccountService {
 
     AccountState getAccountStateByAccountId(String accountId);
 
-    Account invalid(String accountId);
+    Account valid(String accountId, boolean valid);
 
     List<AccountState> getAllAccountsStatus();
 }

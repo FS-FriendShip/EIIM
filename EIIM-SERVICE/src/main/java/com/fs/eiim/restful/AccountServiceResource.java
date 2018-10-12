@@ -64,13 +64,14 @@ public class AccountServiceResource {
         return new DataVO<>(true);
     }
 
-    @Path("accounts/{accountId}/invalid")
+    @Path("accounts/{accountId}/valid")
     @RestAuthenticate
     @GET
     public DataVO<AccountInfoVO> invalid(@PathParam("accountId") String accountId,
-                                         @QueryParam("accountCode") String accountCode) {
+                                         @QueryParam("accountCode") String accountCode,
+                                         @QueryParam("valid") boolean valid) {
         sessionDataStore.setCurrentUserCode(accountCode);
-        Account account = accountService.invalid(accountId);
+        Account account = accountService.valid(accountId, valid);
         sessionDataStore.removeCurrentUserCode();
         return new DataVO<>(AccountInfoVO.valueOf(account, null));
     }
