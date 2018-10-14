@@ -1,6 +1,7 @@
 package com.fs.eiim.service.impl;
 
 import com.fs.eiim.dal.entity.Account;
+import com.fs.eiim.dal.entity.Attachment;
 import com.fs.eiim.dal.entity.BaseData;
 import com.fs.eiim.error.UserInterfaceEiimErrorException;
 import com.fs.eiim.service.InitializeTaskService;
@@ -20,7 +21,11 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import static com.fs.eiim.service.BaseDataService.uuidFemale;
+import static com.fs.eiim.service.BaseDataService.uuidMale;
 
 @Component("initializeTaskService")
 public class InitializeTaskServiceImpl implements InitializeTaskService {
@@ -90,18 +95,46 @@ public class InitializeTaskServiceImpl implements InitializeTaskService {
             if (logger.isDebugEnabled()) {
                 logger.debug(String.format("The file[%s/%s] has existed.", path, name));
             }
-            return;
-        }
-        InputStream in = InitializeTaskServiceImpl.class.getResourceAsStream(String.format("/avatar/%s", uuid));
-        try {
-            FileUtils.saveFile(path, name, in);
-            if (logger.isDebugEnabled()) {
-                logger.debug(String.format("Upload the file[%s] successfully, path: %s/%s.",
-                        uuid, path, name));
+        } else {
+            InputStream in = InitializeTaskServiceImpl.class.getResourceAsStream(String.format("/avatar/%s", uuid));
+            try {
+                FileUtils.saveFile(path, name, in);
+                if (logger.isDebugEnabled()) {
+                    logger.debug(String.format("Upload the file[%s] successfully, path: %s/%s.",
+                            uuid, path, name));
+                }
+            } catch (IOException ex) {
+                if (logger.isErrorEnabled()) {
+                    logger.error(String.format("Save the file[%s] from input stream fail.", path));
+                }
+                throw new UserInterfaceEiimErrorException(
+                        UserInterfaceEiimErrorException.EiimErrors.FILE_UPLOAD_FAIL
+                );
             }
-        } catch (IOException ex) {
+        }
+        Path filePath = Paths.get(path, name);
+        if (Files.exists(filePath)) {
+            try {
+                Attachment attachment = accessor.getById(uuid, Attachment.class);
+                if (attachment == null) {
+                    attachment = EntityFactory.createEntity(Attachment.class);
+                    attachment.setId(uuid);
+                    attachment.setFileSize(Files.size(filePath));
+                    attachment.setFileType("png");
+                    attachment.setFileName(filePath.toString());
+                    accessor.save(attachment);
+                }
+            } catch (IOException ex) {
+                if (logger.isErrorEnabled()) {
+                    logger.error(String.format("Get the file[%s]'s size fail.", filePath.toString()), ex);
+                }
+                throw new UserInterfaceEiimErrorException(
+                        UserInterfaceEiimErrorException.EiimErrors.FILE_UPLOAD_FAIL
+                );
+            }
+        } else {
             if (logger.isErrorEnabled()) {
-                logger.error(String.format("Save the file[%s] from input stream fail.", path));
+                logger.error(String.format("Initialize the avatar[%s] fail, path: %s.", uuid, path));
             }
             throw new UserInterfaceEiimErrorException(
                     UserInterfaceEiimErrorException.EiimErrors.FILE_UPLOAD_FAIL
@@ -118,7 +151,7 @@ public class InitializeTaskServiceImpl implements InitializeTaskService {
             admin.setCode("Administrator");
             admin.setNickName("Administrator");
             admin.setName("系统管理员");
-            admin.setAvatar("5ba75abf96a54e2a9005968b");
+            admin.setAvatar(uuidMale);
             admin.setPassword(DigestUtils.md5("edmund-EIIM"));
             admin.getRoles().add(roleAdmin);
             accessor.save(admin);
@@ -155,8 +188,8 @@ public class InitializeTaskServiceImpl implements InitializeTaskService {
         initializeRoles();
 
         // 初始化 默认头像：男性-5ba75ab696a54e2a9005968b | 女性-5ba75abf96a54e2a9005968c
-        initializeAvatar("5ba75ab696a54e2a9005968b");
-        initializeAvatar("5ba75abf96a54e2a9005968c");
+        initializeAvatar(uuidMale);
+        initializeAvatar(uuidFemale);
 
         // 初始化 管理员
         initializeAdministratorAccount();

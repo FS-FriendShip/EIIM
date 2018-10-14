@@ -515,7 +515,7 @@ public class BaseDataServiceImpl implements BaseDataService {
 
             // 如果没有设置avatar，则根据性别设置默认的头像，默认为男士头像
             if (StringUtils.isBlank(account.getAvatar())) {
-                account.setAvatar(person.getSex() == User.Sex.FEMALE ? "avatar/5ba75abf96a54e2a9005968c" : "avatar/5ba75ab696a54e2a9005968b");
+                account.setAvatar(person.getSex() == User.Sex.FEMALE ? uuidFemale : uuidMale);
             }
             try {
                 accessor.save(account);

@@ -43,13 +43,16 @@ public interface FileTransformService {
     }
 
     class FileDownloadBean {
-        File file;
-        String fileName;
+        private File file;
+        private String fileName, fileType;
+        private long fileSize;
 
-        public FileDownloadBean(File file, String fileName) {
+        public FileDownloadBean(File file, String fileName, String fileType, long fileSize) {
             super();
             this.file = file;
             this.fileName = fileName;
+            this.fileType = fileType;
+            this.fileSize = fileSize;
         }
 
         public File getFile() {
@@ -58,6 +61,14 @@ public interface FileTransformService {
 
         public String getFileName() {
             return fileName;
+        }
+
+        public String getFileType() {
+            return fileType;
+        }
+
+        public long getFileSize() {
+            return fileSize;
         }
     }
 }

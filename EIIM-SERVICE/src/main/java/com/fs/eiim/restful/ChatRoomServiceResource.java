@@ -201,7 +201,7 @@ public class ChatRoomServiceResource {
         List<ChatMessage> messages = chatRoomService.getAllUnreadMessages(chatRoomId, accountCode);
         return new DataVO<>(ChatMessageVO.valueOf(messages));
     }
-
+    
     @Path("chatRooms/{chatRoomId}/accounts/{accountCode}/messages")
     @POST
     @RestAuthenticate
@@ -218,6 +218,29 @@ public class ChatRoomServiceResource {
         ChatRoomService.Direction direction = messageRequestVO.getDirection();
         Pagination pagination = messageRequestVO.getPagination();
         List<ChatMessage> messages = chatRoomService.getMessagesByRequest(chatRoomId, accountCode, lastMessageId,
+                direction, pagination);
+        if (pagination != null) {
+            return new PaginationDataVO<>(pagination, ChatMessageVO.valueOf(messages));
+        } else {
+            return new DataVO<>(ChatMessageVO.valueOf(messages));
+        }
+    }
+
+    @Path("chatRooms/accounts/{accountCode}/messages")
+    @POST
+    @RestAuthenticate
+    @SuppressWarnings("unchecked")
+    public DataVO<List<ChatMessageVO>> getAllMessagesByRequest(@PathParam("accountCode") String accountCode,
+                                                               MessageRequestVO messageRequestVO) {
+        if (messageRequestVO == null) {
+            throw new UserInterfaceSystemErrorException(
+                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            );
+        }
+        String lastMessageId = messageRequestVO.getLastMessageId();
+        ChatRoomService.Direction direction = messageRequestVO.getDirection();
+        Pagination pagination = messageRequestVO.getPagination();
+        List<ChatMessage> messages = chatRoomService.getMessagesByRequest(accountCode, lastMessageId,
                 direction, pagination);
         if (pagination != null) {
             return new PaginationDataVO<>(pagination, ChatMessageVO.valueOf(messages));

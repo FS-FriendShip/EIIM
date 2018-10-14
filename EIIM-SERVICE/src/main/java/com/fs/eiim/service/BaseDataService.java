@@ -15,6 +15,8 @@ import java.util.List;
  * Date time 2018/8/11 下午6:37
  */
 public interface BaseDataService {
+    String uuidMale = "5ba75ab696a54e2a9005968b", uuidFemale = "5ba75abf96a54e2a9005968c";
+
     /**
      * 获取所有的字典数据项
      *
