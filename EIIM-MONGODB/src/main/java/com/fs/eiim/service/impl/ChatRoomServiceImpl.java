@@ -3,7 +3,6 @@ package com.fs.eiim.service.impl;
 import com.fs.eiim.dal.entity.*;
 import com.fs.eiim.error.UserInterfaceEiimErrorException;
 import com.fs.eiim.service.ChatRoomService;
-import com.mongodb.DBRef;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bson.Document;
@@ -517,7 +516,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         LookupOperation lookup = LookupOperation.newLookup().from("attachment")
                 .localField("message").foreignField("_id").as("attachments");
         AggregationOperation match = Aggregation.match(Criteria.where("messageType").is("FILE")
-                .andOperator(Criteria.where("chatRoom").is(new DBRef("chatRoom", chatRoom)))
+                .andOperator(Criteria.where("chatRoom").is(template.getConverter().toDBRef(chatRoom, null)))
                 .andOperator(Criteria.where("sentTime").gte(lastAccessTime)));
         List<ChatMessage> fileMessages = getFileChatMessageByAggregate(lookup, match);
         if (!fileMessages.isEmpty()) {
@@ -624,7 +623,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                     GeneralAccessor.ConditionTuple.eq("messageType", "TEXT")
             );
             match = Aggregation.match(Criteria.where("messageType").is("FILE")
-                    .andOperator(Criteria.where("chatRoom").is(new DBRef("chatRoom", chatRoom))
+                    .andOperator(Criteria.where("chatRoom").is(template.getConverter().toDBRef(chatRoom, null))
                             .andOperator(Criteria.where("sentTime").gte(sentTime + 1))));
         } else {
             // 旧消息
@@ -634,7 +633,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                     GeneralAccessor.ConditionTuple.eq("messageType", "TEXT")
             );
             match = Aggregation.match(Criteria.where("messageType").is("FILE")
-                    .andOperator(Criteria.where("chatRoom").is(new DBRef("chatRoom", chatRoom))
+                    .andOperator(Criteria.where("chatRoom").is(template.getConverter().toDBRef(chatRoom, null))
                             .andOperator(Criteria.where("sentTime").lte(sentTime - 1))));
         }
         List<ChatMessage> result = new ArrayList<>();
