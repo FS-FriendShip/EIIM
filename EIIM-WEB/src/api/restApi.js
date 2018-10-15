@@ -35,6 +35,14 @@ export default {
   },
 
   /**
+   *
+   * @param data
+   */
+  setAccountPassword (data) {
+    return update('/v1/persons/account/password', data)
+  },
+
+  /**
    * 禁用帐号
    * @param personId
    * @param account
@@ -50,7 +58,20 @@ export default {
    * @returns {*}
    */
   getChatrooms (accountCode) {
-    return get('/v1/chatRooms/accounts/' + accountCode + '/unread')
+    return get('/v1/chatRooms/accounts/' + accountCode)
+  },
+
+  /**
+   *
+   * @param params
+   * @returns {Promise}
+   */
+  getChatroom (params) {
+    let sessionId = params.sessionId
+    let accountCode = params.accountCode
+    delete params['sessionId']
+    delete params['accountCode']
+    return post('/v1/chatRooms/' + sessionId + '/accounts/' + accountCode + '/messages', params)
   },
 
   /**
@@ -114,15 +135,29 @@ export default {
    * @returns {boolean}
    */
   delOrg (orgId) {
-    return remove('/v1/orgs/' + orgId)
+    return get('/v1/orgs/' + orgId + '/valid?valid=false')
   },
 
+  /**
+   *
+   * @param user
+   * @returns {Promise}
+   */
   saveUser (user) {
     if (!user.id) {
       return post('/v1/persons/new', user)
     } else {
       return update('/v1/persons/' + user.id, user)
     }
+  },
+
+  /**
+   *
+   * @param personId
+   * @returns {Promise}
+   */
+  delUser (personId) {
+    return get('/v1/persons/' + personId + '/valid?valid=false')
   },
 
   /**

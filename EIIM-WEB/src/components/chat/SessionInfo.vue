@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import SessionDialog from '../components/SessionDialog'
+import SessionDialog from './SessionDialog'
 export default {
   name: 'SessionInfo',
   components: {SessionDialog},
@@ -56,8 +56,6 @@ export default {
       } else {
         this.activeSession = {}
       }
-
-      console.log(this.activeSession)
     }
   }
 }

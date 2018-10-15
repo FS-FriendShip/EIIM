@@ -5,7 +5,7 @@ import org.mx.dal.Pagination;
 
 public class MessageRequestVO {
     private String lastMessageId;
-    private ChatRoomService.Direction direction = ChatRoomService.Direction.FORWARD;
+        private ChatRoomService.Direction direction = ChatRoomService.Direction.FORWARD;
     private boolean pageable = false;
     private int page = 1, pageSize = 20;
 

@@ -1,6 +1,8 @@
 package com.fs.eiim.restful;
 
+import com.fs.eiim.dal.entity.Account;
 import com.fs.eiim.dal.entity.AccountState;
+import com.fs.eiim.restful.vo.account.AccountInfoVO;
 import com.fs.eiim.restful.vo.account.AccountStateVO;
 import com.fs.eiim.restful.vo.account.AuthenticationVO;
 import com.fs.eiim.service.AccountService;
@@ -52,6 +54,7 @@ public class AccountServiceResource {
     }
 
     @Path("logout/{accountId}")
+    @RestAuthenticate
     @GET
     public DataVO<Boolean> logout(@PathParam("accountId") String accountId,
                                   @QueryParam("accountCode") String accountCode) {
@@ -59,6 +62,18 @@ public class AccountServiceResource {
         accountService.logout(accountId);
         sessionDataStore.removeCurrentUserCode();
         return new DataVO<>(true);
+    }
+
+    @Path("accounts/{accountId}/valid")
+    @RestAuthenticate
+    @GET
+    public DataVO<AccountInfoVO> invalid(@PathParam("accountId") String accountId,
+                                         @QueryParam("accountCode") String accountCode,
+                                         @QueryParam("valid") boolean valid) {
+        sessionDataStore.setCurrentUserCode(accountCode);
+        Account account = accountService.valid(accountId, valid);
+        sessionDataStore.removeCurrentUserCode();
+        return new DataVO<>(AccountInfoVO.valueOf(account, null));
     }
 
     @Path("accounts/status")

@@ -6,7 +6,6 @@ import com.fs.eiim.restful.vo.org.OrgInfoVO;
 import com.fs.eiim.service.BaseDataService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.mx.StringUtils;
 import org.mx.dal.session.SessionDataStore;
 import org.mx.error.UserInterfaceSystemErrorException;
 import org.mx.service.rest.auth.RestAuthenticate;
@@ -74,31 +73,27 @@ public class OrgServiceResource {
     @RestAuthenticate
     public DataVO<OrgInfoVO> modifyOrg(@PathParam("orgId") String orgId, @QueryParam("accountCode") String accountCode,
                                        OrgFormVO orgFormVO) {
-        if (StringUtils.isBlank(orgId)) {
-            if (logger.isErrorEnabled()) {
-                logger.error("The organization's id is blank.");
-            }
-            return new DataVO<>(new UserInterfaceSystemErrorException(
-                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
-            ));
-        }
         orgFormVO.setId(orgId);
         sessionDataStore.setCurrentUserCode(accountCode);
         return saveOrg(orgFormVO);
+    }
+
+    @Path("orgs/{orgId}/valid")
+    @GET
+    @RestAuthenticate
+    public DataVO<OrgInfoVO> validOrg(@PathParam("orgId") String orgId,
+                                   @QueryParam("accountCode") String accountCode,
+                                   @QueryParam("valid") boolean valid) {
+        sessionDataStore.setCurrentUserCode(accountCode);
+        BaseDataService.OrgInfo org = baseDataService.validOrg(orgId, valid);
+        sessionDataStore.removeCurrentUserCode();
+        return new DataVO<>(OrgInfoVO.valueOf(org));
     }
 
     @Path("orgs/{orgId}")
     @GET
     @RestAuthenticate
     public DataVO<OrgInfoVO> getOrg(@PathParam("orgId") String orgId) {
-        if (StringUtils.isBlank(orgId)) {
-            if (logger.isErrorEnabled()) {
-                logger.error("The organization's id is blank.");
-            }
-            return new DataVO<>(new UserInterfaceSystemErrorException(
-                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
-            ));
-        }
         BaseDataService.OrgInfo org = baseDataService.getOrgInfo(orgId);
         return new DataVO<>(OrgInfoVO.valueOf(org));
     }

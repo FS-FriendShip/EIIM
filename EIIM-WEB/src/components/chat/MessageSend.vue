@@ -1,7 +1,14 @@
 <template>
   <div id="messageSender">
     <div class="toolbar">
-      <i class="iconfont icon-biaoqing"></i>
+      <el-popover
+        placement="top-start"
+        width="560"
+        trigger="click">
+        <emotion @emotion="handleEmotion" :height="200" ></emotion>
+        <i class="iconfont icon-biaoqing" slot="reference"></i>
+      </el-popover>
+
       <el-upload
         class="avatar-uploader"
         action="upload"
@@ -10,13 +17,14 @@
         <i class="iconfont icon-iconset0196"></i>
       </el-upload>
     </div>
-    <textarea ref="select_frame" placeholder="按 Ctrl + Enter 发送" v-model="message" @keyup="sendTextMessage"
-              rows="5"></textarea>
+    <MessageInput class="message-input" ref="select_frame" :content="message" @send="sendTextMessage" placeholder='按Ctrl+Enter发送'></MessageInput>
   </div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
+import Emotion from './Emotion/index'
+import MessageInput from './MessageInput'
 
 export default {
   name: 'MessageSend',
@@ -24,16 +32,42 @@ export default {
   data () {
     return {
       sessionId: null,
-      message: null,
+      message: {txt: ''},
       fileList: []
     }
+  },
+
+  components: {
+    Emotion,
+    MessageInput
   },
 
   computed: {
     ...mapGetters({session: 'chatroom/api_get_chatroom', user: 'account/api_current_account'})
   },
 
+  height: {
+    type: Number,
+    default: 200
+  },
+
   methods: {
+    handleEmotion (i) {
+      this.message.txt += this.emotion(i)
+    },
+
+    /**
+     * 将匹配结果替换表情图片
+     *
+     *
+     * */
+    emotion (res) {
+      let word = res.replace(/#|;/gi, '')
+      const list = ['微笑', '撇嘴', '色', '发呆', '得意', '流泪', '害羞', '闭嘴', '睡', '大哭', '尴尬', '发怒', '调皮', '呲牙', '惊讶', '难过', '酷', '冷汗', '抓狂', '吐', '偷笑', '可爱', '白眼', '傲慢', '饥饿', '困', '惊恐', '流汗', '憨笑', '大兵', '奋斗', '咒骂', '疑问', '嘘', '晕', '折磨', '衰', '骷髅', '敲打', '再见', '擦汗', '抠鼻', '鼓掌', '糗大了', '坏笑', '左哼哼', '右哼哼', '哈欠', '鄙视', '委屈', '快哭了', '阴险', '亲亲', '吓', '可怜', '菜刀', '西瓜', '啤酒', '篮球', '乒乓', '咖啡', '饭', '猪头', '玫瑰', '凋谢', '示爱', '爱心', '心碎', '蛋糕', '闪电', '炸弹', '刀', '足球', '瓢虫', '便便', '月亮', '太阳', '礼物', '拥抱', '强', '弱', '握手', '胜利', '抱拳', '勾引', '拳头', '差劲', '爱你', 'NO', 'OK', '爱情', '飞吻', '跳跳', '发抖', '怄火', '转圈', '磕头', '回头', '跳绳', '挥手', '激动', '街舞', '献吻', '左太极', '右太极']
+      let index = list.indexOf(word)
+      return `<img src="https://res.wx.qq.com/mpres/htmledition/images/icon/emotion/${index}.gif" align="middle">`
+    },
+
     /**
      * 文件上传
      *
@@ -46,24 +80,22 @@ export default {
           user: this.user
         }).then(res => {
           if (res) {
-            this.message = ''
+            this.message.txt = ''
           }
         })
       })
     },
 
-    sendTextMessage (e) {
-      if (e.ctrlKey && (e.keyCode === 13 || e.keyCode === 91) && this.message.length) {
-        this.$store.dispatch('chatroom/api_send_text_message', {
-          sessionId: this.session.id,
-          message: this.message,
-          user: this.user
-        }).then(res => {
-          if (res) {
-            this.message = ''
-          }
-        })
-      }
+    sendTextMessage () {
+      this.$store.dispatch('chatroom/api_send_text_message', {
+        sessionId: this.session.id,
+        message: this.message.txt,
+        user: this.user
+      }).then(res => {
+        if (res) {
+          this.message.txt = ''
+        }
+      })
     }
   },
 
@@ -141,17 +173,26 @@ export default {
 
 <style lang="less" scoped>
   #messageSender {
-    height: 100%;
+    border-top: 1px solid silver;
   }
 
-  #messageSender textarea {
+  #messageSender .message-input {
     padding: 10px;
     height: 100px;
+    max-height:100px;
     width: 100%;
     border: none;
     outline: none;
     font-family: "Micrsofot Yahei";
     resize: none;
+    overflow-y:auto;
+    overflow-x:hidden;
+  }
+
+  #messageSender .message-input:before {
+    content: attr(placeholder);
+    display: block;
+    color: #adadad;
   }
 
   #messageSender .toolbar {
@@ -162,7 +203,6 @@ export default {
     outline: none;
     font-family: "Micrsofot Yahei";
     resize: none;
-    border-bottom: 1px solid silver;
     line-height:24px;
     display: flex;
     justify-content: flex-start;

@@ -2,7 +2,8 @@
   <el-container id="admin">
     <el-header id="main-header">
       <el-row type="flex" class="row-bg" align="middle">
-        <el-col :span="23" class="title">若森通信软件用户管理平台</el-col>
+        <el-col :span="20" class="title">若森通信软件用户管理平台</el-col>
+        <el-col :span="3"><i class="iconfont icon-zhongzhi quit" @click="setPassword">修改密码</i></el-col>
         <el-col :span="1"><i class="iconfont icon-tuichu quit" @click="logout">退出</i></el-col>
       </el-row>
     </el-header>
@@ -31,29 +32,27 @@
           <el-header style="text-align: right; font-size: 12px">
             <label id="orgName"></label>
             <el-button type="primary" icon="el-icon-plus" circle  @click="showUser">新增用户</el-button>
-            <el-button type="danger" icon="iconfont icon-shangchu" circle>删除用户</el-button>
+            <el-button type="danger" icon="iconfont icon-shangchu" circle @click="handleUserDelete">删除用户</el-button>
           </el-header>
           <el-main>
             <el-table v-if="org" :data="org.employees" tooltip-effect="dark" @row-dblclick="handleUserEdit">
               <el-table-column type="selection" mini-width="5%"></el-table-column>
-              <el-table-column prop="fullName" label="姓名" mini-width="15%"></el-table-column>
+              <el-table-column prop="fullName" label="姓名" mini-width="10%"></el-table-column>
               <el-table-column prop="title" label="职务" mini-width="20%"></el-table-column>
-              <el-table-column prop="mobile" label="手机" mini-width="15%"></el-table-column>
+              <el-table-column prop="mobile" label="手机" mini-width="10%"></el-table-column>
               <el-table-column prop="phone" label="固定电话" mini-width="10%"></el-table-column>
-              <el-table-column prop="email" label="邮件地址" mini-width="35%"></el-table-column>
-              <el-table-column label="操作" mini-width="5%">
+              <el-table-column prop="email" label="邮件地址" mini-width="30%"></el-table-column>
+              <el-table-column label="操作" mini-width="15%">
                 <template slot-scope="scope">
                   <el-button
-                    size="mini" v-if="!scope.row.account"
+                    v-if="!scope.row.account"
                     @click="showAccount(scope.$index, scope.row)">开通帐号</el-button>
                   <el-button
                     icon="iconfont icon-ban"
-                    size="mini"
-                    type="danger" v-else-if="scope.row.account.state"
+                    type="danger" v-else-if="scope.row.account.valid"
                     @click="disableAccount(scope.$index, scope.row)">禁用</el-button>
                   <el-button
                     icon="iconfont icon-qiyong"
-                    size="mini"
                     type="danger" v-else
                     @click="enableAccount(scope.$index, scope.row)">启用</el-button>
                 </template>
@@ -74,7 +73,7 @@
 import {mapGetters} from 'vuex'
 import OrgDialog from '../../components/admin/OrgDialog'
 import UserDialog from '../../components/admin/UserDialog'
-import AccountDialog from '../../components/admin/AccountDialog'
+import AccountDialog from '../../components/AccountDialog'
 
 export default {
   name: 'admin',
@@ -168,7 +167,13 @@ export default {
     },
 
     handleUserDelete: function (index, row) {
-      this.$store.dispatch('contact/api_delete_org', row.id)
+      this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$store.dispatch('contact/api_delete_org', row.id)
+      })
     },
 
     setUserDialogVisible (visible) {
@@ -190,6 +195,16 @@ export default {
     },
 
     /**
+     *  设置密码
+     *
+     * */
+    setPassword () {
+      let row = {fullName: '系统管理员', mobile: 'Administrtor'}
+      this.context = {type: 'ACCOUNT', action: 'reset', data: row}
+      this.showAccountDialog = true
+    },
+
+    /**
      * 禁用帐号
      *
      * */
@@ -204,7 +219,7 @@ export default {
     },
 
     /**
-     * 启用帐号ß
+     * 启用帐号
      *
      * */
     enableAccount (index, row) {
@@ -235,23 +250,6 @@ export default {
     height: 100%;
     margin: 10px 0px 0px 0px;
     padding: 0;
-  }
-
-  #admin #main-header{
-    height:80px!important;
-  }
-
-  #main-header .title {
-    font-weight: bolder;
-    font-size: 40px;
-    color: #8B5A00;
-  }
-
-  #main-header .quit {
-    font-weight: bolder;
-    font-size: 18px;
-    color: #fff;
-    cursor: pointer;
   }
 
   #admin  #main-body {
@@ -289,5 +287,14 @@ export default {
 
   #main-header .row-bg {
     height:100%;
+  }
+
+  #main-header .title {
+    font-size: 40px;
+  }
+
+  #main-header .quit {
+    font-size: 20px;
+    color: #fff;
   }
 </style>

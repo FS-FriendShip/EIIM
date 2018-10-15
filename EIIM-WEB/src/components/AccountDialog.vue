@@ -10,6 +10,10 @@
           <el-input v-model="account.accountCode" :disabled="true"></el-input>
         </el-form-item>
 
+        <el-form-item v-if="reset" label="旧密码">
+          <el-input type="password" placeholder="旧密码" v-model="account.oldPassword"></el-input>
+        </el-form-item>
+
         <el-form-item label="密码"  prop="password">
           <el-input type="password" placeholder="密码" v-model="account.password"></el-input>
         </el-form-item>
@@ -77,11 +81,13 @@ export default {
 
     return {
       visible: this.show,
+      reset: false,
       account: {
         personId: null,
         accountCode: null,
         password: null,
         confirmPassword: null,
+        oldPassword: null,
         nickname: null,
         avatar: null
       },
@@ -101,7 +107,21 @@ export default {
     saveAccountInfo (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$store.dispatch('account/api_account_save', {personId: this.account.personId, account: {accountCode: this.account.accountCode, password: this.account.password, nickname: this.account.nickname, avatar: this.account.accountCode + '.png'}}).then(this.closeDialog)
+          if (!this.reset) {
+            this.$store.dispatch('account/api_account_save', {personId: this.account.personId,
+              account: {
+                accountCode: this.account.accountCode,
+                password: this.account.password,
+                nickname: this.account.nickname
+              }
+            }).then(this.closeDialog)
+          } else {
+            this.$store.dispatch('account/api_account_password', {
+              accountCode: this.account.accountCode,
+              oldPassword: this.account.oldPassword,
+              newPassword: this.account.password
+            }).then(this.closeDialog)
+          }
         } else {
           return false
         }
@@ -132,7 +152,6 @@ export default {
 
     context () {
       if (this.context.type === 'ACCOUNT') {
-        console.log(this.context.data)
         if (!this.context.data.account) {
           this.account.accountCode = this.context.data.mobile
           this.account.nickname = this.context.data.fullName
@@ -142,6 +161,11 @@ export default {
         }
 
         this.account.personId = this.context.data.id
+        if (this.context.action === 'reset') {
+          this.reset = true
+        } else {
+          this.reset = false
+        }
       }
     }
   }

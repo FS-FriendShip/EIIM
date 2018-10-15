@@ -1,40 +1,46 @@
 <template>
   <el-container id="Main" v-upload>
-    <el-aside>
-      <Profile></Profile>
-      <Session></Session>
-    </el-aside>
+    <el-aside class="nav">
+      <NavBar>
 
-    <el-main class="message-main">
-      <el-row class="message-header" align="middle">
-        <el-col :span="22" :class="'header-item'"><div class="session-name">{{session?session.name:''}}</div></el-col>
-        <el-col :span="2" :class="'header-item'">
-          <i class="iconfont icon-Set-up" @click="toggleSessionInfo"></i>
-        </el-col>
-      </el-row>
-      <el-row class="message-body">
-        <Message v-on:toggleSessionInfo="toggleSessionInfo"></Message>
-        <SessionInfo v-show="showSessionInfo" :session="session"></SessionInfo>
-      </el-row>
-      <el-row class="message-footer">
-        <MessageSend></MessageSend>
-      </el-row>
-    </el-main>
+      </NavBar>
+    </el-aside>
+    <el-container class="chat">
+      <el-aside class="session">
+        <Session></Session>
+      </el-aside>
+
+      <el-main class="message-main">
+        <el-row class="message-header" align="middle">
+          <el-col :span="22" :class="'header-item'"><div class="session-name">{{session?session.name:''}}</div></el-col>
+          <el-col :span="2" :class="'header-item'">
+            <i class="iconfont icon-Set-up" @click="toggleSessionInfo"></i>
+          </el-col>
+        </el-row>
+        <el-row class="message-body">
+          <Message v-on:toggleSessionInfo="toggleSessionInfo"></Message>
+          <SessionInfo v-show="showSessionInfo" :session="session"></SessionInfo>
+        </el-row>
+        <el-row class="message-footer">
+          <MessageSend></MessageSend>
+        </el-row>
+      </el-main>
+    </el-container>
   </el-container>
 </template>
 
 <script>
-import Profile from '../../components/Profile'
-import Session from '../../components/Session'
-import MessageSend from '../../components/MessageSend'
-import Message from '../../components/Message'
-import SessionInfo from '../../components/SessionInfo'
+import NavBar from '../../components/chat/NavBar'
+import Session from '../../components/chat/Session'
+import MessageSend from '../../components/chat/MessageSend'
+import Message from '../../components/chat/Message'
+import SessionInfo from '../../components/chat/SessionInfo'
 import websocket from '../../api/websocket'
 import {mapGetters} from 'vuex'
 
 export default {
   name: 'Main',
-  components: {Profile, MessageSend, Message, Session, SessionInfo},
+  components: {NavBar, MessageSend, Message, Session, SessionInfo},
 
   data () {
     return {
@@ -54,7 +60,14 @@ export default {
     websocket.initWebSocket()
 
     // 获取聊天室信息
-    this.$store.dispatch('chatroom/api_get_chatrooms', account.account)
+    this.$store.dispatch('chatroom/api_get_chatrooms', account.account).then(() => {
+      this.sessionDialogVisible = true
+
+      let params = {session: this.session, account: this.GLOBAL.account.account}
+      if (this.session) {
+        this.$store.dispatch('chatroom/api_select_chatroom', params)
+      }
+    })
   },
 
   computed: {
@@ -69,64 +82,32 @@ export default {
       }
     }
   }
-
-  // mounted () {
-  //   let session = this.session
-  //   let store = this.$store
-  //   document.addEventListener('paste', function (event) {
-  //     console.log(event.dataTransfer.files)
-  //     let clipboardData = event.clipboardData
-  //     if (clipboardData) {
-  //       let items = clipboardData.items
-  //       if (items && items.length) {
-  //         let item = null
-  //         for (var i = 0; i < clipboardData.types.length; i++) {
-  //           if (clipboardData.types[i] === 'Files') {
-  //             item = items[i]
-  //             if (item && item.kind === 'file') {
-  //               console.log('sending file')
-  //               store.dispatch('chatroom/api_upload_file', {
-  //                 sessionId: session.id,
-  //                 file: item.getAsFile()
-  //               }).then(res => {
-  //                 if (res) {
-  //                   // this.message = ''
-  //                 }
-  //               })
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //   })
-  // }
 }
 </script>
 
 <style scoped>
   #Main {
-    overflow: none;
-    border-radius: 3px;
-    margin:50px 50px;
+    width: 100%;
+    height: 100%;
+    padding: 0;
   }
 
-  #Main .el-aside {
+  #Main .nav {
+    width:75px!important;
+    background: #4F4F4F;
+  }
+
+  #Main .chat {
     text-align: left;
     color: #fff;
-    background: #2e3238;
+    background: #fff;
   }
-
-  #Main>.el-main {
-    background-color: #eee;
-  }
-
-  /*#Main .message {*/
-    /*height: 800px;*/
-  /*}*/
 
   #Main .message-main{
     padding: 0px;
     overflow: hidden;
+    color: #000!important;
+    background-color: #eee;
   }
 
   #Main .message-main .message-header{
@@ -155,14 +136,13 @@ export default {
   #Main .message-main .message-body{
     padding:0px;
     width: 100%;
-    height:600px;
+    height:700px;
     overflow: auto;
   }
 
   #Main .message-main .message-footer{
     padding:0px;
     width: 100%;
-    height:150px;
-    background: #fff;
+    height:200px;
   }
 </style>

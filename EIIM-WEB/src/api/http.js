@@ -17,8 +17,6 @@ var getAccount = function () {
 // http request 拦截器
 axios.interceptors.request.use(
   config => {
-    console.log(config.url)
-    // const token = getCookie('名称');注意使用的时候需要引入cookie方法，推荐js-cookie
     if (config.url.includes('v1/upload')) {
       config.headers = {
         'Content-Type': 'multipart/form-data'
@@ -39,6 +37,8 @@ axios.interceptors.request.use(
         console.log(err)
       }
     }
+
+    console.log(config)
     return config
   },
   error => {

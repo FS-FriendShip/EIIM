@@ -39,6 +39,24 @@ export default {
     })
   },
 
+  /**
+   * 设置密码
+   * @param commit
+   * @param data
+   * @returns {Promise<T>}
+   */
+  api_account_password: ({commit}, data) => {
+    return api.setAccountPassword(data).then(res => {
+      return res.data
+    })
+  },
+
+  /**
+   * 激活帐号
+   * @param commit
+   * @param data
+   * @returns {Promise<T>}
+   */
   api_account_enable: ({commit}, data) => {
     console.log(data)
     // return data
@@ -47,6 +65,12 @@ export default {
     })
   },
 
+  /**
+   * 禁用帐号
+   * @param commit
+   * @param data
+   * @returns {Promise<T>}
+   */
   api_account_disable: ({commit}, data) => {
     console.log(data)
     // return data

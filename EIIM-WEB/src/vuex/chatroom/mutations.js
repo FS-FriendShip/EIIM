@@ -26,6 +26,9 @@ export default {
       let found = false
 
       chatrooms.forEach(item => {
+        item.active = false
+        item.latestMessage = null
+        item.unread = 0
         item.read = false
         item.quiet = false
         if (!item.name) {
@@ -52,7 +55,10 @@ export default {
         localChatrooms.forEach(localRoom => {
           if (localRoom.id === item.id) {
             found = true
-            item.messages.forEach(message => localRoom.messages.push(message))
+            item.messages.forEach(message => {
+              localRoom.messages.push(message)
+              localRoom.lastUpdatedTime = message.sentTime
+            })
           }
         })
 
@@ -96,11 +102,26 @@ export default {
   [types.UPDATE_CHATROOM_MESSAGE] (state, message) {
     let roomId = message.chatRoomId
     let chatroom = state.chatrooms.filter(room => room.id === roomId)[0]
+    if (!chatroom.messages) {
+      chatroom.messages = []
+    }
     chatroom.messages.push(message)
+    chatroom.latestMessage = message
+    chatroom.unread += 1
+
     localStorage.setItem('Chatrooms', JSON.stringify(state.chatrooms))
   },
 
   [types.SELECT_CHATROOM] (state, roomId) {
+    state.chatrooms.forEach(room => {
+      if (room.id === roomId) {
+        room.active = true
+        room.unread = 0
+      } else {
+        room.active = false
+      }
+    })
+    localStorage.setItem('Chatrooms', JSON.stringify(state.chatrooms))
     state.selectedSessionId = roomId
   },
 

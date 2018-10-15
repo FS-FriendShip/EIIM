@@ -18,8 +18,8 @@ export default {
       let account = JSON.parse(localStorage.getItem('account-key')).account
       this.account = account
       if (!this.websocket || this.websocket.readyState !== 1) {
-        const wsuri = 'ws://localhost:9997/notify' // ws地址
-        // const wsuri = 'ws://121.40.51.91:8188/notify'
+        //const wsuri = 'ws://localhost:9997/notify' // ws地址
+        // const wsuri = 'ws://60.173.195.18:60993/notify'
         this.websocket = new WebSocket(wsuri)
         this.websocket.onopen = () => {
           this.register()

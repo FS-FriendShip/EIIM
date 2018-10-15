@@ -248,7 +248,64 @@ public class BaseDataServiceImpl implements BaseDataService {
     }
 
     @Override
+    public OrgInfo validOrg(String orgId, boolean valid) {
+        if (StringUtils.isBlank(orgId)) {
+            if (logger.isErrorEnabled()) {
+                logger.error("The org's id is blank.");
+            }
+            throw new UserInterfaceSystemErrorException(
+                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            );
+        }
+        Org org = accessor.getById(orgId, Org.class);
+        if (org == null) {
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format("The org[%s] not found.", orgId));
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.ORG_NOT_FOUND
+            );
+        }
+        if (valid == org.isValid()) {
+            if (logger.isWarnEnabled()) {
+                logger.warn(String.format("The org[%s] is %s, input: %s.", orgId, org.isValid(), valid));
+            }
+        } else {
+            org.setValid(valid);
+            org = accessor.save(org);
+            // 如果valid = false，则处理下级节点
+            if (!valid) {
+                Set<Org> children = org.getChildren();
+                if (children != null && !children.isEmpty()) {
+                    children.forEach(child -> validOrg(child.getId(), valid));
+                }
+            }
+        }
+        PersonAccountTuple manager = null;
+        List<PersonAccountTuple> employees = new ArrayList<>();
+        if (org.getManager() != null && !StringUtils.isBlank(org.getManager().getId())) {
+            manager = getPersonInfo(org.getManager().getId());
+        }
+        if (org.getEmployees() != null && !org.getEmployees().isEmpty()) {
+            org.getEmployees().forEach(employee -> {
+                if (employee != null && !StringUtils.isBlank(employee.getId())) {
+                    employees.add(getPersonInfo(employee.getId()));
+                }
+            });
+        }
+        return new OrgInfo(org, manager, employees);
+    }
+
+    @Override
     public OrgInfo getOrgInfo(String orgId) {
+        if (StringUtils.isBlank(orgId)) {
+            if (logger.isErrorEnabled()) {
+                logger.error("The org's id is blank.");
+            }
+            throw new UserInterfaceSystemErrorException(
+                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            );
+        }
         Org org = accessor.getById(orgId, Org.class);
         if (org != null) {
             PersonAccountTuple manager = null;
@@ -399,12 +456,14 @@ public class BaseDataServiceImpl implements BaseDataService {
         }
         Account account = accessor.findOne(GeneralAccessor.ConditionTuple.eq("person", person),
                 Account.class);
-        if (account == null) {
+        AccountState accountState = null;
+        if (account != null) {
+            accountState = accountService.getAccountStateByAccountId(account.getId());
+        } else {
             if (logger.isWarnEnabled()) {
                 logger.warn(String.format("The person[%s] not be enabled a account.", person.getFullName()));
             }
         }
-        AccountState accountState = accountService.getAccountStateByAccountId(account.getId());
         return PersonAccountTuple.valueOf(person, account, accountState, getOrgByPerson(person));
     }
 
@@ -465,7 +524,7 @@ public class BaseDataServiceImpl implements BaseDataService {
                     logger.debug(String.format("Enable persion[%s]'s account sccuessfully, the eiim code: %s.",
                             person.getFullName(), account.getEiimCode()));
                 }
-                return PersonAccountTuple.valueOf(person, account, getOrgByPerson(person));
+                return PersonAccountTuple.valueOf(person, account, null, getOrgByPerson(person));
             } catch (Exception ex) {
                 if (logger.isErrorEnabled()) {
                     logger.error("Save account info fail.", ex);
@@ -484,6 +543,53 @@ public class BaseDataServiceImpl implements BaseDataService {
                     UserInterfaceRbacErrorException.RbacErrors.ACCOUNT_HAS_EXIST
             );
         }
+    }
+
+    @Override
+    public PersonAccountTuple   validPersonAccount(String personId, boolean valid) {
+        if (StringUtils.isBlank(personId)) {
+            if (logger.isErrorEnabled()) {
+                logger.error("The person's id is blank.");
+            }
+            throw new UserInterfaceSystemErrorException(
+                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            );
+        }
+        Person person = accessor.getById(personId, Person.class);
+        if (person == null) {
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format("The person[%s] not found.", personId));
+            }
+            throw new UserInterfaceRbacErrorException(
+                    UserInterfaceRbacErrorException.RbacErrors.USER_NOT_FOUND
+            );
+        }
+        if (valid == person.isValid()) {
+            if (logger.isWarnEnabled()) {
+                logger.warn(String.format("The person[%s]'s valid: %s, input valid: %s.",
+                        person.getId(), person.isValid(), valid));
+            }
+        } else {
+            person.setValid(valid);
+            person = accessor.save(person);
+        }
+        Account account = accessor.findOne(GeneralAccessor.ConditionTuple.eq("person", person), Account.class);
+        if (account == null) {
+            if (logger.isWarnEnabled()) {
+                logger.warn(String.format("The person[%s] not enable the account, please enable it at first.", person.getId()));
+            }
+        } else {
+            if (valid == account.isValid()) {
+                if (logger.isWarnEnabled()) {
+                    logger.warn(String.format("The account[%s]'s valid: %s, input valid: %s.",
+                            account.getId(), account.isValid(), valid));
+                }
+            } else {
+                account.setValid(valid);
+                account = accessor.save(account);
+            }
+        }
+        return PersonAccountTuple.valueOf(person, account, null, getOrgByPerson(person));
     }
 
     private boolean passwordStrength(String password) {

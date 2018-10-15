@@ -100,11 +100,9 @@ export default {
     createSession () {
       let session = this.session ? this.session : {}
       let names = ''
-      console.log(this.GLOBAL.account)
       let accountCodes = [this.GLOBAL.account.account.code]
 
       this.sessionMemberList.forEach(member => {
-        console.log(member)
         names += member.nickname
         accountCodes.push(member.code)
       })
@@ -118,7 +116,6 @@ export default {
       session.accountCodes = accountCodes
 
       if (this.isNew || (!this.isGroup && session.accountCodes.length > 2)) {
-        console.log(session)
         this.$store.dispatch('chatroom/api_new_chatroom', session).then((data) => {
           this.dialogVisible = false
         })

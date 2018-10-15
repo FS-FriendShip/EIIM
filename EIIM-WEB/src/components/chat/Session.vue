@@ -1,24 +1,35 @@
 <template>
-  <div class="list">
+  <div class="session">
     <el-container>
       <el-header style="padding:10px">
         <el-row>
-          <input class="search" type="text" v-model="key" placeholder="search user..." @keyup="searchSession">
-          <el-button icon="iconfont icon-add" circle="true" @click="showSessionDialog"></el-button>
+          <el-input
+            placeholder="检索"
+            class="search"
+            @keyup.native="searchSession"
+            prefix-icon="el-icon-search"
+            v-model="key">
+          </el-input>
+
+          <el-button icon="iconfont icon-add" @click="showSessionDialog" size="mini"></el-button>
         </el-row>
       </el-header>
 
-      <el-main style="padding:10px">
+      <el-main class="session-list">
         <vue-context-menu :contextMenuData="contextMenuData"
                           @topSession="topSession"
                           @deleteSession="deleteSession">
         </vue-context-menu>
 
-        <el-row class="session-item" :gutter="50" v-for="item in sessions"  @click.native="selectSession(item.id)" :key="item.id" @contextmenu.native="showMenu(item.id)">
-          <el-col :span="4"><img class="avatar-large" :src="'/rest/v1/download/' + item.id"></el-col>
+        <el-row align="middle" class="session-item" v-bind:class="item.active ? 'active':''" :gutter="50" v-for="item in sessions"  @click.native="selectSession(item)" :key="item.id" @contextmenu.native="showMenu(item.id)">
+          <el-col :span="4"><el-badge :value="item.unread" class="item"><img class="avatar-large" :src="'/rest/v1/download/' + item.creator.avatar"></el-badge></el-col>
           <el-col :span="20">
-            <span>{{item.name}}</span>
-            <p>{{item.latestMessage}}</p>
+            <div>
+              <span class="title">{{item.name}}</span><span class="sentTime">{{(item.latestMessage?item.latestMessage.sentTime:null) | formatDate('session')}}</span>
+            </div>
+            <div class="subtitle">
+              <span v-html="item.subtitle"></span>
+            </div>
           </el-col>
         </el-row>
       </el-main>
@@ -30,8 +41,7 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import SessionDialog from '../components/SessionDialog'
-
+import SessionDialog from './SessionDialog'
 export default {
   name: 'Profile',
   components: {SessionDialog},
@@ -65,7 +75,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters({sessions: 'chatroom/api_get_chatrooms', userList: 'contact/api_contact_List'})
+    ...mapGetters({sessions: 'chatroom/api_get_chatrooms', search: 'chatroom/api_search_chatroom', userList: 'contact/api_contact_List'})
   },
 
   methods: {
@@ -94,9 +104,13 @@ export default {
       this.$store.dispatch('chatroom/api_delete_chatroom', this.contextMenuItemId)
     },
 
-    selectSession (sessionId) {
-      console.log(sessionId)
-      this.$store.dispatch('chatroom/api_select_chatroom', sessionId)
+    /**
+     *
+     * @param sessionId
+     */
+    selectSession (session) {
+      let params = {session: session, account: this.GLOBAL.account.account}
+      this.$store.dispatch('chatroom/api_select_chatroom', params)
     },
 
     showSessionDialog () {
@@ -111,29 +125,23 @@ export default {
 
     searchSession (e) {
       let key = this.key
-      if (key) {
-        this.sessions = this.sessions.filter(session => {
-          return session.name.includes(key)
-        })
-      }
+      this.search(key)
     }
   }
 }
 </script>
 
 <style scoped lang="less">
-  .list {
+  .session {
     .session-item {
+      margin-top:10px;
       padding:5px 0px;
-      border-bottom: 1px solid #292C33;
+      border-bottom: 1px solid #EAEAEA;
       cursor: pointer;
       transition: background-color .1s;
 
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.03);
-      }
       &.active {
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: #EAEAEA;
       }
     }
     .avatar, .name {
@@ -148,24 +156,54 @@ export default {
     }
   }
 
+  .session .session-list {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 800px;
+    padding-top: 0px;
+  }
+
   .search {
     padding: 0 10px;
     width: 75%;
     font-size: 12px;
-    color: #fff;
-    height: 50px;
-    line-height: 30px;
-    border: solid 1px #3a3a3a;
+    height: 20px;
+    line-height: 20px;
     border-radius: 4px;
     outline: none;
-    background-color: #26292E;
   }
 
   .session-item .title {
-    /*font-weight: bolder;*/
+    color: #000;
+    font-size: 14px;
+    padding-left:10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    white-space:nowrap;
+    width:150px;
+    height:24px;
+    display:block;
+    float:left;
+  }
+
+  .session-item .sentTime {
+    color: #A1A1A1;
+    font-size:12px;
+    padding-left:10px;
+    float:right;
   }
 
   .session-item .subtitle {
-    /*font-weight: lighter;*/
+    color: #A1A1A1;
+    font-size:12px;
+    width: 200px;
+    height: 28px;
+    padding-left:10px;
+    margin-top:10px;
+    line-height: 28px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 </style>

@@ -30,6 +30,8 @@ public interface BaseDataService {
 
     OrgInfo saveOrgInfo(Org org);
 
+    OrgInfo validOrg(String orgId, boolean valid);
+
     OrgInfo getOrgInfo(String orgId);
 
     List<PersonAccountTuple> getAllPersons();
@@ -39,6 +41,8 @@ public interface BaseDataService {
     PersonAccountTuple getPersonInfo(String personId);
 
     PersonAccountTuple enablePersonAccount(String personId, AccountInitialInfo accountInfo);
+
+    PersonAccountTuple validPersonAccount(String personId, boolean valid);
 
     void changeAccountPassword(String accountCode, String oldPassword, String newPassword);
 

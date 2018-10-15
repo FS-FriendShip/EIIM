@@ -1,21 +1,22 @@
 <template>
   <div class="message">
-    <ul v-if="session">
+    <ul id="message-list" v-if="session">
       <li v-for="item in session.messages" :key="item.id">
         <p v-if="item.showTime" class="time">
-          <span>{{ item.sentTime | formatDate}}</span>
+          <span>{{ item.sentTime | formatDate('message')}}</span>
         </p>
         <div class="main" v-if = "item.sender" :class="item.owner==='self'?'self':'other'">
-          <img class="avatar avatar-medium" :src="item.sender.avatar"/>
-          <div v-if="item.messageType=='TEXT'" class="text">{{ item.message.text }}</div>
+          <img class="avatar avatar-medium" :src="'/rest/v1/download/' +    item.sender.avatar"/>
+          <div v-if="item.messageType=='TEXT'" class="text" v-html="item.message.text"></div>
           <div v-else-if="item.messageType=='FILE' && ['png','jpg'].includes(item.message.fileType)" class="file-img">
             <img :src="'/rest/v1/download/'+item.message.id"/>
           </div>
           <div v-else-if="item.messageType=='FILE'" class="file">
             <a style=" text-decoration: none;"  :href="'/rest/v1/download/' + item.message.id">
               <div style="float:left;">
-                <img v-if="['xls','xlsx'].includes(item.message.fileType)" src="../assets/file_excel.png" height="60px" width="60px">
-                <img v-else-if="['doc','docx'].includes(item.message.fileType)" src="../assets/file_word.png" height="60px" width="60px">
+                <img v-if="['xls','xlsx'].includes(item.message.fileType)" src="../../assets/file_excel.png" height="60px" width="60px">
+                <img v-else-if="['doc','docx'].includes(item.message.fileType)" src="../../assets/file_word.png" height="60px" width="60px">
+                <img v-else src="../../assets/file.png" height="60px" width="60px">
               </div>
               <div style="padding-left:20px">
                 <span class="file-name">
@@ -36,7 +37,6 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import {dateFormat} from '../common/utils'
 
 export default {
   name: 'Message',
@@ -48,13 +48,13 @@ export default {
   created () {
   },
 
-  filters: {
-    // 将日期过滤为 hour:minutes
-    formatDate (time) {
-      var date = new Date(time)
-      return dateFormat(date, 'yyyy-MM-dd hh:mm')
-    }
+  updated: function () {
+    this.$nextTick(function () {
+      var messageList = this.$el.querySelector('#message-list')
+      messageList.scrollTop = messageList.scrollHeight
+    })
   },
+
   directives: {
     // 发送消息后滚动到底部
     'scroll-bottom' () {
@@ -85,6 +85,10 @@ export default {
   .message {
     padding: 20px;
     overflow-y: scroll;
+
+    ul {
+      padding-left:0px;
+    }
 
     li {
       margin-bottom: 15px;
@@ -144,7 +148,7 @@ export default {
       border-radius: 4px;
 
       .file-excel {
-        background-image: url('../assets/file_excel.png');
+        background-image: url('../../assets/file_excel.png');
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-position: right;

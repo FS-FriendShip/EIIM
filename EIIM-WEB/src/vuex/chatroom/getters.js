@@ -7,6 +7,28 @@ export default {
    */
   api_get_chatrooms: (state, getters) => {
     let chatrooms = state.chatrooms
+    if (chatrooms) {
+      chatrooms.forEach(chatroom => {
+        let latestMessage = chatroom.latestMessage
+        if (latestMessage) {
+          let subtitle = ''
+
+          let account = JSON.parse(localStorage.getItem('account-key')).account.account
+          if (account.code !== latestMessage.sender.code) {
+            subtitle += latestMessage.sender.nickname
+            subtitle += ':'
+          }
+
+          if (latestMessage.messageType === 'FILE') {
+            subtitle += latestMessage.message.fileName
+          } else if (latestMessage.messageType === 'TEXT') {
+            subtitle += latestMessage.message.text
+          }
+
+          chatroom.subtitle = subtitle
+        }
+      })
+    }
     return chatrooms
   },
 
@@ -50,13 +72,14 @@ export default {
    */
   api_search_chatroom: (state, getters) => {
     return function (key) {
+      let sessions = localStorage.getItem('Chatrooms') ? JSON.parse(localStorage.getItem('Chatrooms')) : []
+
       if (key) {
-        let sessions = state.chatrooms.filter(session => {
+        state.chatrooms = sessions.filter(session => {
           return session.name.includes(key)
         })
-        return sessions
       } else {
-        return state.chatrooms
+        state.chatrooms = sessions
       }
     }
   },

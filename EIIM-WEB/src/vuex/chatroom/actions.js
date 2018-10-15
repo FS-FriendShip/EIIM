@@ -15,22 +15,48 @@ export default {
   api_get_chatrooms: ({commit}, account) => {
     let accountCode = account.code
     api.getChatrooms(accountCode).then(res => {
-      console.log(res)
       commit(types.UPDATE_CHATROOM, {chatrooms: res.data, accountCode: accountCode})
     })
   },
 
   /**
-   * 获取聊天室消息
+   * 选择聊天室
    * @param commit
-   * @param account
+   * @param roomId
    */
-  api_get_chatroom: ({commit}, roomId, account) => {
-    let accountCode = account.accountCode
-    api.getUnreadChatMsg(roomId, accountCode).then(res => {
-      res.data.forEach(room => (room.msgs = {}))
-      commit(types.UPDATE_CHATROOM_MESSAGE, roomId, res.data)
-    })
+  api_select_chatroom: ({commit}, params) => {
+    let session = params.session
+    if (session && session.id) {
+      let latestMessageId = 0
+      if (session.latestMessage) {
+        latestMessageId = session.latestMessage.id
+      }
+
+      let account = params.account
+      let apiParams = {
+        accountCode: account.code,
+        sessionId: session.id,
+        lastMessageId: latestMessageId,
+        direction: 'FORWARD',
+        pageable: false
+      }
+      api.getChatroom(apiParams).then(res => {
+        if (res.data) {
+          res.data.forEach(message => {
+            message.chatRoomId = session.id
+            if (account.code === message.sender.code) {
+              message.owner = 'self'
+            } else {
+              message.owner = 'other'
+            }
+
+            commit(types.UPDATE_CHATROOM_MESSAGE, message)
+          })
+        }
+
+        commit(types.SELECT_CHATROOM, session.id)
+      })
+    }
   },
 
   /**
@@ -92,7 +118,6 @@ export default {
    * @param data
    */
   api_send_file_message: ({commit}, data) => {
-    console.log(data)
     websocket.send({
       chatRoomId: data.sessionId,
       messageType: 'FILE',
@@ -125,15 +150,6 @@ export default {
     message.id = messageId
     delete message.chatMessageId
     commit(types.UPDATE_CHATROOM_MESSAGE, message)
-  },
-
-  /**
-   * 选择聊天室
-   * @param commit
-   * @param roomId
-   */
-  api_select_chatroom: ({commit}, roomId) => {
-    commit(types.SELECT_CHATROOM, roomId)
   },
 
   /**

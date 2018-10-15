@@ -1,5 +1,6 @@
 package com.fs.eiim.service;
 
+import com.fs.eiim.dal.entity.Account;
 import com.fs.eiim.dal.entity.AccountState;
 
 import java.util.List;
@@ -18,6 +19,8 @@ public interface AccountService {
     void logout(String accountId);
 
     AccountState getAccountStateByAccountId(String accountId);
+
+    Account valid(String accountId, boolean valid);
 
     List<AccountState> getAllAccountsStatus();
 }
