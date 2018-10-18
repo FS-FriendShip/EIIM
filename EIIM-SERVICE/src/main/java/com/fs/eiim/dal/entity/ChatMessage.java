@@ -33,6 +33,10 @@ public interface ChatMessage extends Base {
 
     void setMessageByType(Message message);
 
+    enum MessageType {
+        TEXT, FILE
+    }
+
     interface Message {
         //
     }
@@ -51,7 +55,7 @@ public interface ChatMessage extends Base {
     }
 
     class FileMessage implements Message {
-        private String id, fileName, fileType;
+        private String id, fileName, fileType, fileDescribe;
         private long fileSize;
 
         public FileMessage(Attachment attachment) {
@@ -60,6 +64,7 @@ public interface ChatMessage extends Base {
             this.fileName = attachment.getFileName();
             this.fileType = attachment.getFileType();
             this.fileSize = attachment.getFileSize();
+            this.fileDescribe = attachment.getFileDescribe();
         }
 
         public String getId() {
@@ -77,9 +82,9 @@ public interface ChatMessage extends Base {
         public long getFileSize() {
             return fileSize;
         }
-    }
 
-    enum MessageType {
-        TEXT, FILE
+        public String getFileDescribe() {
+            return fileDescribe;
+        }
     }
 }

@@ -14,14 +14,15 @@ public interface FileTransformService {
     FileDownloadBean downloadFile(String uuid);
 
     class FileUploadBean {
-        private String id, fileName, fileType;
+        private String id, fileName, fileType, fileDescribe;
         private long fileSize;
 
-        public FileUploadBean(String id, String fileName, String fileType, long fileSize) {
+        public FileUploadBean(String id, String fileName, String fileType, String fileDescribe, long fileSize) {
             super();
             this.id = id;
             this.fileName = fileName;
             this.fileType = fileType;
+            this.fileDescribe = fileDescribe;
             this.fileSize = fileSize;
         }
 
@@ -40,18 +41,23 @@ public interface FileTransformService {
         public long getFileSize() {
             return fileSize;
         }
+
+        public String getFileDescribe() {
+            return fileDescribe;
+        }
     }
 
     class FileDownloadBean {
         private File file;
-        private String fileName, fileType;
+        private String fileName, fileType, fileDescribe;
         private long fileSize;
 
-        public FileDownloadBean(File file, String fileName, String fileType, long fileSize) {
+        public FileDownloadBean(File file, String fileName, String fileType, String fileDescribe, long fileSize) {
             super();
             this.file = file;
             this.fileName = fileName;
             this.fileType = fileType;
+            this.fileDescribe = fileDescribe;
             this.fileSize = fileSize;
         }
 
@@ -69,6 +75,10 @@ public interface FileTransformService {
 
         public long getFileSize() {
             return fileSize;
+        }
+
+        public String getFileDescribe() {
+            return fileDescribe;
         }
     }
 }

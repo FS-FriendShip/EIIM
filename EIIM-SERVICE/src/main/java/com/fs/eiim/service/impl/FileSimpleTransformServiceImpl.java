@@ -2,6 +2,7 @@ package com.fs.eiim.service.impl;
 
 import com.fs.eiim.dal.entity.Attachment;
 import com.fs.eiim.error.UserInterfaceEiimErrorException;
+import com.fs.eiim.service.FileDescribeCheckService;
 import com.fs.eiim.service.FileTransformService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,11 +30,14 @@ public class FileSimpleTransformServiceImpl implements FileTransformService {
     private String uploadRootPath;
 
     private GeneralAccessor generalAccessor;
+    private FileDescribeCheckService fileDescribeCheckService;
 
     @Autowired
-    public FileSimpleTransformServiceImpl(@Qualifier("generalAccessorMongodb") GeneralAccessor generalAccessor) {
+    public FileSimpleTransformServiceImpl(@Qualifier("generalAccessorMongodb") GeneralAccessor generalAccessor,
+                                          FileDescribeCheckService fileDescribeCheckService) {
         super();
         this.generalAccessor = generalAccessor;
+        this.fileDescribeCheckService = fileDescribeCheckService;
     }
 
     @Override
@@ -59,10 +63,13 @@ public class FileSimpleTransformServiceImpl implements FileTransformService {
                 logger.debug(String.format("Upload the file[%s] successfully, path: %s/%s.",
                         fileName, path, name));
             }
-            long size = Files.size(Paths.get(path, name));
+            Path filePath = Paths.get(path, name);
+            long size = Files.size(filePath);
             attachment.setFileSize(size);
-            generalAccessor.save(attachment);
-            return new FileUploadBean(uuid, fileName, fileType, size);
+            attachment.setFileDescribe(fileDescribeCheckService.checkFileDescribe(filePath.toFile()));
+            attachment = generalAccessor.save(attachment);
+            return new FileUploadBean(attachment.getId(), attachment.getFileName(), attachment.getFileType(),
+                    attachment.getFileDescribe(), attachment.getFileSize());
         } catch (IOException ex) {
             if (logger.isErrorEnabled()) {
                 logger.error(String.format("Save the file[%s] from input stream fail.", path));
@@ -104,6 +111,6 @@ public class FileSimpleTransformServiceImpl implements FileTransformService {
             );
         }
         return new FileDownloadBean(pathFile.toFile(), attachment.getFileName(),
-                attachment.getFileType(), attachment.getFileSize());
+                attachment.getFileType(), attachment.getFileDescribe(), attachment.getFileSize());
     }
 }
