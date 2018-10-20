@@ -18,7 +18,7 @@
           </el-col>
         </el-row>
         <el-row class="message-body">
-          <Message v-on:toggleSessionInfo="toggleSessionInfo"></Message>
+          <Message v-bind:style="{height:messageHeight}" v-on:toggleSessionInfo="toggleSessionInfo"></Message>
           <SessionInfo v-show="showSessionInfo" :session="session"></SessionInfo>
         </el-row>
         <el-row class="message-footer">
@@ -44,7 +44,8 @@ export default {
 
   data () {
     return {
-      showSessionInfo: false
+      showSessionInfo: false,
+      messageHeight: (window.innerHeight - 200) + 'px'
     }
   },
 
@@ -74,6 +75,13 @@ export default {
     ...mapGetters({session: 'chatroom/api_get_chatroom', user: 'account/api_current_account'})
   },
 
+  mounted () {
+    const that = this
+    window.onresize = function windowResize () {
+      that.messageHeight = (window.innerHeight - 200) + 'px'
+    }
+  },
+
   directives: {
     upload: {
       bind (el) {
@@ -101,6 +109,10 @@ export default {
     text-align: left;
     color: #fff;
     background: #fff;
+  }
+
+  #Main .chat .session {
+    width:400px!important;
   }
 
   #Main .message-main{
@@ -136,13 +148,13 @@ export default {
   #Main .message-main .message-body{
     padding:0px;
     width: 100%;
-    height:700px;
-    overflow: auto;
+    /*height:650px;*/
   }
 
   #Main .message-main .message-footer{
+    bottom:0px;
     padding:0px;
     width: 100%;
-    height:200px;
+    height: 150px;
   }
 </style>

@@ -60,6 +60,37 @@ export default {
   },
 
   /**
+   * 获取所未读消息
+   * @param commit
+   * @param params
+   */
+  api_get_unread: ({commit}, params) => {
+    let latestMessageId = 0
+    let account = params.account
+    let apiParams = {
+      accountCode: account.code,
+      lastMessageId: latestMessageId,
+      direction: 'FORWARD',
+      pageable: false
+    }
+    api.getUnreadMessages(apiParams).then(res => {
+      if (res.data) {
+        res.data.forEach(room => {
+          room.messages.forEach(message => {
+            if (account.code === message.sender.code) {
+              message.owner = 'self'
+            } else {
+              message.owner = 'other'
+            }
+          })
+        })
+
+        commit(types.UPDATE_CHATROOM, res.data)
+      }
+    })
+  },
+
+  /**
    * 新建聊天室
    * @param commit
    * @param contact
@@ -159,6 +190,7 @@ export default {
    */
   api_upload_file: ({commit}, data) => {
     let formData = new FormData()
+    console.log(data)
     formData.append('file', data.file)
     formData.append('type', data.file.type)
 

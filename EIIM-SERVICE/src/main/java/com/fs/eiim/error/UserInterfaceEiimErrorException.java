@@ -58,6 +58,7 @@ public class UserInterfaceEiimErrorException extends UserInterfaceException {
         CHATROOM_MEMBER_STATE_SAVE_FAIL("保存指定聊天成员状态失败。"),
 
         CHATROOM_MESSAGE_SAVE_FAIL("保存指定的聊天消息失败。"),
+        CHATROOM_MESSAGE_NOT_FOUND("指定的聊天消息不存在。"),
 
         CHATROOM_NOTICE_SAVE_FAIL("保存指定的聊天室公告失败。"),
 

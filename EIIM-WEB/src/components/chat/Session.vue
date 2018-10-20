@@ -22,7 +22,7 @@
         </vue-context-menu>
 
         <el-row align="middle" class="session-item" v-bind:class="item.active ? 'active':''" :gutter="50" v-for="item in sessions"  @click.native="selectSession(item)" :key="item.id" @contextmenu.native="showMenu(item.id)">
-          <el-col :span="4"><el-badge :value="item.unread" class="item"><img class="avatar-large" :src="'/rest/v1/download/' + item.creator.avatar"></el-badge></el-col>
+          <el-col :span="4"><el-badge :value="item.unread" class="item"><img class="avatar-large" :src="item.creator.avatar"></el-badge></el-col>
           <el-col :span="20">
             <div>
               <span class="title">{{item.name}}</span><span class="sentTime">{{(item.latestMessage?item.latestMessage.sentTime:null) | formatDate('session')}}</span>

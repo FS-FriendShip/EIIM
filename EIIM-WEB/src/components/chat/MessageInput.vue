@@ -1,5 +1,5 @@
 <template>
-  <div id="editbox" class="box" contenteditable="true" v-html="innerText" @keyup="changeTxt($event)" @focus="lock=true" @blur="lock=false">
+  <div id="editbox" class="box" contenteditable="true" v-html="innerText" v-bind:style="{background:bgColor}" @keyup="changeTxt($event)" @focus="focus('editbox')" @blur="blur('editbox')">
 
   </div>
 </template>
@@ -9,13 +9,14 @@ export default {
   name: 'MessageInput',
   data: function () {
     return {
-      innerText: this.content.txt
+      innerText: this.content.txt,
+      bgColor: '#eee'
     }
   },
   props: {
     content: {
       type: Object,
-      default:  {txt: ''}
+      default: {txt: ''}
     }
   },
   watch: {
@@ -36,6 +37,16 @@ export default {
         this.$emit('send')
         this.$el.innerHTML = ''
       }
+    },
+
+    focus: function () {
+      this.lock = true
+      this.bgColor = '#fff'
+    },
+
+    blur: function () {
+      this.lock = false
+      this.bgColor = '#eee'
     }
   }
 }

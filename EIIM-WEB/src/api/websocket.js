@@ -1,4 +1,6 @@
 import store from '../vuex'
+import { Message } from 'element-ui'
+
 export default {
   name: 'websocket',
 
@@ -18,12 +20,16 @@ export default {
       let account = JSON.parse(localStorage.getItem('account-key')).account
       this.account = account
       if (!this.websocket || this.websocket.readyState !== 1) {
-        //const wsuri = 'ws://localhost:9997/notify' // ws地址
-        // const wsuri = 'ws://60.173.195.18:60993/notify'
+        let websocketPrefix = 'ws://'
+        let http = window.location.href
+        if (http.substr(0, 5) === 'https') {
+          websocketPrefix = '"wss://"'
+        }
+
+        const wsuri = websocketPrefix + process.env.WEBSOCKET_ENV + '/notify'// ws地址
         this.websocket = new WebSocket(wsuri)
         this.websocket.onopen = () => {
           this.register()
-          console.log('WebSocket连接成功')
         }
 
         this.websocket.onerror = this.websocketonerror
@@ -95,7 +101,7 @@ export default {
   },
 
   websocketonerror (e) { // 错误
-    console.log('WebSocket连接发生错误')
+    Message.error('WebSocket连接发生错误。异常码=' + e.code)
   },
 
   websocketonmessage (e) { // 数据接收
@@ -126,6 +132,6 @@ export default {
   },
 
   websocketclose (e) { // 关闭
-    console.log('connection closed (' + e.code + ')')
+    Message.error('WebSocket连接关闭。关闭码=' + e.code)
   }
 }

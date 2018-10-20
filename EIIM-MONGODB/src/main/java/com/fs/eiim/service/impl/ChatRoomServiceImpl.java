@@ -3,6 +3,7 @@ package com.fs.eiim.service.impl;
 import com.fs.eiim.dal.entity.*;
 import com.fs.eiim.error.UserInterfaceEiimErrorException;
 import com.fs.eiim.service.ChatRoomService;
+import com.mongodb.DBRef;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bson.Document;
@@ -516,8 +517,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         LookupOperation lookup = LookupOperation.newLookup().from("attachment")
                 .localField("message").foreignField("_id").as("attachments");
         AggregationOperation match = Aggregation.match(Criteria.where("messageType").is("FILE")
-                .andOperator(Criteria.where("chatRoom").is(template.getConverter().toDBRef(chatRoom, null))
-                        .andOperator(Criteria.where("sentTime").gte(lastAccessTime))));
+                .andOperator(Criteria.where("chatRoom").is(new DBRef("chatRoom", chatRoom)))
+                .andOperator(Criteria.where("sentTime").gte(lastAccessTime)));
         List<ChatMessage> fileMessages = getFileChatMessageByAggregate(lookup, match);
         if (!fileMessages.isEmpty()) {
             result.addAll(fileMessages);
@@ -609,6 +610,10 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 sentTime = chatMessage.getSentTime();
             }
         }
+        return getUnreadMessages(direction, sentTime, chatRoom, pagination);
+    }
+
+    private List<ChatMessage> getUnreadMessages(Direction direction, long sentTime, ChatRoom chatRoom, Pagination pagination) {
         GeneralAccessor.ConditionGroup group;
         AggregationOperation match;
         if (direction == Direction.FORWARD) {
@@ -619,7 +624,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                     GeneralAccessor.ConditionTuple.eq("messageType", "TEXT")
             );
             match = Aggregation.match(Criteria.where("messageType").is("FILE")
-                    .andOperator(Criteria.where("chatRoom").is(template.getConverter().toDBRef(chatRoom, null))
+                    .andOperator(Criteria.where("chatRoom").is(new DBRef("chatRoom", chatRoom))
                             .andOperator(Criteria.where("sentTime").gte(sentTime + 1))));
         } else {
             // 旧消息
@@ -629,7 +634,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                     GeneralAccessor.ConditionTuple.eq("messageType", "TEXT")
             );
             match = Aggregation.match(Criteria.where("messageType").is("FILE")
-                    .andOperator(Criteria.where("chatRoom").is(template.getConverter().toDBRef(chatRoom, null))
+                    .andOperator(Criteria.where("chatRoom").is(new DBRef("chatRoom", chatRoom))
                             .andOperator(Criteria.where("sentTime").lte(sentTime - 1))));
         }
         List<ChatMessage> result = new ArrayList<>();
@@ -648,6 +653,46 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             result.addAll(fileMessages);
         }
         return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see ChatRoomService#getMessagesByRequest(String, String, Direction, Pagination)
+     */
+    @Override
+    public List<ChatMessage> getMessagesByRequest(String accountCode, String lastMessageId,
+                                                  Direction direction, Pagination pagination) {
+        if (StringUtils.isBlank(accountCode) || StringUtils.isBlank(lastMessageId)) {
+            if (logger.isErrorEnabled()) {
+                logger.error("The the account's code or the last message's id is blank.");
+            }
+            throw new UserInterfaceSystemErrorException(
+                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            );
+        }
+        long sentTime;
+        ChatMessage chatMessage = accessor.getById(lastMessageId, ChatMessage.class);
+        if (chatMessage == null) {
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format("The chat message[%s] not found.", lastMessageId));
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.CHATROOM_MESSAGE_NOT_FOUND
+            );
+        } else {
+            sentTime = chatMessage.getSentTime();
+        }
+        ChatRoom chatRoom = chatMessage.getChatRoom();
+        if (!hasMember(chatRoom, accountCode)) {
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format("The account[%s] not in the chat room[%s].", accountCode, chatRoom.getId()));
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.CHATROOM_MEMBER_NOT_FOUND
+            );
+        }
+        return getUnreadMessages(direction, sentTime, chatRoom, pagination);
     }
 
     /**

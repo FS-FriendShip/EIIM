@@ -75,6 +75,17 @@ export default {
   },
 
   /**
+   *
+   * @param params
+   * @returns {Promise}
+   */
+  getUnreadMessages (params) {
+    let accountCode = params.accountCode
+    delete params['accountCode']
+    return post('/v1/chatRooms/accounts/' + accountCode + '/messages', params)
+  },
+
+  /**
    * 新开一个聊天室
    * @param chatRoom
    * @returns {Promise}
@@ -175,17 +186,6 @@ export default {
    */
   getContact (personId) {
     return get('/v1/persons/' + personId)
-  },
-
-  /**
-   * 获取某个用户在聊天室中未读消息
-   * @param accountCode
-   * @param roomId
-   * @param fromIndex
-   * @returns {Promise}
-   */
-  getUnreadChatMsg (accountCode, roomId, fromIndex) {
-    return get('/v1/chatRooms/' + roomId + '/accounts/' + accountCode + '/unread')
   },
 
   /**

@@ -9,7 +9,7 @@
 
           <ul style="height:400px; margin-top: 20px; overflow: auto">
             <li v-for="item in availableUserList" :key="item.id" class="user-wrap">
-              <img class="avatar-small" :src="'/rest/v1/download/' + item.id">
+              <img class="avatar-small" :src="item.account.avatar">
               <p class="name">{{item.account.nickname}}</p>
               <el-checkbox v-model="item.checked" :name="item.id" width="10%" :key="item.id" @change="selectUser(item)"></el-checkbox>
             </li>
@@ -24,7 +24,7 @@
           </el-row>
           <ul style="margin-top: 20px">
             <li v-if="sessionMemberList" v-for="item in sessionMemberList" :key="item.id" class="user-wrap">
-              <img class="avatar-small" :src="'/rest/v1/download/' + item.id">
+              <img class="avatar-small" :src="item.avatar">
               <p class="name">{{item.nickname}}</p>
               <i class="el-icon-remove" @click="unselectUser(item.id)"></i>
             </li>

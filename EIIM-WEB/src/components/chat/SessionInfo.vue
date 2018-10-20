@@ -2,10 +2,10 @@
   <div id="SessionInfo" class="SessionInfo" v-if="activeSession">
     <el-container>
       <el-header height="40px"><el-button class="button-add" icon="iconfont icon-add" @click="showSessionDialog">添加成员</el-button></el-header>
-      <el-main style="padding:5px">
-        <ul>
+      <el-main style="padding:0px 5px">
+        <ul style="padding:0px;">
           <li v-for="item in activeSession.members"  :key="item.account.id" class="user-wrap">
-            <img class="avatar-small" :src="'/rest/v1/download/' + item.account.id">
+            <img class="avatar-small" :src="item.account.avatar">
             <p class="name">{{item.account.nickname}}</p>
           </li>
         </ul>

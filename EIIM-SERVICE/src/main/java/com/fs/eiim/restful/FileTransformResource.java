@@ -44,9 +44,10 @@ public class FileTransformResource {
         FileTransformService.FileDownloadBean downloadBean = fileTransformService.downloadFile(uuid);
         if (downloadBean != null) {
             try {
-                String filename = URLEncoder.encode(downloadBean.getFileName(), "utf-8");
+                String filename = URLEncoder.encode(downloadBean.getFileName(), "UTF-8");
                 return Response.ok(downloadBean.getFile())
-                        .header("Content-disposition", "attachment;filename=" + filename)
+                        .header("Content-disposition", "attachment;filename* = UTF-8''" + filename)
+                        .header("Content-Length", downloadBean.getFileSize())
                         .header("Cache-Control", "no-cache").build();
             } catch (UnsupportedEncodingException ex) {
                 throw new UserInterfaceSystemErrorException(

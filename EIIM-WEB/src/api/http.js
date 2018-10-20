@@ -4,7 +4,7 @@ import { Message } from 'element-ui'
 // 创建axios实例 application/x-www-data-urlencoded  application/json
 axios.defaults.timeout = 5000
 // axios.defaults.baseURL = 'http://121.40.51.91:8088/rest'
-axios.defaults.baseURL = '/rest'
+axios.defaults.baseURL = process.env.API_SERVER_ENV + '/rest/'
 
 var getAccount = function () {
   let account = localStorage.getItem('account-key') ? JSON.parse(localStorage.getItem('account-key')) : {}
@@ -38,7 +38,6 @@ axios.interceptors.request.use(
       }
     }
 
-    console.log(config)
     return config
   },
   error => {
@@ -49,7 +48,7 @@ axios.interceptors.request.use(
 // http response 拦截器
 axios.interceptors.response.use(
   response => {
-    console.log(response.data)
+    console.log(response)
     let errorCode = response.data.errorCode
     if (errorCode === 2) {
       this.$route.push({
@@ -57,8 +56,10 @@ axios.interceptors.response.use(
         querry: {redirect: this.$route.currentRoute.fullPath}// 从哪个页面跳转
       })
     } else if (errorCode !== 0) {
-      Message.error(response.data.errorMessage)
-      throw new Error(response.data.errorMessage)
+      if (response.config.url.indexOf('logout') < 0) {
+        Message.error(response.data.errorMessage)
+        throw new Error(response.data.errorMessage)
+      }
     }
 
     return response

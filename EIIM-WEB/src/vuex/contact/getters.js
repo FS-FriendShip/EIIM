@@ -4,6 +4,10 @@ export default {
     let contactsList = state.contacts
     contactsList.forEach(item => {
       item.checked = false
+
+      if (item.account && !item.account.avatar.startsWith('http')) {
+        item.account.avatar = process.env.FILE_SERVER_ENV + item.account.avatar
+      }
       return item
     })
     return contactsList.filter(item => item.account)
@@ -51,7 +55,6 @@ export default {
       }
     }
 
-    console.log(org)
     return org
   }
 }

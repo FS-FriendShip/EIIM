@@ -103,6 +103,7 @@ public class FileSimpleTransformServiceImpl implements FileTransformService {
                     UserInterfaceEiimErrorException.EiimErrors.FILE_NOT_FOUND
             );
         }
-        return new FileDownloadBean(pathFile.toFile(), attachment.getFileName());
+        return new FileDownloadBean(pathFile.toFile(), attachment.getFileName(),
+                attachment.getFileType(), attachment.getFileSize());
     }
 }

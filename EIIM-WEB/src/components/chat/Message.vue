@@ -1,18 +1,19 @@
 <template>
-  <div class="message">
+  <div id="message" class="message">
     <ul id="message-list" v-if="session">
       <li v-for="item in session.messages" :key="item.id">
         <p v-if="item.showTime" class="time">
           <span>{{ item.sentTime | formatDate('message')}}</span>
         </p>
         <div class="main" v-if = "item.sender" :class="item.owner==='self'?'self':'other'">
-          <img class="avatar avatar-medium" :src="'/rest/v1/download/' +    item.sender.avatar"/>
+          <img class="avatar avatar-medium" :src="item.sender.avatar"/>
           <div v-if="item.messageType=='TEXT'" class="text" v-html="item.message.text"></div>
           <div v-else-if="item.messageType=='FILE' && ['png','jpg'].includes(item.message.fileType)" class="file-img">
-            <img :src="'/rest/v1/download/'+item.message.id"/>
+            <img :src="item.message.id"/>
           </div>
+
           <div v-else-if="item.messageType=='FILE'" class="file">
-            <a style=" text-decoration: none;"  :href="'/rest/v1/download/' + item.message.id">
+            <a style=" text-decoration: none;"  :href="item.message.download">
               <div style="float:left;">
                 <img v-if="['xls','xlsx'].includes(item.message.fileType)" src="../../assets/file_excel.png" height="60px" width="60px">
                 <img v-else-if="['doc','docx'].includes(item.message.fileType)" src="../../assets/file_word.png" height="60px" width="60px">
@@ -50,8 +51,7 @@ export default {
 
   updated: function () {
     this.$nextTick(function () {
-      var messageList = this.$el.querySelector('#message-list')
-      messageList.scrollTop = messageList.scrollHeight
+      this.$el.scrollTop = this.$el.scrollHeight
     })
   },
 
@@ -83,11 +83,12 @@ export default {
     text-decoration: none;
   }
   .message {
-    padding: 20px;
     overflow-y: scroll;
+    padding: 20px 0px;
 
     ul {
       padding-left:0px;
+      padding: 0px 20px;
     }
 
     li {

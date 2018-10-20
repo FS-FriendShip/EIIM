@@ -40,6 +40,9 @@ public interface ChatRoomService {
     List<ChatMessage> getMessagesByRequest(String chatRoomId, String accountCode, String lastMessageId,
                                            Direction direction, Pagination pagination);
 
+    List<ChatMessage> getMessagesByRequest(String accountCode, String lastMessageId,
+                                           Direction direction, Pagination pagination);
+
     ChatMessage saveChatMessage(String accoutnCode, String eiimCode, String chatRoomId, ChatMessage.MessageType messageType, String message);
 
     List<ChatNotice> getAllChatRoomNotices(String chatRoomId);

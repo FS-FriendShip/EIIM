@@ -8,7 +8,7 @@ import org.mx.dal.entity.Base;
  * @author john peng
  * Date time 2018/8/8 下午1:25
  */
-public interface ChatMessage extends Base {
+public interface    ChatMessage extends Base {
     ChatRoom getChatRoom();
 
     void setChatRoom(ChatRoom chatRoom);

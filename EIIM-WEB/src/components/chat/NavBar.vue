@@ -13,7 +13,7 @@
               </el-col>
 
               <el-col :span="12">
-                <img class="avatar-large" :src="'/rest/v1/download/' + currentUser.account.avatar">
+                <img class="avatar-large" :src="currentUser.account.avatar">
               </el-col>
             </el-row>
             <el-row style="margin-top:50px">
@@ -25,7 +25,7 @@
               </el-col>
             </el-row>
           </div>
-          <img class="avatar-large" :src="'/rest/v1/download/' + currentUser.account.avatar" slot="reference">
+          <img class="avatar-large" :src="currentUser.account.avatar" slot="reference">
         </el-popover>
 
         <AccountDialog v-on:setAccountDialogVisible="setAccountDialogVisible" :context="context" :show.sync="showAccountDialog"></AccountDialog>
@@ -87,6 +87,7 @@ export default {
 <style scoped lang="less">
   .card {
     padding:12px;
+    width:75px!important;
   }
   ///*.card {*/
     /*padding: 12px;*/

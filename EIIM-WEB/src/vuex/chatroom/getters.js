@@ -1,4 +1,6 @@
 import {dateFormat} from '../../common/utils'
+import { Message } from 'element-ui'
+
 export default {
   /**
    * 初始化聊天室信息。在系统启动时候调用
@@ -27,6 +29,10 @@ export default {
 
           chatroom.subtitle = subtitle
         }
+
+        if (!chatroom.creator.avatar.startsWith('http')) {
+          chatroom.creator.avatar = process.env.FILE_SERVER_ENV + chatroom.creator.avatar
+        }
       })
     }
     return chatrooms
@@ -39,26 +45,49 @@ export default {
    * @returns {function(*): T[]}
    */
   api_get_chatroom: (state, getters) => {
-    let roomId = state.selectedSessionId
     let chatroom = {}
-    if (roomId) {
-      chatroom = state.chatrooms[0]
 
+    if (state.selectedSessionId) {
+      let roomId = state.selectedSessionId
       if (roomId) {
-        chatroom = state.chatrooms.find(room => room.id === roomId)
-      }
+        if (roomId) {
+          chatroom = state.chatrooms.find(room => room.id === roomId)
+        }
 
-      let sentTime = ''
-      if (chatroom.messages) {
-        chatroom.messages.forEach(message => {
-          let dateTime = new Date(message.sentTime)
-          if (sentTime === dateFormat(dateTime, 'yyyy-MM-dd hh:mm')) {
-            message.showTime = false
-          } else {
-            message.showTime = true
-            sentTime = dateFormat(dateTime, 'yyyy-MM-dd hh:mm')
-          }
-        })
+        if (!chatroom) {
+          chatroom = state.chatrooms[0]
+        }
+
+        if (chatroom && chatroom.members) {
+          chatroom.members.forEach(member => {
+            if (!member.account.avatar.startsWith('http')) {
+              member.account.avatar = process.env.FILE_SERVER_ENV + member.account.avatar
+            }
+          })
+        }
+
+        let sentTime = ''
+        if (chatroom && chatroom.messages) {
+          chatroom.messages.forEach(message => {
+            let dateTime = new Date(message.sentTime)
+            if (sentTime === dateFormat(dateTime, 'yyyy-MM-dd hh:mm')) {
+              message.showTime = false
+            } else {
+              message.showTime = true
+              sentTime = dateFormat(dateTime, 'yyyy-MM-dd hh:mm')
+            }
+
+            if (message.sender && !message.sender.avatar.startsWith('http')) {
+              message.sender.avatar = process.env.FILE_SERVER_ENV + message.sender.avatar
+            }
+
+            if (message.messageType === 'FILE') {
+              if (!message.message.download || !message.message.download.startsWith('http')) {
+                message.message.download = process.env.FILE_SERVER_ENV + message.message.id
+              }
+            }
+          })
+        }
       }
     }
 

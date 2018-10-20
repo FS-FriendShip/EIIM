@@ -2,6 +2,7 @@
   "name": "eiim-web",
   "version": "1.0.0",
   "description": "EIIM WEB",
+  "main": "electron.js",
   "author": "Tony Zhang",
   "private": true,
   "scripts": {
@@ -10,7 +11,8 @@
     "e2e": "node test/e2e/runner.js",
     "test": "npm run e2e",
     "lint": "eslint --ext .js,.vue src test/e2e/specs",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "electron_dev": "npm run build && electron build/electron.js"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -38,6 +40,8 @@
     "copy-webpack-plugin": "^4.0.1",
     "cross-spawn": "^5.0.1",
     "css-loader": "^0.28.11",
+    "electron": "^3.0.5",
+    "electron-packager": "^12.2.0",
     "element-ui": "^2.0.0-rc.1",
     "eslint": "^4.15.0",
     "eslint-config-standard": "^10.2.1",
