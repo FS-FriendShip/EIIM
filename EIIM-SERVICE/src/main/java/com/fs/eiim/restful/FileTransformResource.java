@@ -1,6 +1,9 @@
 package com.fs.eiim.restful;
 
+import com.fs.eiim.error.UserInterfaceEiimErrorException;
 import com.fs.eiim.service.FileTransformService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.mx.error.UserInterfaceSystemErrorException;
@@ -13,11 +16,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 @Component("fileTransformResource")
 @Path("rest/v1")
 public class FileTransformResource {
+    private static final Log logger = LogFactory.getLog(FileTransformResource.class);
+
     private FileTransformService fileTransformService;
 
     @Autowired
@@ -32,8 +38,17 @@ public class FileTransformResource {
     @Produces(MediaType.APPLICATION_JSON)
     public DataVO<FileTransformService.FileUploadBean> uploadFile(@FormDataParam("file") InputStream in,
                                                                   @FormDataParam("file") FormDataContentDisposition detail) {
-        String fileName = detail.getFileName();
-        return new DataVO<>(fileTransformService.uploadFile(fileName, in));
+        try {
+            String fileName = URLDecoder.decode(detail.getFileName(), "UTF-8");
+            return new DataVO<>(fileTransformService.uploadFile(fileName, in));
+        } catch (UnsupportedEncodingException ex) {
+            if (logger.isErrorEnabled()) {
+                logger.error("Decode the filename fail.", ex);
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.EIIM_OTHER_FAIL
+            );
+        }
     }
 
     @Path("download/{uuid}")

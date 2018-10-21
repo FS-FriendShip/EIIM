@@ -10,7 +10,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 @Component
 public class FileDescribeCheckServiceImpl implements FileDescribeCheckService {
@@ -24,7 +23,7 @@ public class FileDescribeCheckServiceImpl implements FileDescribeCheckService {
             PicDescribe picDescribe = new PicDescribe(((BufferedImage) image).getWidth(),
                     ((BufferedImage) image).getHeight());
             return JSON.toJSONString(picDescribe);
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             if (logger.isDebugEnabled()) {
                 logger.debug(String.format("The file[%s] is not image file.", file.getAbsoluteFile()));
             }
