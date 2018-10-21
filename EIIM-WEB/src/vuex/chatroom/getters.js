@@ -1,5 +1,4 @@
 import {dateFormat} from '../../common/utils'
-import { Message } from 'element-ui'
 
 export default {
   /**
@@ -10,12 +9,12 @@ export default {
   api_get_chatrooms: (state, getters) => {
     let chatrooms = state.chatrooms
     if (chatrooms) {
+      let account = JSON.parse(localStorage.getItem('account-key')).account.account
       chatrooms.forEach(chatroom => {
         let latestMessage = chatroom.latestMessage
         if (latestMessage) {
           let subtitle = ''
 
-          let account = JSON.parse(localStorage.getItem('account-key')).account.account
           if (account.code !== latestMessage.sender.code) {
             subtitle += latestMessage.sender.nickname
             subtitle += ':'
@@ -28,6 +27,14 @@ export default {
           }
 
           chatroom.subtitle = subtitle
+        }
+
+        if (chatroom.members.length === 2) {
+          chatroom.members.forEach(member => {
+            if (member.account.id !== account.id) {
+              chatroom.name = member.account.nickname
+            }
+          })
         }
 
         if (!chatroom.creator.avatar.startsWith('http')) {

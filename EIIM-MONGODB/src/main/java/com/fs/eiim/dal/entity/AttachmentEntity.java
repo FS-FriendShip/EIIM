@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "attachment")
 public class AttachmentEntity extends MongoBaseEntity implements Attachment {
-    private String fileName, fileType;
+    private String fileName, fileType, fileDescribe;
     private long fileSize;
 
     @Override
@@ -36,5 +36,15 @@ public class AttachmentEntity extends MongoBaseEntity implements Attachment {
     @Override
     public void setFileSize(long size) {
         this.fileSize = size;
+    }
+
+    @Override
+    public String getFileDescribe() {
+        return fileDescribe;
+    }
+
+    @Override
+    public void setFileDescribe(String fileDescribe) {
+        this.fileDescribe = fileDescribe;
     }
 }

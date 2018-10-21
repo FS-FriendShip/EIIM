@@ -11,11 +11,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {'/rest': {
-        target:'http://localhost:9999', // 你请求的第三方接口
-        // target:'http://121.40.51.91:8088', // 你请求的第三方接口
+        // target:'http://60.173.195.18:4080', // 你请求的第三方接口
+        target:'http://121.40.51.91:8080', // 你请求的第三方接口
         changeOrigin:true, // 在本地会创建一个虚拟服务端，然后发送请求的数据，并同时接收请求的数据，这样服务端和服务端进行数据的交互就不会有跨域问题
         pathRewrite:{  // 路径重写，
-          '~/rest/': '/rest'  // 替换target中的请求地址，也就是说以后你在请求http://api.jisuapi.com/XXXXX这个地址的时候直接写成/api即可。
+          '^/rest/': '/LiVEService/'  // 替换target中的请求地址，也就是说以后你在请求http://api.jisuapi.com/XXXXX这个地址的时候直接写成/api即可。
         }
       }
     },

@@ -1,4 +1,5 @@
 <template>
+  <div style="height:500px">
   <el-form ref="LoginForm" :model="login" class="login-container">
     <div class="banner">
       <img style='width:100%;height:100px;' src="../assets/rhosoon.png">
@@ -20,6 +21,15 @@
       <el-button  style="width:100%;" type="primary" @click="doLogin">登录</el-button>
     </el-form-item>
   </el-form>
+
+    <el-upload
+      class="avatar-uploader"
+      action="upload"
+      :beforeUpload = "sendFileMessage"
+      :show-file-list="false">
+      <i class="iconfont icon-iconset0196"></i>
+    </el-upload>
+  </div>
 </template>
 
 <script>
@@ -29,8 +39,8 @@ export default {
   data () {
     return {
       login: {
-        accountCode: '',
-        password: ''
+        accountCode: '13601951701',
+        password: 'ftp123456'
       },
       error: ''
     }
@@ -41,6 +51,18 @@ export default {
   },
 
   methods: {
+    /**
+     * 文件上传
+     *
+     * */
+    sendFileMessage (params) {
+      this.$store.dispatch('chatroom/api_upload_file', params).then((data) => {
+
+      })
+
+      return false
+    },
+
     doLogin: function () {
       this.$store.dispatch('account/api_clear_cache')
       this.$store.dispatch('chatroom/api_clear_cache')

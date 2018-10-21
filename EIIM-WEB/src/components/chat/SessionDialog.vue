@@ -102,8 +102,10 @@ export default {
       let names = ''
       let accountCodes = [this.GLOBAL.account.account.code]
 
-      this.sessionMemberList.forEach(member => {
+      this.sessionMemberList.forEach((member, index) => {
+        if (index > 0) names += '、'
         names += member.nickname
+
         accountCodes.push(member.code)
       })
 
@@ -118,9 +120,14 @@ export default {
       if (this.isNew || (!this.isGroup && session.accountCodes.length > 2)) {
         this.$store.dispatch('chatroom/api_new_chatroom', session).then((data) => {
           this.dialogVisible = false
+          // //发送消息
+          let message = '我是' + this.GLOBAL.account.account.nickname
+          this.$store.dispatch('chatroom/api_send_text_message', {
+            sessionId: data.id,
+            message: message
+          })
         })
       } else {
-        console.log('update session members')
         this.$store.dispatch('chatroom/api_update_chatroom_members', session).then((data) => {
           this.dialogVisible = false
         })
@@ -159,7 +166,6 @@ export default {
      * 监控session属性的变化
      */
     session () {
-      console.log(this.session)
       if (this.session) {
         this.sessionMemberList = []
         this.isNew = false

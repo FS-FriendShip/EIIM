@@ -12,8 +12,9 @@
     "test": "npm run e2e",
     "lint": "eslint --ext .js,.vue src test/e2e/specs",
     "build": "node build/build.js",
-    "electron_dev": "npm run build && electron build/electron.js"
-  },
+    "electron_dev": "npm run build && electron build/electron.js",
+    "electron_build": "electron-packager ./dist/ --platform=win32 --arch=x64 --icon=./src/assets/favicon.ico --overwrite"
+},
   "dependencies": {
     "axios": "^0.18.0",
     "less": "^3.8.1",

@@ -102,8 +102,10 @@ export default {
       addAccountCodes: session.accountCodes
     }
 
-    api.createChatrooms(chatroom).then(res => {
+    return api.createChatrooms(chatroom).then(res => {
       commit(types.CREATE_CHATROOM, res.data)
+
+      return res.data
     })
   },
 
@@ -188,13 +190,11 @@ export default {
    * @param commit
    * @param data
    */
-  api_upload_file: ({commit}, data) => {
+  api_upload_file: ({commit}, file) => {
     let formData = new FormData()
-    console.log(data)
-    formData.append('file', data.file)
-    formData.append('type', data.file.type)
-
-    return api.uploadFile(formData).then(res => {
+    formData.append('file', file, file.name)
+    formData.append('type', file.type)
+    return api.uploadFile (formData).then(res => {
       return res.data
     })
   },

@@ -12,7 +12,7 @@
       <el-upload
         class="avatar-uploader"
         action="upload"
-        :http-request="sendFileMessage"
+        :beforeUpload = "sendFileMessage"
         :show-file-list="false">
         <i class="iconfont icon-iconset0196"></i>
       </el-upload>
@@ -84,6 +84,8 @@ export default {
           }
         })
       })
+
+      return false
     },
 
     sendTextMessage () {

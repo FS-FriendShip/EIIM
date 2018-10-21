@@ -193,6 +193,7 @@ export default {
    * @param FormData
    */
   uploadFile (file) {
-    return post('/v1/upload', file)
+    // return post('/v1/upload', file)
+    return post('/ilog/transfer//leadingInList/P09S', file)
   }
 }

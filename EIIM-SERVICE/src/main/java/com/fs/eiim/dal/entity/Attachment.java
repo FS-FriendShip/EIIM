@@ -14,4 +14,8 @@ public interface Attachment extends Base {
     long getFileSize();
 
     void setFileSize(long size);
+
+    String getFileDescribe();
+
+    void setFileDescribe(String fileDescribe);
 }
