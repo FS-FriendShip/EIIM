@@ -17,10 +17,10 @@ var getAccount = function () {
 // http request 拦截器
 axios.interceptors.request.use(
   config => {
-    if (config.url.includes('/ilog/transfer//leadingInList/P09S')) {
-      // config.headers = {
-      //   'Content-Type': 'multipart/form-data'
-      // }
+    if (config.url.includes('/v1/upload')) {
+      config.headers = {
+        'Content-Type': 'multipart/form-data'
+      }
     } else {
       config.data = JSON.stringify(config.data)
       config.headers = {
@@ -28,15 +28,15 @@ axios.interceptors.request.use(
       }
     }
 
-    // if (!config.url.includes('login')) {
-    //   try {
-    //     let account = getAccount()
-    //     config.headers.token = account.token
-    //     config.headers.deviceId = account.deviceKey + '.pc'
-    //   } catch (err) {
-    //     console.log(err)
-    //   }
-    // }
+    if (!config.url.includes('login')) {
+      try {
+        let account = getAccount()
+        config.headers.token = account.token
+        config.headers.deviceId = account.deviceKey + '.pc'
+      } catch (err) {
+        console.log(err)
+      }
+    }
 
     console.log(config)
     return config

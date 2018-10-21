@@ -39,7 +39,8 @@ public class FileTransformResource {
     public DataVO<FileTransformService.FileUploadBean> uploadFile(@FormDataParam("file") InputStream in,
                                                                   @FormDataParam("file") FormDataContentDisposition detail) {
         try {
-            String fileName = URLDecoder.decode(detail.getFileName(), "UTF-8");
+            String fileName = new String(detail.getFileName().getBytes("iso8859-1"), "utf-8");
+//            URLDecoder.decode(detail.getFileName(), "UTF-8");
             return new DataVO<>(fileTransformService.uploadFile(fileName, in));
         } catch (UnsupportedEncodingException ex) {
             if (logger.isErrorEnabled()) {

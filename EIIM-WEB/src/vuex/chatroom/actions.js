@@ -194,7 +194,7 @@ export default {
     let formData = new FormData()
     formData.append('file', file, file.name)
     formData.append('type', file.type)
-    return api.uploadFile (formData).then(res => {
+    return api.uploadFile(formData).then(res => {
       return res.data
     })
   },
