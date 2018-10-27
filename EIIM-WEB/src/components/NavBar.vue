@@ -16,11 +16,11 @@
                 <img class="avatar-large" :src="currentUser.account.avatar">
               </el-col>
             </el-row>
-            <el-row style="margin-top:50px">
-              <el-col :span="12">
+            <el-row style="margin-top:50px" justify="center">
+              <el-col :span="12" style="text-align:center">
                 <i class="iconfont icon-zhongzhi quit" @click="setPassword">修改密码</i>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="12"  style="text-align:center">
                 <i class="iconfont icon-tuichu quit" @click="logout">退出</i>
               </el-col>
             </el-row>
@@ -31,12 +31,30 @@
         <AccountDialog v-on:setAccountDialogVisible="setAccountDialogVisible" :context="context" :show.sync="showAccountDialog"></AccountDialog>
       </el-col>
     </el-row>
+
+    <el-row style="margin-top:20px">
+      <el-col :span="24" justify="center" align="middle">
+        <img class="avatar-large" src="../assets/chat.png"  title="聊天" @click="showChat">
+      </el-col>
+    </el-row>
+
+    <el-row style="margin-top:20px">
+      <el-col :span="24" justify="center" align="middle">
+        <img class="avatar-large" src="../assets/contacts.png"  title="通讯录" @click="showContact">
+      </el-col>
+    </el-row>
+
+    <el-row style="margin-top:20px">
+      <el-col :span="24" justify="center" align="middle">
+        <img class="avatar-large" src="../assets/users.png"  title="用户管理" @click="showUsers">
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
-import AccountDialog from '../AccountDialog'
+import AccountDialog from './AccountDialog'
 
 export default {
   name: 'Profile',
@@ -61,13 +79,24 @@ export default {
       )
     },
 
+    showChat () {
+     this.$router.push({name: 'Chat'})
+    },
+
+    showContact () {
+      this.$router.push({name: 'Contact'})
+    },
+
+    showUsers () {
+      this.$router.push({name: 'Admin'})
+    },
+
     /**
      *  设置密码
      *
      * */
     setPassword () {
       let account = this.GLOBAL.account.account
-      console.log(account)
       let row = {fullName: account.nickname, mobile: account.code}
       this.context = {type: 'ACCOUNT', action: 'reset', data: row}
       this.showAccountDialog = true

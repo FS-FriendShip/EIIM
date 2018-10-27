@@ -67,7 +67,7 @@ export default {
 
         if (chatroom && chatroom.members) {
           chatroom.members.forEach(member => {
-            if (!member.account.avatar.startsWith('http')) {
+            if (member.account.avatar && !member.account.avatar.startsWith('http')) {
               member.account.avatar = process.env.FILE_SERVER_ENV + member.account.avatar
             }
           })

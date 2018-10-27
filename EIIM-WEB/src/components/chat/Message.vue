@@ -68,20 +68,21 @@ export default {
 
 <style lang="less" scoped>
   a:link {
-    font-size: 12px;
+    font-size: 14px;
     color: #000000;
     text-decoration: none;
   }
   a:visited {
-    font-size: 12px;
+    font-size: 14px;
     color: #000000;
     text-decoration: none;
   }
   a:hover {
-    font-size: 12px;
+    font-size: 14px;
     color: #000000;
     text-decoration: none;
   }
+
   .message {
     overflow-y: scroll;
     padding: 20px 0px;
@@ -101,7 +102,7 @@ export default {
       > span {
         display: inline-block;
         padding: 0 18px;
-        font-size: 12px;
+        font-size: 14px;
         color: #fff;
         border-radius: 2px;
         background-color: #dcdcdc;
@@ -119,7 +120,7 @@ export default {
       max-width: ~'calc(100% - 40px)';
       min-height: 30px;
       line-height: 2.5;
-      font-size: 12px;
+      font-size: 14px;
       text-align: left;
       word-break: break-all;
       background-color: #fafafa;
@@ -142,7 +143,7 @@ export default {
       width: 300px;
       height: 80px;
       line-height: 2.5;
-      font-size: 12px;
+      font-size: 14px;
       text-align: left;
       word-break: break-all;
       background-color: #fff;

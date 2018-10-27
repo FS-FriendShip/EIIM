@@ -1,5 +1,5 @@
 {
-  "name": "eiim-web",
+  "name": "eiim",
   "version": "1.0.0",
   "description": "EIIM WEB",
   "main": "electron.js",
@@ -13,7 +13,7 @@
     "lint": "eslint --ext .js,.vue src test/e2e/specs",
     "build": "node build/build.js",
     "electron_dev": "npm run build && electron build/electron.js",
-    "electron_build": "electron-packager ./dist/ --platform=win32 --arch=x64 --icon=./src/assets/favicon.ico --overwrite"
+    "publish": "electron-packager ./dist/ 若信 --platform=mas --arch=x64 --out ./out --overwrite"
 },
   "dependencies": {
     "axios": "^0.18.0",

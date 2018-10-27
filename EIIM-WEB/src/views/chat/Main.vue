@@ -1,36 +1,28 @@
 <template>
-  <el-container id="Main" v-upload>
-    <el-aside class="nav">
-      <NavBar>
-
-      </NavBar>
+  <el-container id = "Chat" v-upload>
+    <el-aside class="session">
+      <Session></Session>
     </el-aside>
-    <el-container class="chat">
-      <el-aside class="session">
-        <Session></Session>
-      </el-aside>
 
-      <el-main class="message-main">
-        <el-row class="message-header" align="middle">
-          <el-col :span="22" :class="'header-item'"><div class="session-name">{{session?session.name:''}}</div></el-col>
-          <el-col :span="2" :class="'header-item'">
-            <i class="iconfont icon-Set-up" @click="toggleSessionInfo"></i>
-          </el-col>
-        </el-row>
-        <el-row class="message-body">
-          <Message v-bind:style="{height:messageHeight}" v-on:toggleSessionInfo="toggleSessionInfo"></Message>
-          <SessionInfo v-show="showSessionInfo" :session="session"></SessionInfo>
-        </el-row>
-        <el-row class="message-footer">
-          <MessageSend></MessageSend>
-        </el-row>
-      </el-main>
-    </el-container>
+    <el-main class="message-main">
+      <el-row class="message-header" align="middle">
+        <el-col :span="22" :class="'header-item'"><div class="session-name">{{session?session.name:''}}</div></el-col>
+        <el-col :span="2" :class="'header-item'">
+          <i class="iconfont icon-Set-up" @click="toggleSessionInfo"></i>
+        </el-col>
+      </el-row>
+      <el-row class="message-body">
+        <Message v-bind:style="{height:messageHeight}" v-on:toggleSessionInfo="toggleSessionInfo"></Message>
+        <SessionInfo v-show="showSessionInfo" :session="session"></SessionInfo>
+      </el-row>
+      <el-row class="message-footer">
+        <MessageSend></MessageSend>
+      </el-row>
+    </el-main>
   </el-container>
 </template>
 
 <script>
-import NavBar from '../../components/chat/NavBar'
 import Session from '../../components/chat/Session'
 import MessageSend from '../../components/chat/MessageSend'
 import Message from '../../components/chat/Message'
@@ -40,7 +32,7 @@ import {mapGetters} from 'vuex'
 
 export default {
   name: 'Main',
-  components: {NavBar, MessageSend, Message, Session, SessionInfo},
+  components: {MessageSend, Message, Session, SessionInfo},
 
   data () {
     return {
@@ -94,64 +86,58 @@ export default {
 </script>
 
 <style scoped>
-  #Main {
+  #Chat {
     width: 100%;
     height: 100%;
     padding: 0;
-  }
 
-  #Main .nav {
-    width:75px!important;
-    background: #4F4F4F;
-  }
-
-  #Main .chat {
     text-align: left;
     color: #fff;
     background: #fff;
   }
 
-  #Main .chat .session {
+  #Chat .session {
     width:400px!important;
+    background: #fff;
   }
 
-  #Main .message-main{
+  #Chat .message-main{
     padding: 0px;
     overflow: hidden;
     color: #000!important;
     background-color: #eee;
   }
 
-  #Main .message-main .message-header{
+  #Chat .message-main .message-header{
     padding:0px;
     width: 100%;
     height:50px;
     border-bottom: 1px solid silver;
   }
 
-  #Main .message-main .message-header .header-item{
+  #Chat .message-main .message-header .header-item{
     height: 100%;
     line-height: 30px;
     padding: 10px 20px;
     text-align: left;
   }
 
-  #Main .message-main .message-header .header-item .session-name {
+  #Chat .message-main .message-header .header-item .session-name {
     font-weight: bolder;
     font-size: 18px;
   }
 
-  #Main .message-main .message-header .header-item .icon-Set-up {
+  #Chat .message-main .message-header .header-item .icon-Set-up {
     font-size: 24px;
   }
 
-  #Main .message-main .message-body{
+  #Chat .message-main .message-body{
     padding:0px;
     width: 100%;
     /*height:650px;*/
   }
 
-  #Main .message-main .message-footer{
+  #Chat .message-main .message-footer{
     bottom:0px;
     padding:0px;
     width: 100%;

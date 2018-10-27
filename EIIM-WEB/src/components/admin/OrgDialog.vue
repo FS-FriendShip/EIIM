@@ -1,8 +1,8 @@
 <template>
   <div id="org_form">
     <el-dialog title="组织信息" :visible.sync="visible" center  @close="closeDialog">
-      <el-form ref="OrgForm" :model="org" label-width="100px">
-        <el-form-item label="组织名称" :rules="[{required: true, message: '组织名称不能为空'}]">
+      <el-form ref="OrgForm" :model="org" label-width="100px"  :rules="validateRules">
+        <el-form-item label="组织名称" prop="name">
           <el-input v-model="org.name"></el-input>
         </el-form-item>
 
@@ -26,6 +26,14 @@ export default {
   name: 'OrgForm',
 
   data () {
+    var validateName = (rule, value, callback) => {
+      if (!value || value === '') {
+        callback(new Error('组织名称不能为空'))
+      } else {
+        callback()
+      }
+    }
+
     return {
       visible: this.show,
       org: {
@@ -33,7 +41,15 @@ export default {
         code: null,
         name: null,
         type: 'internal'
-      }
+      },
+
+      validateRules: {
+        name: [
+          { validator: validateName, trigger: 'blur' }
+        ]
+      },
+
+
     }
   },
 
@@ -44,6 +60,7 @@ export default {
           if (this.context.action === 'create') {
             this.org.code = this.org.name
           }
+
           this.$store.dispatch('contact/api_save_org', this.org).then(this.closeDialog)
         } else {
           return false

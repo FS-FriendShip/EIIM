@@ -1,30 +1,24 @@
 <template>
-  <el-container id="admin">
-    <el-header id="main-header">
-      <el-row type="flex" class="row-bg" align="middle">
-        <el-col :span="20" class="title">若森通信软件用户管理平台</el-col>
-        <el-col :span="3"><i class="iconfont icon-zhongzhi quit" @click="setPassword">修改密码</i></el-col>
-        <el-col :span="1"><i class="iconfont icon-tuichu quit" @click="logout">退出</i></el-col>
-      </el-row>
-    </el-header>
-
-    <el-container id="main-body">
+  <el-container id="admin" v-bind:style="{height:adminHeight}">
+    <el-container>
       <el-aside width="400px" :class="'org-list'">
         <el-row>
           <el-button type="primary" icon="iconfont icon-add" @click="showOrg">新增</el-button>
         </el-row>
-        <el-table v-if="orgs && orgs.length > 0"  :data="orgs" @show-header="false" @row-click="selectOrg" :row-style="selectedHighlight" :row-class-name="tableRowClassName" >
-          <el-table-column align="left" prop="name" min-width="300px">
-          </el-table-column>
 
-          <el-table-column>
-            <template slot-scope="scope">
-              <i class="iconfont u-btn icon-bianji" @click="handleOrgEdit(scope.$index, scope.row)"></i>
+        <el-row><el-col class="org-item"/></el-row>
 
-              <i class="iconfont u-btn icon-shangchu" @click="handleOrgDelete(scope.$index, scope.row)"></i>
-            </template>
-          </el-table-column>
-        </el-table>
+        <el-row align="middle" v-bind:class="org.active ? 'active':''" :gutter="50" v-for="org in orgs"  @click.native="selectOrg(org)" :key="org.id">
+          <el-col class="org-item" :span="18">
+            <span class="title">{{org.name}}</span>
+          </el-col>
+
+          <el-col v-if="org.active" class="org-item" :span="6">
+            <i class="iconfont u-btn icon-bianji" @click="handleOrgEdit(org)"></i>
+
+            <i class="iconfont u-btn icon-shangchu" @click="handleOrgDelete(org)"></i>
+          </el-col>
+        </el-row>
       </el-aside>
 
       <el-main style="background:#fff">
@@ -35,7 +29,7 @@
             <el-button type="danger" icon="iconfont icon-shangchu" circle @click="handleUserDelete">删除用户</el-button>
           </el-header>
           <el-main>
-            <el-table v-if="org" :data="org.employees" tooltip-effect="dark" @row-dblclick="handleUserEdit">
+            <el-table v-if="org" :data="org.employees" tooltip-effect="dark" @row-dblclick="handleUserEdit" @selection-change="handleSelectionChange">>
               <el-table-column type="selection" mini-width="5%"></el-table-column>
               <el-table-column prop="fullName" label="姓名" mini-width="10%"></el-table-column>
               <el-table-column prop="title" label="职务" mini-width="20%"></el-table-column>
@@ -81,6 +75,8 @@ export default {
 
   data () {
     return {
+      selectedOrgId: null,
+      adminHeight: (window.innerHeight) + 'px',
       showOrgDialog: false,
       showUserDialog: false,
       showAccountDialog: false,
@@ -89,7 +85,8 @@ export default {
         action: null,
         data: null
       },
-      getIndex: 0
+      getIndex: 0,
+      multipleSelection: []
     }
   },
 
@@ -97,10 +94,7 @@ export default {
    *
    */
   created  () {
-    this.$store.dispatch('contact/api_init_orgs').then(res => {
-      let org = res.data[0]
-      this.selectOrg({id: org.id, index: 0})
-    })
+    this.getOrgs()
   },
 
   /**
@@ -111,6 +105,10 @@ export default {
   },
 
   methods: {
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+
     selectOrg: function (row) {
       this.getIndex = row.index
       this.selectedOrgId = row.id
@@ -122,35 +120,32 @@ export default {
       this.showOrgDialog = true
     },
 
-    handleOrgEdit: function (index, row) {
-      this.context = {type: 'ORG', action: 'edit', data: row}
+    handleOrgEdit: function (org) {
+      this.context = {type: 'ORG', action: 'edit', data: org}
       this.showOrgDialog = true
     },
 
-    handleOrgDelete: function (index, row) {
+    handleOrgDelete: function (org) {
       this.$confirm('此操作将永久删除, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('contact/api_delete_org', row.id)
+        this.$store.dispatch('contact/api_delete_org', org.id).then(() => {
+          this.getOrgs()
+        })
+      })
+    },
+
+    getOrgs: function () {
+      this.$store.dispatch('contact/api_init_orgs').then(res => {
+        let org = res.data[0]
+        this.selectOrg({id: org.id, index: 0})
       })
     },
 
     setOrgDialogVisible (visible) {
       this.showOrgDialog = visible
-    },
-
-    tableRowClassName ({row, rowIndex}) {
-      row.index = rowIndex
-    },
-
-    selectedHighlight ({row, rowIndex}) {
-      if ((this.getIndex) === rowIndex) {
-        return {
-          'background-color': 'rgb(250, 195, 100)'
-        }
-      }
     },
 
     /**
@@ -166,13 +161,28 @@ export default {
       this.showUserDialog = true
     },
 
-    handleUserDelete: function (index, row) {
+    handleUserDelete: function () {
+      if(! this.multipleSelection || this.multipleSelection.length === 0) {
+        this.$message({
+          message: '选择需要删除的用户。',
+          type: 'error'
+        });
+        return
+      }
+
+      let personIds = []
+      this.multipleSelection.forEach(person =>
+        personIds.push(person.id)
+      )
+      let orgId= this.selectedOrgId
       this.$confirm('此操作将永久删除, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('contact/api_delete_org', row.id)
+        this.$store.dispatch('contact/api_del_user', personIds).then(res => {
+          this.$store.dispatch('contact/api_get_org', orgId)
+        })
       })
     },
 
@@ -214,7 +224,7 @@ export default {
       row.account.state = false
 
       this.$store.dispatch('account/api_account_disable', row).then(res => {
-        this.$store.dispatch('contact/api_update_employee', row)
+        this.$store.dispatch('contact/api_get_org', row.orgId)
       })
     },
 
@@ -228,7 +238,7 @@ export default {
       row.account.state = true
 
       this.$store.dispatch('account/api_account_enable', row).then(res => {
-        this.$store.dispatch('contact/api_update_employee', row)
+        this.$store.dispatch('contact/api_get_org', row.orgId)
       })
     },
 
@@ -247,19 +257,15 @@ export default {
 <style scoped lang="less">
   #admin {
     width: 100%;
-    height: 100%;
-    margin: 10px 0px 0px 0px;
-    padding: 0;
-  }
-
-  #admin  #main-body {
-    height:850px;
+    height: 850px;
+    padding: 0px;
     background:#fff;
   }
 
-  #main-body .org-list{
+  #admin .org-list{
     border-right: solid 1px silver;
     padding: 20px;
+    background-color:#eee;
 
     .item-org {
       margin-top: 20px;
@@ -274,27 +280,28 @@ export default {
     }
   }
 
-  .org-list {
-    .u-btn {
-      display:none;
-    }
-    .el-table__body tr:hover{
-      .u-btn{
-        display: inline;
-      }
-    }
+  .org-list .org-item {
+    padding:15px 0px;
+    display:table-cell;
+    vertical-align:middle;
   }
 
-  #main-header .row-bg {
-    height:100%;
+  .active {
+    background-color: #fff;
   }
 
-  #main-header .title {
-    font-size: 40px;
-  }
-
-  #main-header .quit {
-    font-size: 20px;
-    color: #fff;
+  .org-list  .org-item .title {
+    color: #000;
+    font-size: 14px;
+    padding-left:10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    white-space:nowrap;
+    width:150px;
+    height:24px;
+    line-height: 24px;
+    display:block;
+    float:left;
   }
 </style>

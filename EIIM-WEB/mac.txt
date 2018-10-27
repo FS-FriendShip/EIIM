@@ -1,0 +1,2 @@
+1. sudo npm run-script publish
+2. appdmg appdmg.json ./rhosoon.dmg

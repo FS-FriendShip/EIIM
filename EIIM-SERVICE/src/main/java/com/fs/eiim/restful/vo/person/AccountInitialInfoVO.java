@@ -3,10 +3,10 @@ package com.fs.eiim.restful.vo.person;
 import com.fs.eiim.service.BaseDataService;
 
 public class AccountInitialInfoVO {
-    private String accountCode, password, nickname, avatar;
+    private String accountCode, password, nickname, avatar, roleCode;
 
     public BaseDataService.AccountInitialInfo get() {
-        return new BaseDataService.AccountInitialInfo(accountCode, password, nickname, avatar);
+        return new BaseDataService.AccountInitialInfo(accountCode, password, nickname, avatar, roleCode);
     }
 
     public String getAccountCode() {
@@ -39,5 +39,9 @@ public class AccountInitialInfoVO {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getRoleCode() {
+        return roleCode;
     }
 }

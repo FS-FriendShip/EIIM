@@ -10,15 +10,19 @@
           <el-input v-model="account.accountCode" :disabled="true"></el-input>
         </el-form-item>
 
-        <el-form-item v-if="reset" label="旧密码">
+        <el-form-item v-if="action === 'create'" label="管理员帐号" true-label="Administrator" false-label="User">
+          <el-checkbox v-model="account.roleCode"></el-checkbox>
+        </el-form-item>
+
+        <el-form-item v-if="action === 'password'" label="旧密码">
           <el-input type="password" placeholder="旧密码" v-model="account.oldPassword"></el-input>
         </el-form-item>
 
-        <el-form-item label="密码"  prop="password">
+        <el-form-item v-if="action === 'password'" label="密码"  prop="password">
           <el-input type="password" placeholder="密码" v-model="account.password"></el-input>
         </el-form-item>
 
-        <el-form-item label="确认密码" prop="confirmPassword">
+        <el-form-item v-if="action === 'password'" label="确认密码" prop="confirmPassword">
           <el-input type="password" placeholder="确认密码" v-model="account.confirmPassword"></el-input>
         </el-form-item>
       </el-form>
@@ -81,10 +85,11 @@ export default {
 
     return {
       visible: this.show,
-      reset: false,
+      action: '',
       account: {
         personId: null,
         accountCode: null,
+        roleCode: false,
         password: null,
         confirmPassword: null,
         oldPassword: null,
@@ -105,16 +110,20 @@ export default {
 
   methods: {
     saveAccountInfo (formName) {
+      this.account.roleCode = this.account.roleCode?'Administrator' : 'User'
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          if (!this.reset) {
+          if (this.action === 'create') {
             this.$store.dispatch('account/api_account_save', {personId: this.account.personId,
               account: {
                 accountCode: this.account.accountCode,
-                password: this.account.password,
-                nickname: this.account.nickname
+                password: '111111',
+                nickname: this.account.nickname,
+                roleCode: this.account.roleCode
               }
-            }).then(this.closeDialog)
+            }).then(data => {
+              this.closeDialog
+            })
           } else {
             this.$store.dispatch('account/api_account_password', {
               accountCode: this.account.accountCode,
@@ -152,6 +161,7 @@ export default {
 
     context () {
       if (this.context.type === 'ACCOUNT') {
+        this.action = this.context.action
         if (!this.context.data.account) {
           this.account.accountCode = this.context.data.mobile
           this.account.nickname = this.context.data.fullName
@@ -161,11 +171,6 @@ export default {
         }
 
         this.account.personId = this.context.data.id
-        if (this.context.action === 'reset') {
-          this.reset = true
-        } else {
-          this.reset = false
-        }
       }
     }
   }

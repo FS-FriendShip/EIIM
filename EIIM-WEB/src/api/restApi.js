@@ -30,8 +30,18 @@ export default {
    * @param account
    * @returns {Promise}
    */
-  enableAccountInfo (personId, account) {
-    return get('/v1/persons/' + personId + '/valid?valid=true')
+  enableAccountInfo (accountId) {
+    return get('/v1/accounts/' + accountId + '/valid?valid=true')
+  },
+
+  /**
+   * 禁用帐号
+   * @param personId
+   * @param account
+   * @returns {Promise}
+   */
+  disableAccountInfo  (accountId) {
+    return get('/v1/accounts/' + accountId + '/valid?valid=false')
   },
 
   /**
@@ -43,16 +53,7 @@ export default {
   },
 
   /**
-   * 禁用帐号
-   * @param personId
-   * @param account
-   * @returns {Promise}
-   */
-  disableAccountInfo  (personId, account) {
-    return get('/v1/persons/' + personId + '/valid?valid=false')
-  },
-
-  /**
+   *
    * 获取所有聊天室列表信息
    * @param accountCode
    * @returns {*}
@@ -167,8 +168,8 @@ export default {
    * @param personId
    * @returns {Promise}
    */
-  delUser (personId) {
-    return get('/v1/persons/' + personId + '/valid?valid=false')
+  delUser (personIds) {
+    return update('/v1/persons/valid?valid=false', personIds)
   },
 
   /**

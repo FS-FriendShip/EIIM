@@ -79,28 +79,31 @@ export default {
    * @param commit
    */
   api_delete_org: ({commit}, orgId) => {
-    console.log(orgId)
     return api.delOrg(orgId).then(res => {
-      commit(types.UPDATE_ORG, res.data)
+      if(res.errorCode === 0) {
+        commit(types.UPDATE_ORG, res.data)
+      }
     })
   },
 
+
   /**
-   *
+   * 删除用户
    * @param commit
    * @param user
    * @returns {Promise<T>}
    */
+  api_del_user: ({commit}, personIds) => {
+    return api.delUser(personIds)
+  },
+
+  /**
+   * 新建机构
+   * @param commit
+   * @param org
+   */
   api_save_user: ({commit}, user) => {
-    if (user.id) {
-      return api.saveUser(user).then(res => {
-        commit(types.UPDATE_USER, res.data)
-      })
-    } else {
-      return api.saveUser(user).then(res => {
-        commit(types.CREATE_USER, res.data)
-      })
-    }
+    return api.saveUser(user)
   },
 
   /**

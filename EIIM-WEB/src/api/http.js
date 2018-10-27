@@ -134,6 +134,8 @@ export function get (url, params = {}) {
   if (account) {
     if (url.indexOf('?') <= 0) {
       url = url + '?accountCode=' + account.account.code
+    }else {
+      url = url + '&accountCode=' + account.account.code
     }
   }
   return new Promise((resolve, reject) => {
@@ -161,6 +163,8 @@ export function post (url, data = {}) {
   if (account) {
     if (url.indexOf('?') <= 0) {
       url = url + '?accountCode=' + account.account.code
+    }else {
+      url = url + '&accountCode=' + account.account.code
     }
   }
   return new Promise((resolve, reject) => {
@@ -185,6 +189,8 @@ export function update (url, data = {}) {
   if (account) {
     if (url.indexOf('?') <= 0) {
       url = url + '?accountCode=' + account.account.code
+    } else {
+      url = url + '&accountCode=' + account.account.code
     }
   }
   return new Promise((resolve, reject) => {
@@ -209,6 +215,8 @@ export function remove (url, data = {}) {
   if (account) {
     if (url.indexOf('?') <= 0) {
       url = url + '?accountCode=' + account.account.code
+    }else {
+      url = url + '&accountCode=' + account.account.code
     }
   }
   return new Promise((resolve, reject) => {
