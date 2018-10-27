@@ -2,6 +2,7 @@ package com.fs.eiim.service.impl;
 
 import com.fs.eiim.dal.entity.Account;
 import com.fs.eiim.dal.entity.AccountState;
+import com.fs.eiim.dal.entity.Person;
 import com.fs.eiim.error.UserInterfaceEiimErrorException;
 import com.fs.eiim.service.AccountService;
 import org.apache.commons.logging.Log;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component("accountService")
@@ -91,13 +93,18 @@ public class AccountServiceImpl implements AccountService {
             }
             throw new UserInterfaceEiimErrorException(UserInterfaceEiimErrorException.EiimErrors.ACCOUNT_BLANK_PASSWORD);
         }
-        Account account = accessor.findOne(GeneralAccessor.ConditionGroup.or(
-                GeneralAccessor.ConditionTuple.eq("code", accountCode),
-                GeneralAccessor.ConditionTuple.eq("nickname", accountCode),
-                GeneralAccessor.ConditionTuple.eq("eiimCode", accountCode),
-                GeneralAccessor.ConditionTuple.eq("person.mobile", accountCode),
-                GeneralAccessor.ConditionTuple.eq("person.email", accountCode)
-        ), Account.class);
+        Person person = accessor.findOne(GeneralAccessor.ConditionGroup.or(
+                GeneralAccessor.ConditionTuple.eq("mobile", accountCode),
+                GeneralAccessor.ConditionTuple.eq("email", accountCode)
+        ), Person.class);
+        List<GeneralAccessor.ConditionGroup> conditions = new ArrayList<>();
+        conditions.add(GeneralAccessor.ConditionTuple.eq("code", accountCode));
+        conditions.add(GeneralAccessor.ConditionTuple.eq("nickname", accountCode));
+        conditions.add(GeneralAccessor.ConditionTuple.eq("eiimCode", accountCode));
+        if (person != null) {
+            conditions.add(GeneralAccessor.ConditionTuple.eq("person", person));
+        }
+        Account account = accessor.findOne(GeneralAccessor.ConditionGroup.or(conditions), Account.class);
         if (account == null) {
             throw new UserInterfaceRbacErrorException(UserInterfaceRbacErrorException.RbacErrors.ACCOUNT_NOT_FOUND);
         }
