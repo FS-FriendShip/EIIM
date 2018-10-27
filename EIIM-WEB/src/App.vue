@@ -98,10 +98,6 @@ export default {
     width: 0px;  /* remove scrollbar space */
     background: transparent;  /* optional: just make scrollbar invisible */
   }
-  /* optional: show position indicator in red */
-  ::-webkit-scrollbar-thumb {
-    background: #FF0000;
-  }
 
   .nav {
     width:75px!important;

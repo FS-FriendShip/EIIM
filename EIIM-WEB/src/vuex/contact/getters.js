@@ -50,7 +50,7 @@ export default {
         org = state.orgs.filter(org => org.id === orgId)[0]
       }
 
-      if (!org.employees) {
+      if (org && !org.employees) {
         org.employees = []
       }
     }

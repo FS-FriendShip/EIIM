@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from '@/views/Login'
 import ChatMain from '@/views/chat/Main'
 import AdminMain from '@/views/admin/Main'
+import ContactMain from '@/views/contact/Main'
 
 Vue.use(Router)
 
@@ -20,6 +21,13 @@ export default new Router({
       name: 'Chat',
       meta: {auth: true, keepAlive: true},
       component: ChatMain
+    },
+
+    {
+      path: '/Contact',
+      name: 'Contact',
+      meta: {auth: true, keepAlive: true},
+      component: ContactMain
     },
 
     {

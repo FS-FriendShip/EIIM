@@ -80,7 +80,9 @@ export default {
    */
   api_delete_org: ({commit}, orgId) => {
     return api.delOrg(orgId).then(res => {
-      commit(types.UPDATE_ORG, res.data)
+      if(res.errorCode === 0) {
+        commit(types.UPDATE_ORG, res.data)
+      }
     })
   },
 

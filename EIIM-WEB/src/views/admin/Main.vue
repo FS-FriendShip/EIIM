@@ -9,23 +9,16 @@
         <el-row><el-col class="org-item"/></el-row>
 
         <el-row align="middle" v-bind:class="org.active ? 'active':''" :gutter="50" v-for="org in orgs"  @click.native="selectOrg(org)" :key="org.id">
-          <el-col class="org-item" :span="24">
+          <el-col class="org-item" :span="18">
             <span class="title">{{org.name}}</span>
           </el-col>
+
+          <el-col v-if="org.active" class="org-item" :span="6">
+            <i class="iconfont u-btn icon-bianji" @click="handleOrgEdit(org)"></i>
+
+            <i class="iconfont u-btn icon-shangchu" @click="handleOrgDelete(org)"></i>
+          </el-col>
         </el-row>
-
-        <!--<el-table v-if="orgs && orgs.length > 0"  :data="orgs" @show-header="false" @row-click="selectOrg" :row-style="selectedHighlight" >-->
-          <!--<el-table-column align="left" prop="name" min-width="300px">-->
-          <!--</el-table-column>-->
-
-          <!--<el-table-column>-->
-            <!--<template slot-scope="scope">-->
-              <!--<i class="iconfont u-btn icon-bianji" @click="handleOrgEdit(scope.$index, scope.row)"></i>-->
-
-              <!--<i class="iconfont u-btn icon-shangchu" @click="handleOrgDelete(scope.$index, scope.row)"></i>-->
-            <!--</template>-->
-          <!--</el-table-column>-->
-        <!--</el-table>-->
       </el-aside>
 
       <el-main style="background:#fff">
@@ -101,10 +94,7 @@ export default {
    *
    */
   created  () {
-    this.$store.dispatch('contact/api_init_orgs').then(res => {
-      let org = res.data[0]
-      this.selectOrg({id: org.id, index: 0})
-    })
+    this.getOrgs()
   },
 
   /**
@@ -130,18 +120,27 @@ export default {
       this.showOrgDialog = true
     },
 
-    handleOrgEdit: function (index, row) {
-      this.context = {type: 'ORG', action: 'edit', data: row}
+    handleOrgEdit: function (org) {
+      this.context = {type: 'ORG', action: 'edit', data: org}
       this.showOrgDialog = true
     },
 
-    handleOrgDelete: function (index, row) {
+    handleOrgDelete: function (org) {
       this.$confirm('此操作将永久删除, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('contact/api_delete_org', row.id)
+        this.$store.dispatch('contact/api_delete_org', org.id).then(() => {
+          this.getOrgs()
+        })
+      })
+    },
+
+    getOrgs: function () {
+      this.$store.dispatch('contact/api_init_orgs').then(res => {
+        let org = res.data[0]
+        this.selectOrg({id: org.id, index: 0})
       })
     },
 
