@@ -50,6 +50,7 @@ public class AccountInfoVO {
         if (roles != null && !roles.isEmpty()) {
             List<RoleInfoVO> roleInfoVOS = new ArrayList<>();
             roles.forEach(role -> roleInfoVOS.add(RoleInfoVO.valueOf(role)));
+            accountInfoVO.roles = roleInfoVOS;
         }
         return accountInfoVO;
     }
