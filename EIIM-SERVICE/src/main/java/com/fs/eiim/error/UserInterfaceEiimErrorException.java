@@ -48,6 +48,10 @@ public class UserInterfaceEiimErrorException extends UserInterfaceException {
 
         PERSON_NOT_FOUND("指定的人员不存在。"),
         PERSON_SAVE_FAIL("保存指定的人员信息失败。"),
+        PERSON_MOBILE_BLANK("人员的手机号码不能为空。"),
+        PERSON_MOBILE_EXIST("人员的手机号码已经存在，不能重复。"),
+        PERSON_EMAIL_BLANK("人员的电子邮件不能为空。"),
+        PERSON_EMAIL_EXIST("人员的电子邮件已经存在，不能重复。"),
 
         CHATROOM_NOT_FOUND("指定的聊天室不存在。"),
         CHATROOM_TOP_FAIL("将指定聊天室置顶失败。"),
