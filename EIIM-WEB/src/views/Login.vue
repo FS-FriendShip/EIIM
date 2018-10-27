@@ -1,5 +1,5 @@
 <template>
-  <div style="height:500px">
+  <div>
   <el-form ref="LoginForm" :model="login" class="login-container">
     <div class="banner">
       <img style='width:100%;height:100px;' src="../assets/rhosoon.png">
@@ -22,13 +22,6 @@
     </el-form-item>
   </el-form>
 
-    <el-upload
-      class="avatar-uploader"
-      action="upload"
-      :beforeUpload = "sendFileMessage"
-      :show-file-list="false">
-      <i class="iconfont icon-iconset0196"></i>
-    </el-upload>
   </div>
 </template>
 
@@ -39,8 +32,8 @@ export default {
   data () {
     return {
       login: {
-        accountCode: '13601951701',
-        password: 'ftp123456'
+        accountCode: '',
+        password: ''
       },
       error: ''
     }
@@ -72,11 +65,7 @@ export default {
           this.$store.dispatch('account/api_account_login', this.login).then((data) => {
             data.accountCode = data.account.code
             this.GLOBAL.account = data
-            if (data.accountCode === 'Administrator') {
-              this.$router.push({name: 'Admin'})
-            } else {
-              this.$router.push({name: 'Chat'})
-            }
+            this.$router.push({name: 'Chat'})
           })
         } else {
           return false

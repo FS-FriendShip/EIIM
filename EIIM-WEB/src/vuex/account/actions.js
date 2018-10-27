@@ -43,7 +43,6 @@ export default {
    * 设置密码
    * @param commit
    * @param data
-   * @returns {Promise<T>}
    */
   api_account_password: ({commit}, data) => {
     return api.setAccountPassword(data).then(res => {
@@ -58,9 +57,7 @@ export default {
    * @returns {Promise<T>}
    */
   api_account_enable: ({commit}, data) => {
-    console.log(data)
-    // return data
-    return api.enableAccountInfo(data.id, data.account.code).then(res => {
+    return api.enableAccountInfo(data.account.id).then(res => {
       return res.data
     })
   },
@@ -72,9 +69,7 @@ export default {
    * @returns {Promise<T>}
    */
   api_account_disable: ({commit}, data) => {
-    console.log(data)
-    // return data
-    return api.disableAccountInfo(data.id, data.account.code).then(res => {
+    return api.disableAccountInfo(data.account.id).then(res => {
       return res.data
     })
   }

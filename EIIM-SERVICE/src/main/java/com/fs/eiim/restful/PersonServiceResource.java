@@ -15,9 +15,11 @@ import org.mx.service.rest.auth.RestAuthenticate;
 import org.mx.service.rest.vo.DataVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -129,19 +131,34 @@ public class PersonServiceResource {
 
     @Path("persons/{personId}/valid")
     @GET
-    public DataVO<AccountInfoVO> validPersonAccount(@PathParam("personId") String personId,
+    @RestAuthenticate
+    public DataVO<Boolean> validPersonAccount(@PathParam("personId") String personId,
+                                              @QueryParam("accountCode") String accountCode,
+                                              @QueryParam("valid") boolean valid) {
+        if (personId == null || personId.trim().length() == 0) {
+            return new DataVO<>(new UserInterfaceSystemErrorException(
+                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            ));
+        }
+
+        return this.validPersonAccount(new String[]{personId}, accountCode, valid);
+    }
+
+    @Path("persons/valid")
+    @PUT
+    @RestAuthenticate
+    public DataVO<Boolean> validPersonAccount(String[] personIds,
                                                     @QueryParam("accountCode") String accountCode,
                                                     @QueryParam("valid") boolean valid) {
-        if (StringUtils.isBlank(personId)) {
+        if (personIds == null || personIds.length == 0) {
             return new DataVO<>(new UserInterfaceSystemErrorException(
                     UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
             ));
         }
         sessionDataStore.setCurrentUserCode(accountCode);
-        BaseDataService.PersonAccountTuple tuple = baseDataService.validPersonAccount(personId,
-                valid);
+        baseDataService.validPersonAccount(Arrays.asList(personIds),  valid);
         sessionDataStore.removeCurrentUserCode();
-        return new DataVO<>(AccountInfoVO.valueOf(tuple.getAccount(), tuple.getAccountState()));
+        return new DataVO<>(true);
     }
 
     @Path("persons/account/password")

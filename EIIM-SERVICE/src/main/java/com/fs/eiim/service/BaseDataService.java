@@ -44,7 +44,7 @@ public interface BaseDataService {
 
     PersonAccountTuple enablePersonAccount(String personId, AccountInitialInfo accountInfo);
 
-    PersonAccountTuple validPersonAccount(String personId, boolean valid);
+    boolean validPersonAccount(List<String> personIds, boolean valid);
 
     void changeAccountPassword(String accountCode, String oldPassword, String newPassword);
 
@@ -171,14 +171,19 @@ public interface BaseDataService {
     }
 
     class AccountInitialInfo {
-        private String accountCode, password, nickname, avatar;
+        private String accountCode, password, nickname, avatar, roleCode;
 
-        public AccountInitialInfo(String accountCode, String password, String nickname, String avatar) {
+        public AccountInitialInfo(String accountCode, String password, String nickname, String avatar, String roleCode) {
             super();
             this.accountCode = accountCode;
             this.password = password;
             this.nickname = nickname;
             this.avatar = avatar;
+            this.roleCode = roleCode;
+        }
+
+        public String getRoleCode() {
+            return roleCode;
         }
 
         public String getAccountCode() {

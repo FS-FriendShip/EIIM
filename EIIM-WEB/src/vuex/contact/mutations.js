@@ -23,6 +23,14 @@ export default {
   },
 
   [types.INIT_ORGS] (state, orgs) {
+    if (!orgs) {
+      orgs = []
+    }
+
+    orgs.forEach((org, index) => {
+      org.active = (index === 0)
+    })
+
     state.orgs = orgs
   },
 
@@ -38,6 +46,16 @@ export default {
 
   [types.UPDATE_ORG] (state, org) {
     state.selectedOrgId = org.id
+    org.active = true
+
+    state.orgs.forEach(item => {
+      if (item.id === org.id) {
+        item.active = true
+      } else {
+        item.active = false
+      }
+    })
+
     let index = state.orgs.findIndex(item => item.id === org.id)
     state.orgs.splice(index, 1, org)
   }
