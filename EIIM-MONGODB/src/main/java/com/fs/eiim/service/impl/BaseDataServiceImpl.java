@@ -377,6 +377,40 @@ public class BaseDataServiceImpl implements BaseDataService {
                 );
             }
         }
+        if (StringUtils.isBlank(person.getMobile())) {
+            if (logger.isErrorEnabled()) {
+                logger.error("The person's mobile is blank.");
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.PERSON_MOBILE_BLANK
+            );
+        }
+        if (StringUtils.isBlank(person.getEmail())) {
+            if (logger.isErrorEnabled()) {
+                logger.error("The person's email is blank.");
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.PERSON_EMAIL_BLANK
+            );
+        }
+        Person check = accessor.findOne(GeneralAccessor.ConditionTuple.eq("mobile", person.getMobile()), Person.class);
+        if (check != null) {
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format("The person[%s] has existed.", person.getMobile()));
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.PERSON_MOBILE_EXIST
+            );
+        }
+        check = accessor.findOne(GeneralAccessor.ConditionTuple.eq("email", person.getEmail()), Person.class);
+        if (check != null) {
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format("The person[%s] has existed.", person.getEmail()));
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.PERSON_EMAIL_EXIST
+            );
+        }
         if (!StringUtils.isBlank(person.getId())) {
             Person checkedPerson = accessor.getById(person.getId(), Person.class);
             if (checkedPerson != null) {
@@ -547,7 +581,7 @@ public class BaseDataServiceImpl implements BaseDataService {
     }
 
     @Override
-    public PersonAccountTuple   validPersonAccount(String personId, boolean valid) {
+    public PersonAccountTuple validPersonAccount(String personId, boolean valid) {
         if (StringUtils.isBlank(personId)) {
             if (logger.isErrorEnabled()) {
                 logger.error("The person's id is blank.");

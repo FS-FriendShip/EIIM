@@ -91,7 +91,13 @@ public class AccountServiceImpl implements AccountService {
             }
             throw new UserInterfaceEiimErrorException(UserInterfaceEiimErrorException.EiimErrors.ACCOUNT_BLANK_PASSWORD);
         }
-        Account account = accessor.getByCode(accountCode, Account.class);
+        Account account = accessor.findOne(GeneralAccessor.ConditionGroup.or(
+                GeneralAccessor.ConditionTuple.eq("code", accountCode),
+                GeneralAccessor.ConditionTuple.eq("nickname", accountCode),
+                GeneralAccessor.ConditionTuple.eq("eiimCode", accountCode),
+                GeneralAccessor.ConditionTuple.eq("person.mobile", accountCode),
+                GeneralAccessor.ConditionTuple.eq("person.email", accountCode)
+        ), Account.class);
         if (account == null) {
             throw new UserInterfaceRbacErrorException(UserInterfaceRbacErrorException.RbacErrors.ACCOUNT_NOT_FOUND);
         }
