@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="off" packages="com.dscomm.comp.logs.appender.db.jdbc">
+    <Properties>
+        <Property name="baseDir">logs</Property>
+    </Properties>
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout charset="UTF-8"
+                           pattern="%d{yyyy/MM/dd HH:mm:ss.SSS} [%thread] %-5level %logger{10}(%line) - %msg%exception{full}%n"/>
+        </Console>
+        <RollingRandomAccessFile name="root"
+                                 fileName="${baseDir}/root.log"
+                                 filePattern="${baseDir}/%d{yyyy-MM}/root-%d{dd}-%i.log.gz">
+            <PatternLayout charset="UTF-8"
+                           pattern="%d{yyyy/MM/dd HH:mm:ss.SSS} [%thread] %-5level %logger{10}(%line) - %msg%exception{full}%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="2"/>
+                <SizeBasedTriggeringPolicy size="30MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="mx"
+                                 fileName="${baseDir}/mx.log" filePattern="${baseDir}/%d{yyyy-MM}/mx-%d{dd}-%i.log.gz">
+            <PatternLayout charset="UTF-8"
+                           pattern="%d{yyyy/MM/dd HH:mm:ss.SSS} [%thread] %-5level %logger{10}(%line) - %msg%exception{full}%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="2"/>
+                <SizeBasedTriggeringPolicy size="30 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="eiim"
+                                 fileName="${baseDir}/eiim.log"
+                                 filePattern="${baseDir}/%d{yyyy-MM}/eiim-%d{dd}-%i.log.gz">
+            <PatternLayout charset="UTF-8"
+                           pattern="%d{yyyy/MM/dd HH:mm:ss.SSS} [%thread] %-5level %logger{10}(%line) - %msg%exception{full}%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="2"/>
+                <SizeBasedTriggeringPolicy size="30 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingRandomAccessFile>
+    </Appenders>
+    <Loggers>
+        <logger name="org.mx" level="debug" additivity="false">
+            <appender-ref ref="mx"/>
+        </logger>
+        <logger name="com.fs" level="debug" additivity="false">
+            <appender-ref ref="eiim"/>
+        </logger>
+        <root level="info">
+            <appender-ref ref="root"/>
+        </root>
+    </Loggers>
+</configuration>
