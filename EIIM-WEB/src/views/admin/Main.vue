@@ -105,8 +105,8 @@ export default {
   },
 
   methods: {
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
+    handleSelectionChange (val) {
+      this.multipleSelection = val
     },
 
     selectOrg: function (row) {
@@ -162,11 +162,11 @@ export default {
     },
 
     handleUserDelete: function () {
-      if(! this.multipleSelection || this.multipleSelection.length === 0) {
+      if (!this.multipleSelection || this.multipleSelection.length === 0) {
         this.$message({
           message: '选择需要删除的用户。',
           type: 'error'
-        });
+        })
         return
       }
 
@@ -174,7 +174,7 @@ export default {
       this.multipleSelection.forEach(person =>
         personIds.push(person.id)
       )
-      let orgId= this.selectedOrgId
+      let orgId = this.selectedOrgId
       this.$confirm('此操作将永久删除, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -240,15 +240,6 @@ export default {
       this.$store.dispatch('account/api_account_enable', row).then(res => {
         this.$store.dispatch('contact/api_get_org', row.orgId)
       })
-    },
-
-    /**
-     *
-     */
-    logout: function () {
-      this.$store.dispatch('account/api_account_logout', this.currentUser.account).then(res =>
-        this.$router.push({name: 'Login'})
-      )
     }
   }
 }

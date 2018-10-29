@@ -7,6 +7,7 @@ export default {
   data () {
     return {
       websocket: null,
+      socketStatus: false,
       account: localStorage.getItem('account-key') ? JSON.parse(localStorage.getItem('account-key')).account : {}
     }
   },
@@ -16,9 +17,15 @@ export default {
   },
 
   initWebSocket () { // 初始化weosocket
+    if (this.socketStatus) {
+      console.log('Closing websocket......')
+      this.websocket.close()
+    }
+
     if (localStorage.getItem('account-key')) {
-      let account = JSON.parse(localStorage.getItem('account-key')).account
+      let account = JSON.parse(localStorage.getItem('account-key'))
       this.account = account
+      console.log(this.account)
       if (!this.websocket || this.websocket.readyState !== 1) {
         let websocketPrefix = 'ws://'
         let http = window.location.href
@@ -29,6 +36,8 @@ export default {
         const wsuri = websocketPrefix + process.env.WEBSOCKET_ENV + '/notify'// ws地址
         this.websocket = new WebSocket(wsuri)
         this.websocket.onopen = () => {
+          console.log('WebSocket连接成功')
+          this.socketStatus = true
           this.register()
         }
 
@@ -58,7 +67,6 @@ export default {
    * 注册
    */
   register () {
-    console.log(this.account)
     let accountCode = this.account.account.code
     let token = this.account.token
 
@@ -101,6 +109,8 @@ export default {
   },
 
   websocketonerror (e) { // 错误
+    this.socketStatus = false
+    console.log('WebSocket连接发生错误')
     Message.error('WebSocket连接发生错误。异常码=' + e.code)
   },
 
@@ -132,6 +142,7 @@ export default {
   },
 
   websocketclose (e) { // 关闭
-    Message.error('WebSocket连接关闭。关闭码=' + e.code)
+    this.socketStatus = false
+    console.log('WebSocket连接关闭')
   }
 }

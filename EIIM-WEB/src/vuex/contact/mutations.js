@@ -2,7 +2,16 @@ import * as types from './types.js'
 
 export default {
   [types.UPDATE_CONTACTS] (state, contacts) {
+    if (contacts) {
+      contacts.forEach((contact, index) => {
+        contact.active = (index === 0)
+      })
+    }
     state.contacts = contacts
+  },
+
+  [types.SELECT_CONTACT] (state, id) {
+    state.selectedContactId = id
   },
 
   [types.UPDATE_USER] (state, user) {

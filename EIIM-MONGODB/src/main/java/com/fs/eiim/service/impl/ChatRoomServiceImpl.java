@@ -207,6 +207,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         if (!StringUtils.isBlank(chatRoomId)) {
             chatRoom = accessor.getById(chatRoomId, ChatRoom.class);
         }
+
         if (chatRoom == null) {
             chatRoom = EntityFactory.createEntity(ChatRoom.class);
         }

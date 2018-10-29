@@ -35,7 +35,7 @@ export default {
 
   methods: {
     quitSession  () {
-      this.$store.dispatch('chatroom/api_quite_chatroom', {sessionId: this.session.id, accountCode: this.GLOBAL.account.accountCode}).then(res => this.$emit('toggleSessionInfo'))
+      this.$store.dispatch('chatroom/api_quite_chatroom', {sessionId: this.session.id, accountCode: this.GLOBAL.getAccount()}).then(res => this.$emit('toggleSessionInfo'))
     },
 
     showSessionDialog () {

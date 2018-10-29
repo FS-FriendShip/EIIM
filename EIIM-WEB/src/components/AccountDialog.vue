@@ -110,7 +110,7 @@ export default {
 
   methods: {
     saveAccountInfo (formName) {
-      this.account.roleCode = this.account.roleCode?'Administrator' : 'User'
+      this.account.roleCode = this.account.roleCode ? 'Administrator' : 'User'
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.action === 'create') {
@@ -121,9 +121,7 @@ export default {
                 nickname: this.account.nickname,
                 roleCode: this.account.roleCode
               }
-            }).then(data => {
-              this.closeDialog
-            })
+            }).then(this.closeDialog())
           } else {
             this.$store.dispatch('account/api_account_password', {
               accountCode: this.account.accountCode,

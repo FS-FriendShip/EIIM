@@ -1,6 +1,5 @@
 import api from '../../api/restApi.js'
 import * as types from './types'
-import state from './state'
 
 export default {
   /**
@@ -21,7 +20,7 @@ export default {
    * @returns {*}
    */
   api_get_contact: ({commit}, id) => {
-    return state.contacts.filter(contact => contact.id === id)
+    commit(types.SELECT_CONTACT, id)
   },
 
   /**
@@ -80,12 +79,11 @@ export default {
    */
   api_delete_org: ({commit}, orgId) => {
     return api.delOrg(orgId).then(res => {
-      if(res.errorCode === 0) {
+      if (res.errorCode === 0) {
         commit(types.UPDATE_ORG, res.data)
       }
     })
   },
-
 
   /**
    * 删除用户

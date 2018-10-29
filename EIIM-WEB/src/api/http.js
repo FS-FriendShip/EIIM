@@ -7,11 +7,7 @@ axios.defaults.timeout = 5000
 axios.defaults.baseURL = process.env.API_SERVER_ENV + '/rest/'
 
 var getAccount = function () {
-  let account = localStorage.getItem('account-key') ? JSON.parse(localStorage.getItem('account-key')) : {}
-  if (account) {
-    return account.account
-  }
-  return undefined
+  return localStorage.getItem('account-key') ? JSON.parse(localStorage.getItem('account-key')) : undefined
 }
 
 // http request 拦截器
@@ -38,7 +34,9 @@ axios.interceptors.request.use(
       }
     }
 
-    console.log(config)
+    if (process.env.NODE_ENV !== 'production') {
+     console.log(config)
+    }
     return config
   },
   error => {
@@ -49,7 +47,9 @@ axios.interceptors.request.use(
 // http response 拦截器
 axios.interceptors.response.use(
   response => {
-    console.log(response)
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(response)
+    }
     let errorCode = response.data.errorCode
     if (errorCode === 2) {
       this.$route.push({
@@ -134,7 +134,7 @@ export function get (url, params = {}) {
   if (account) {
     if (url.indexOf('?') <= 0) {
       url = url + '?accountCode=' + account.account.code
-    }else {
+    } else {
       url = url + '&accountCode=' + account.account.code
     }
   }
@@ -163,7 +163,7 @@ export function post (url, data = {}) {
   if (account) {
     if (url.indexOf('?') <= 0) {
       url = url + '?accountCode=' + account.account.code
-    }else {
+    } else {
       url = url + '&accountCode=' + account.account.code
     }
   }
@@ -215,7 +215,7 @@ export function remove (url, data = {}) {
   if (account) {
     if (url.indexOf('?') <= 0) {
       url = url + '?accountCode=' + account.account.code
-    }else {
+    } else {
       url = url + '&accountCode=' + account.account.code
     }
   }

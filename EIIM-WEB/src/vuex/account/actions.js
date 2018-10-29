@@ -25,6 +25,12 @@ export default {
     })
   },
 
+  api_portrait_set: ({commit}, portrait) => {
+    return api.saveAccountProtrait(portrait.account, portrait.fileId).then(res => {
+      commit(types.UPDATE_ACCOUNT_PORTRAIT, portrait.fileId)
+    })
+  },
+
   /**
    *
    * @param commit

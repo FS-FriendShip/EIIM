@@ -5,6 +5,8 @@ export default {
     contactsList.forEach(item => {
       item.checked = false
 
+      item.active = (item.id === state.selectedContactId)
+
       if (item.account && !item.account.avatar.startsWith('http')) {
         item.account.avatar = process.env.FILE_SERVER_ENV + item.account.avatar
       }
@@ -19,10 +21,15 @@ export default {
    * @param id
    * @returns {{}}
    */
-  contactInfo: (state, getters) => {
-    return function (id) {
-      return state.contacts.filter(item => item.id === id)
+  api_get_contact: (state, getters) => {
+    let currentId = state.selectedContactId
+
+    let contacts = state.contacts.filter(contact => contact.id === currentId)
+    if (!contacts || contacts.length === 0) {
+      return {}
     }
+
+    return contacts[0]
   },
 
   /**

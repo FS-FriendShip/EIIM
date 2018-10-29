@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import websocket from '../api/websocket'
 export default {
   name: 'Login',
   data () {
@@ -37,10 +37,6 @@ export default {
       },
       error: ''
     }
-  },
-
-  computed: {
-    ...mapGetters({account: 'account/api_get_account'})
   },
 
   methods: {
@@ -63,8 +59,7 @@ export default {
       this.$refs['LoginForm'].validate((valid) => {
         if (valid) {
           this.$store.dispatch('account/api_account_login', this.login).then((data) => {
-            data.accountCode = data.account.code
-            this.GLOBAL.account = data
+            websocket.initWebSocket()
             this.$router.push({name: 'Chat'})
           })
         } else {
@@ -81,8 +76,6 @@ export default {
       let account = localStorage.getItem('account-key') ? JSON.parse(localStorage.getItem('account-key')) : {}
       if (account) {
         next(vm => {
-          vm.GLOBAL.account = account
-
           if (account.accountCode === 'Administrator') {
             vm.$router.push({name: 'Admin'})
           } else {
