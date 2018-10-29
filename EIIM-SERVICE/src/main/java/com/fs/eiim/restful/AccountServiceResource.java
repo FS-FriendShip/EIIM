@@ -94,6 +94,17 @@ public class AccountServiceResource {
         return new DataVO<>(true);
     }
 
+    @Path("/accounts/{accountId}/avatar")
+    @GET
+    @RestAuthenticate
+    public DataVO<Boolean> changeAvatar(@PathParam("accountId") String accountId,
+                                        @QueryParam("avatarId") String avatarId,
+                                        @QueryParam("accountCode") String accountCode) {
+        sessionDataStore.setCurrentUserCode(accountCode);
+        accountService.changeAvatar(accountId, avatarId);
+        return new DataVO<>(true);
+    }
+
     @Path("accounts/{accountId}")
     @GET
     public DataVO<AccountInfoVO> getAccount(@PathParam("accountId") String accountId) {

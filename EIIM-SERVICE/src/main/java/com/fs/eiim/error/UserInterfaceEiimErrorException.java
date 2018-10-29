@@ -66,6 +66,8 @@ public class UserInterfaceEiimErrorException extends UserInterfaceException {
 
         CHATROOM_NOTICE_SAVE_FAIL("保存指定的聊天室公告失败。"),
 
+        AVATAR_NOT_FOUND("指定的头像不存在。"),
+
         FILE_UPLOAD_FAIL("文件上传保存失败。"),
         FILE_DOWNLOAD_FAIL("文件下载读取失败。"),
         FILE_NOT_FOUND("指定的文件不存在。"),

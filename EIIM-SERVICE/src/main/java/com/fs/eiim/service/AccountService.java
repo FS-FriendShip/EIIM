@@ -24,6 +24,8 @@ public interface AccountService {
 
     void resetPassword(String accountId, String password);
 
+    void changeAvatar(String accountId, String avatarId);
+
     Account getAccountById(String accountId);
 
     List<AccountState> getAllAccountsStatus();

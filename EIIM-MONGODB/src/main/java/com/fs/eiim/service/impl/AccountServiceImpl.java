@@ -2,6 +2,7 @@ package com.fs.eiim.service.impl;
 
 import com.fs.eiim.dal.entity.Account;
 import com.fs.eiim.dal.entity.AccountState;
+import com.fs.eiim.dal.entity.Attachment;
 import com.fs.eiim.dal.entity.Person;
 import com.fs.eiim.error.UserInterfaceEiimErrorException;
 import com.fs.eiim.service.AccountService;
@@ -276,6 +277,40 @@ public class AccountServiceImpl implements AccountService {
         accessor.save(account);
         if (logger.isDebugEnabled()) {
             logger.debug(String.format("Reset the account[%s]'s password successfully.", accountId));
+        }
+    }
+
+    @Override
+    public void changeAvatar(String accountId, String avatarId) {
+        if (StringUtils.isBlank(accountId) || StringUtils.isBlank(avatarId)) {
+            if (logger.isErrorEnabled()) {
+                logger.error("The account's id or avatar's id is blank.");
+            }
+            throw new UserInterfaceSystemErrorException(
+                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            );
+        }
+        Account account = accessor.getById(accountId, Account.class);
+        if (account == null) {
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format("The account[%s] not found.", accountId));
+            }
+            throw new UserInterfaceRbacErrorException(UserInterfaceRbacErrorException.RbacErrors.ACCOUNT_NOT_FOUND);
+        }
+        Attachment attachment = accessor.getById(avatarId, Attachment.class);
+        if (attachment == null) {
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format("The avatar[%s] not found.", avatarId));
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.AVATAR_NOT_FOUND
+            );
+        }
+        account.setAvatar(avatarId);
+        accessor.save(account);
+        if (logger.isDebugEnabled()) {
+            logger.debug(String.format("Change the account[%s]'s avatar successfully, avatar's id: %s.",
+                    accountId, avatarId));
         }
     }
 
