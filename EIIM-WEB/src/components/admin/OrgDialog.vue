@@ -47,9 +47,7 @@ export default {
         name: [
           { validator: validateName, trigger: 'blur' }
         ]
-      },
-
-
+      }
     }
   },
 

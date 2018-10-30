@@ -9,6 +9,7 @@
 
 <script>
 import NavBar from './components/NavBar'
+import websocket from './api/websocket'
 export default {
   name: 'App',
   components: {NavBar},
@@ -27,9 +28,11 @@ export default {
     }
   },
 
-  mounted () {
+  created () {
     let href = window.location.href
     this.showNav = !href.endsWith('/')
+
+    websocket.initWebSocket()
 
     if (window.require) {
       let ipc = window.require('electron').ipcRenderer

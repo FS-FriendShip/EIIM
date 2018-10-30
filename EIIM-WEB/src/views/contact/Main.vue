@@ -1,146 +1,170 @@
 <template>
-  <el-container id = "Chat" v-upload>
-    <el-aside class="session">
-      < ></Session>
+  <el-container id = "Contact"  v-bind:style="{height:adminHeight}">
+    <el-aside class="contact-list">
+      <el-container>
+        <el-header style="padding:10px">
+          <el-row>
+            <el-input
+              placeholder="检索"
+              class="search"
+              @keyup.native="searchSession"
+              prefix-icon="el-icon-search"
+              v-model="key">
+            </el-input>
+          </el-row>
+        </el-header>
+
+        <el-main>
+          <el-row type="flex" align="middle" class="contact-item" v-bind:class="contact.active ? 'active':''" :gutter="50" v-for="contact in contacts"  @click.native="selectContact(contact)" :key="contact.id">
+            <el-col :span="4"><img class="avatar-medium" :src="contact.account.avatar"></el-col>
+            <el-col :span="20" :push="1">
+              <span class="title">{{contact.fullName}}</span>
+            </el-col>
+          </el-row>
+        </el-main>
+      </el-container>
     </el-aside>
 
-    <el-main class="message-main">
-      <el-row class="message-header" align="middle">
-        <el-col :span="22" :class="'header-item'"><div class="session-name">{{session?session.name:''}}</div></el-col>
-        <el-col :span="2" :class="'header-item'">
-          <i class="iconfont icon-Set-up" @click="toggleSessionInfo"></i>
+    <el-main class="contact-info">
+      <el-row class="contact-item header" type="flex" align="middle">
+        <el-col :span="3" :offset="4" style="font-size:24px; font-weight:bolder">{{contact.fullName}}</el-col>
+        <el-col :span="12"></el-col>
+        <el-col :span="1"><img class="avatar-large" :src="contact.account?contact.account.avatar:''"></el-col>
+      </el-row>
+
+      <el-row class="contact-item">
+        <el-col :span="3" :offset="4">职务</el-col>
+        <el-col :span="17">{{contact.title}}</el-col>
+      </el-row>
+
+      <el-row class="contact-item">
+        <el-col :span="3" :offset="4">固定电话</el-col>
+        <el-col :span="17">{{contact.phone}}</el-col>
+      </el-row>
+
+      <el-row class="contact-item">
+        <el-col :span="3" :offset="4">移动电话</el-col>
+        <el-col :span="17">{{contact.mobile}}</el-col>
+      </el-row>
+
+      <el-row class="contact-item">
+        <el-col :span="3" :offset="4">邮箱</el-col>
+        <el-col :span="17">{{contact.email}}</el-col>
+      </el-row>
+
+      <el-row style="margin-top:50px">
+        <el-col :span="24" :offset="12">
+          <el-button  type="primary" @click="send(contact)">发消息</el-button>
         </el-col>
-      </el-row>
-      <el-row class="message-body">
-        <Message v-bind:style="{height:messageHeight}" v-on:toggleSessionInfo="toggleSessionInfo"></Message>
-        <SessionInfo v-show="showSessionInfo" :session="session"></SessionInfo>
-      </el-row>
-      <el-row class="message-footer">
-        <MessageSend></MessageSend>
       </el-row>
     </el-main>
   </el-container>
 </template>
 
 <script>
-import Session from '../../components/chat/Session'
-import MessageSend from '../../components/chat/MessageSend'
-import Message from '../../components/chat/Message'
-import SessionInfo from '../../components/chat/SessionInfo'
-import websocket from '../../api/websocket'
 import {mapGetters} from 'vuex'
 
 export default {
-  name: 'Main',
-  components: {MessageSend, Message, Session, SessionInfo},
+  name: 'Contact',
 
   data () {
     return {
-      showSessionInfo: false,
-      messageHeight: (window.innerHeight - 200) + 'px'
+      selectedContactId: '',
+      key: '',
+      adminHeight: (window.innerHeight) + 'px',
+
+      user: {
+        id: null,
+        orgId: null,
+        fullName: null,
+        title: null,
+        sex: 'MALE',
+        mobile: null,
+        phone: null,
+        email: null
+      }
     }
   },
 
+  computed: {
+    ...mapGetters({contacts: 'contact/api_get_contacts', contact: 'contact/api_get_contact'})
+  },
+
   methods: {
-    toggleSessionInfo () {
-      this.showSessionInfo = !this.showSessionInfo
+    selectContact: function (contact) {
+      this.selectedContactId = contact.id
+      this.$store.dispatch('contact/api_get_contact', contact.id)
+    },
+
+    send: function (contact) {
+      let _this = this
+      let session = {}
+      let names = contact.account.nickName
+      let accountCodes = [this.GLOBAL.getAccount().code]
+      accountCodes.push(contact.account.code)
+
+      session.name = names
+      session.accountCodes = accountCodes
+
+      this.$store.dispatch('chatroom/api_new_chatroom', session).then((data) => {
+        if (data.existed) {
+          _this.$router.push({name: 'Chat', params: {chatroomId: data.room.id}})
+        } else {
+          _this.dialogVisible = false
+          // //发送消息
+          let message = '我是' + _this.GLOBAL.getAccount().nickname
+          let roomId = data.id
+          this.$store.dispatch('chatroom/api_send_text_message', {
+            sessionId: data.id,
+            message: message
+          }).then(
+            _this.$router.push({name: 'Chat', params: {chatroomId: roomId}})
+          )
+        }
+      })
     }
   },
 
   created  () {
-    let account = this.user
-    this.GLOBAL.account = account
-    websocket.initWebSocket()
+    this.$store.dispatch('contact/api_get_contacts').then(() => {
 
-    // 获取聊天室信息
-    this.$store.dispatch('chatroom/api_get_chatrooms', account.account).then(() => {
-      this.sessionDialogVisible = true
-
-      let params = {session: this.session, account: this.GLOBAL.account.account}
-      if (this.session) {
-        this.$store.dispatch('chatroom/api_select_chatroom', params)
-      }
     })
-  },
-
-  computed: {
-    ...mapGetters({session: 'chatroom/api_get_chatroom', user: 'account/api_current_account'})
-  },
-
-  mounted () {
-    const that = this
-    window.onresize = function windowResize () {
-      that.messageHeight = (window.innerHeight - 200) + 'px'
-    }
-  },
-
-  directives: {
-    upload: {
-      bind (el) {
-        el.addEventListener('paste', function (event) {
-        })
-      }
-    }
   }
 }
 </script>
 
-<style scoped>
-  #Chat {
+<style scoped  lang="less">
+  #Contact {
     width: 100%;
     height: 100%;
     padding: 0;
 
     text-align: left;
-    color: #fff;
     background: #fff;
   }
 
-  #Chat .session {
-    width:400px!important;
-    background: #fff;
+  #Contact .contact-list {
+    width:300px!important;
+    background: #eee;
+
+    .contact-item{
+      padding: 5px 0px;
+
+      &.active {
+        background-color: #fff;
+      }
+    }
   }
 
-  #Chat .message-main{
-    padding: 0px;
-    overflow: hidden;
-    color: #000!important;
-    background-color: #eee;
-  }
+  #Contact .contact-info {
+    .contact-item {
+      padding:15px 0px;
+    }
 
-  #Chat .message-main .message-header{
-    padding:0px;
-    width: 100%;
-    height:50px;
-    border-bottom: 1px solid silver;
-  }
-
-  #Chat .message-main .message-header .header-item{
-    height: 100%;
-    line-height: 30px;
-    padding: 10px 20px;
-    text-align: left;
-  }
-
-  #Chat .message-main .message-header .header-item .session-name {
-    font-weight: bolder;
-    font-size: 18px;
-  }
-
-  #Chat .message-main .message-header .header-item .icon-Set-up {
-    font-size: 24px;
-  }
-
-  #Chat .message-main .message-body{
-    padding:0px;
-    width: 100%;
-    /*height:650px;*/
-  }
-
-  #Chat .message-main .message-footer{
-    bottom:0px;
-    padding:0px;
-    width: 100%;
-    height: 150px;
+    .contact-item.header {
+      height:100px;
+      border-bottom:1px solid #eee;
+      margin-bottom:10px;
+    }
   }
 </style>

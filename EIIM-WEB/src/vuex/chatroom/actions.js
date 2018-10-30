@@ -96,7 +96,33 @@ export default {
    * @param contact
    * @returns {Promise<T>}
    */
-  api_new_chatroom: ({commit}, session) => {
+  api_new_chatroom: ({commit, state}, session) => {
+    let members = session.accountCodes
+
+    let chatrooms = state.chatrooms
+    if (chatrooms) {
+      let found
+      let existed = chatrooms.filter(chatroom => {
+        if (chatroom.members.length !== 2) return false
+
+        found = chatroom.members.filter(member => {
+          return member.account.code === members[0]
+        })
+        if (found) {
+          found = chatroom.members.filter(member => {
+            return member.account.code === members[1]
+          })
+        }
+
+        return found.length > 0
+      })
+
+      console.log(existed)
+      if (existed && existed.length > 0) {
+        return {existed: true, room: existed[0]}
+      }
+    }
+
     let chatroom = {
       name: session.name,
       addAccountCodes: session.accountCodes

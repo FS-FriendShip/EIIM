@@ -5,7 +5,15 @@ export default{
   title: {
     Contact: '通讯录'
   },
-  account: {},
+
+  getAccount: function () {
+    let account = localStorage.getItem('account-key') ? JSON.parse(localStorage.getItem('account-key')) : undefined
+    if (account) {
+      return account.account
+    }
+
+    return account
+  },
 
   selectedSessionId: null
 }

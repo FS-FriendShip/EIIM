@@ -75,7 +75,13 @@ export default {
   },
 
   computed: {
-    ...mapGetters({sessions: 'chatroom/api_get_chatrooms', search: 'chatroom/api_search_chatroom', userList: 'contact/api_contact_List'})
+    ...mapGetters({sessions: 'chatroom/api_get_chatrooms', search: 'chatroom/api_search_chatroom', userList: 'contact/api_contact_List', findSession: 'chatroom/api_find_chatroom'})
+  },
+
+  mounted () {
+    let session = this.findSession(this.$route.params.chatroomId)
+
+    this.selectSession(session)
   },
 
   methods: {
@@ -109,7 +115,7 @@ export default {
      * @param sessionId
      */
     selectSession (session) {
-      let params = {session: session, account: this.GLOBAL.account.account}
+      let params = {session: session, account: this.GLOBAL.getAccount()}
       this.$store.dispatch('chatroom/api_select_chatroom', params)
     },
 

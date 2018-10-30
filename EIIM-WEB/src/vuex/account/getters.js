@@ -8,10 +8,9 @@ export default {
   },
 
   api_current_account: state => {
-    if (localStorage.getItem('account-key')) {
-      let account = JSON.parse(localStorage.getItem('account-key')).account
-
-      account.account.avatar = process.env.FILE_SERVER_ENV + account.account.avatar
+    let account = state.account.account
+    if (account) {
+      account.avatar = process.env.FILE_SERVER_ENV + account.avatar
       return account
     } else {
       return {}

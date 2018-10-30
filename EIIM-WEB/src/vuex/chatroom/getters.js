@@ -9,7 +9,7 @@ export default {
   api_get_chatrooms: (state, getters) => {
     let chatrooms = state.chatrooms
     if (chatrooms) {
-      let account = JSON.parse(localStorage.getItem('account-key')).account.account
+      let account = JSON.parse(localStorage.getItem('account-key')).account
       chatrooms.forEach(chatroom => {
         let latestMessage = chatroom.latestMessage
         if (latestMessage) {
@@ -42,7 +42,29 @@ export default {
         }
       })
     }
+
+    chatrooms.sort(function (a, b) {
+      if (!a.latestMessage && !b.latestMessage) return 1
+
+      if (a.latestMessage && !b.latestMessage) return -1
+
+      if (!a.latestMessage && b.latestMessage) return 1
+
+      return b.latestMessage.sentTime - a.latestMessage.sentTime
+    })
     return chatrooms
+  },
+
+  /**
+   *
+   * @param state
+   * @param getters
+   * @returns {function(*): *}
+   */
+  api_find_chatroom: (state, getters) => {
+    return function (sessionId) {
+      return state.chatrooms.filter(room => room.id === sessionId)
+    }
   },
 
   /**

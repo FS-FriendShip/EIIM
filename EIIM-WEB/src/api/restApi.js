@@ -25,6 +25,16 @@ export default {
   },
 
   /**
+   * 设置头像
+   * @param account
+   * @param fileId
+   * @returns {Promise}
+   */
+  saveAccountProtrait (account, fileId)  {
+    return get('/v1/accounts/' + account.id + '/avatar?avatarId=' + fileId)
+  },
+
+  /**
    * 启用帐号
    * @param personId
    * @param account

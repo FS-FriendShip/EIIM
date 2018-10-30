@@ -100,7 +100,7 @@ export default {
     createSession () {
       let session = this.session ? this.session : {}
       let names = ''
-      let accountCodes = [this.GLOBAL.account.account.code]
+      let accountCodes = [this.GLOBAL.getAccount().code]
 
       this.sessionMemberList.forEach((member, index) => {
         if (index > 0) names += '、'
@@ -119,13 +119,16 @@ export default {
 
       if (this.isNew || (!this.isGroup && session.accountCodes.length > 2)) {
         this.$store.dispatch('chatroom/api_new_chatroom', session).then((data) => {
+          console.log(data)
           this.dialogVisible = false
           // //发送消息
-          let message = '我是' + this.GLOBAL.account.account.nickname
+          let message = '我是' + this.GLOBAL.getAccount().nickname
           this.$store.dispatch('chatroom/api_send_text_message', {
             sessionId: data.id,
             message: message
-          })
+          }).then(
+            this.dialogVisible = false
+          )
         })
       } else {
         this.$store.dispatch('chatroom/api_update_chatroom_members', session).then((data) => {

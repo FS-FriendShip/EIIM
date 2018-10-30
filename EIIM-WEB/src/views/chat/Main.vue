@@ -27,7 +27,6 @@ import Session from '../../components/chat/Session'
 import MessageSend from '../../components/chat/MessageSend'
 import Message from '../../components/chat/Message'
 import SessionInfo from '../../components/chat/SessionInfo'
-import websocket from '../../api/websocket'
 import {mapGetters} from 'vuex'
 
 export default {
@@ -48,15 +47,12 @@ export default {
   },
 
   created  () {
-    let account = this.user
-    this.GLOBAL.account = account
-    websocket.initWebSocket()
-
+    let account = this.GLOBAL.getAccount()
     // 获取聊天室信息
-    this.$store.dispatch('chatroom/api_get_chatrooms', account.account).then(() => {
+    this.$store.dispatch('chatroom/api_get_chatrooms', account).then(() => {
       this.sessionDialogVisible = true
 
-      let params = {session: this.session, account: this.GLOBAL.account.account}
+      let params = {session: this.session, account: account}
       if (this.session) {
         this.$store.dispatch('chatroom/api_select_chatroom', params)
       }
@@ -64,11 +60,12 @@ export default {
   },
 
   computed: {
-    ...mapGetters({session: 'chatroom/api_get_chatroom', user: 'account/api_current_account'})
+    ...mapGetters({session: 'chatroom/api_get_chatroom'})
   },
 
   mounted () {
     const that = this
+
     window.onresize = function windowResize () {
       that.messageHeight = (window.innerHeight - 200) + 'px'
     }
