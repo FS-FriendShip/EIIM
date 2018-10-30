@@ -13,6 +13,8 @@ public interface FileTransformService {
 
     FileDownloadBean downloadFile(String uuid);
 
+    FileDownloadBean downloadAvatarFile(String accountId);
+
     class FileUploadBean {
         private String id, fileName, fileType, fileDescribe;
         private long fileSize;
