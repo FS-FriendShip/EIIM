@@ -1,5 +1,6 @@
 package com.fs.eiim.service.impl;
 
+import com.fs.eiim.dal.entity.Account;
 import com.fs.eiim.dal.entity.Attachment;
 import com.fs.eiim.error.UserInterfaceEiimErrorException;
 import com.fs.eiim.service.FileDescribeCheckService;
@@ -112,5 +113,36 @@ public class FileSimpleTransformServiceImpl implements FileTransformService {
         }
         return new FileDownloadBean(pathFile.toFile(), attachment.getFileName(),
                 attachment.getFileType(), attachment.getFileDescribe(), attachment.getFileSize());
+    }
+
+    @Override
+    public FileDownloadBean downloadAvatarFile(String accountId) {
+        if (StringUtils.isBlank(accountId)) {
+            if (logger.isErrorEnabled()) {
+                logger.error("The account's id is blank.");
+            }
+            throw new UserInterfaceSystemErrorException(
+                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            );
+        }
+        Account account = generalAccessor.getById(accountId, Account.class);
+        if (account == null) {
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format("The account[%s] not found.", accountId));
+            }
+            throw new UserInterfaceEiimErrorException(
+                    UserInterfaceEiimErrorException.EiimErrors.ACCOUNT_NOT_FOUND
+            );
+        }
+        String avatarId = account.getAvatar();
+        if (StringUtils.isBlank(avatarId)) {
+            if (logger.isErrorEnabled()) {
+                logger.error("The avatar's id is blank.");
+            }
+            throw new UserInterfaceSystemErrorException(
+                    UserInterfaceSystemErrorException.SystemErrors.SYSTEM_ILLEGAL_PARAM
+            );
+        }
+        return downloadFile(avatarId);
     }
 }

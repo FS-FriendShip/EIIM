@@ -7,7 +7,6 @@ import com.fs.eiim.service.BaseDataCacheService;
 import com.fs.eiim.service.BaseDataService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.mx.CollectionUtils;
 import org.mx.DigestUtils;
 import org.mx.StringUtils;
 import org.mx.comps.rbac.dal.entity.Role;
@@ -167,10 +166,10 @@ public class BaseDataServiceImpl implements BaseDataService {
 
     @Override
     public List<Org> getAllOrgs() {
-        List<Org> orgs =  accessor.find(GeneralAccessor.ConditionTuple.eq("parent", null), Org.class);
-        if(orgs != null){
+        List<Org> orgs = accessor.find(GeneralAccessor.ConditionTuple.eq("parent", null), Org.class);
+        if (orgs != null) {
             return orgs.stream().filter(org -> org.isValid()).collect(Collectors.toList());
-        }else{
+        } else {
             return new ArrayList<>();
         }
     }
@@ -399,23 +398,26 @@ public class BaseDataServiceImpl implements BaseDataService {
                     UserInterfaceEiimErrorException.EiimErrors.PERSON_EMAIL_BLANK
             );
         }
-        Person check = accessor.findOne(GeneralAccessor.ConditionTuple.eq("mobile", person.getMobile()), Person.class);
-        if (check != null) {
-            if (logger.isErrorEnabled()) {
-                logger.error(String.format("The person[%s] has existed.", person.getMobile()));
+        if (StringUtils.isBlank(person.getId())) {
+            // 如果新增人员，判定相关的mobile和email是否已经被使用过
+            Person check = accessor.findOne(GeneralAccessor.ConditionTuple.eq("mobile", person.getMobile()), Person.class);
+            if (check != null) {
+                if (logger.isErrorEnabled()) {
+                    logger.error(String.format("The person[%s] has existed.", person.getMobile()));
+                }
+                throw new UserInterfaceEiimErrorException(
+                        UserInterfaceEiimErrorException.EiimErrors.PERSON_MOBILE_EXIST
+                );
             }
-            throw new UserInterfaceEiimErrorException(
-                    UserInterfaceEiimErrorException.EiimErrors.PERSON_MOBILE_EXIST
-            );
-        }
-        check = accessor.findOne(GeneralAccessor.ConditionTuple.eq("email", person.getEmail()), Person.class);
-        if (check != null) {
-            if (logger.isErrorEnabled()) {
-                logger.error(String.format("The person[%s] has existed.", person.getEmail()));
+            check = accessor.findOne(GeneralAccessor.ConditionTuple.eq("email", person.getEmail()), Person.class);
+            if (check != null) {
+                if (logger.isErrorEnabled()) {
+                    logger.error(String.format("The person[%s] has existed.", person.getEmail()));
+                }
+                throw new UserInterfaceEiimErrorException(
+                        UserInterfaceEiimErrorException.EiimErrors.PERSON_EMAIL_EXIST
+                );
             }
-            throw new UserInterfaceEiimErrorException(
-                    UserInterfaceEiimErrorException.EiimErrors.PERSON_EMAIL_EXIST
-            );
         }
         if (!StringUtils.isBlank(person.getId())) {
             Person checkedPerson = accessor.getById(person.getId(), Person.class);
@@ -591,7 +593,7 @@ public class BaseDataServiceImpl implements BaseDataService {
     }
 
     @Override
-    public boolean   validPersonAccount(List<String> personIds, boolean valid) {
+    public boolean validPersonAccount(List<String> personIds, boolean valid) {
         if (personIds == null || personIds.isEmpty()) {
             if (logger.isErrorEnabled()) {
                 logger.error("The person's id is blank.");
@@ -601,7 +603,7 @@ public class BaseDataServiceImpl implements BaseDataService {
             );
         }
 
-        for(String personId : personIds) {
+        for (String personId : personIds) {
             Person person = accessor.getById(personId, Person.class);
             if (person == null) {
                 if (logger.isErrorEnabled()) {

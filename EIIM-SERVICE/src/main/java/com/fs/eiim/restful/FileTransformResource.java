@@ -16,7 +16,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 @Component("fileTransformResource")
@@ -52,12 +51,7 @@ public class FileTransformResource {
         }
     }
 
-    @Path("download/{uuid}")
-    @GET
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.MULTIPART_FORM_DATA)
-    public Response downloadFile(@PathParam("uuid") String uuid) {
-        FileTransformService.FileDownloadBean downloadBean = fileTransformService.downloadFile(uuid);
+    private Response downloadFile(FileTransformService.FileDownloadBean downloadBean) {
         if (downloadBean != null) {
             try {
                 String filename = URLEncoder.encode(downloadBean.getFileName(), "UTF-8");
@@ -73,5 +67,23 @@ public class FileTransformResource {
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
+    }
+
+    @Path("download/{uuid}")
+    @GET
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.MULTIPART_FORM_DATA)
+    public Response downloadFile(@PathParam("uuid") String uuid) {
+        FileTransformService.FileDownloadBean downloadBean = fileTransformService.downloadFile(uuid);
+        return downloadFile(downloadBean);
+    }
+
+    @Path("download/avatar/{accountId}")
+    @GET
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.MULTIPART_FORM_DATA)
+    public Response downloadAvatarFile(@PathParam("accountId") String accountId) {
+        FileTransformService.FileDownloadBean downloadBean = fileTransformService.downloadAvatarFile(accountId);
+        return downloadFile(downloadBean);
     }
 }
