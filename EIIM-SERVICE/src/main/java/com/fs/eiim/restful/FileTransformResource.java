@@ -62,7 +62,7 @@ public class FileTransformResource {
             try {
                 String filename = URLEncoder.encode(downloadBean.getFileName(), "UTF-8");
                 return Response.ok(downloadBean.getFile())
-                        .header("Content-disposition", "attachment;filename* = UTF-8''" + filename)
+                        .header("Content-disposition", "attachment;filename=" + filename)
                         .header("Content-Length", downloadBean.getFileSize())
                         .header("Cache-Control", "no-cache").build();
             } catch (UnsupportedEncodingException ex) {

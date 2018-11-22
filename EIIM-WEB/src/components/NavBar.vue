@@ -77,17 +77,17 @@ export default {
   },
 
   methods: {
-    beforeAvatarUpload(file) {
-      const isJPG = (file.type === 'image/jpeg' || file.type === 'image/png') ;
-      const isLt2M = file.size / 1024 / 1024 < 2;
+    beforeAvatarUpload (file) {
+      const isJPG = (file.type === 'image/jpeg' || file.type === 'image/png')
+      const isLt2M = file.size / 1024 / 1024 < 2
 
       if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 或 PNG 格式!');
+        this.$message.error('上传头像图片只能是 JPG 或 PNG 格式!')
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!');
+        this.$message.error('上传头像图片大小不能超过 2MB!')
       }
-      return isJPG && isLt2M;
+      return isJPG && isLt2M
     },
 
     /**
@@ -96,7 +96,7 @@ export default {
      * */
     sendPortrait (params) {
       let _this = this
-      if(this.beforeAvatarUpload(params)){
+      if (this.beforeAvatarUpload(params)) {
         this.$store.dispatch('chatroom/api_upload_file', params).then((data) => {
           this.$store.dispatch('account/api_portrait_set', {
             fileId: data.id,

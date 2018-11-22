@@ -4,18 +4,30 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './vuex'
-import filters from './filters' // 将全部过滤器放在 filters/index.js 中便于管理
 import global_ from './common/global'
-import {Field, Button, Cell} from 'mint-ui'
+import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
+import {dateFormat} from './common/utils'
 
-Vue.component(Field.name, Field)
-Vue.component(Button.name, Button)
-Vue.component(Cell.name, Cell)
+Vue.use(MintUI)
 
 Vue.prototype.GLOBAL = global_
 
-filters(Vue)
+Vue.filter('formatDate', function (value, scene) {
+  if (value) {
+    let date = new Date(value)
+    let currentDate = new Date()
+    if (scene === 'session') {
+      if (dateFormat(currentDate, 'yy/MM/dd') === dateFormat(date, 'yy/MM/dd')) {
+        return dateFormat(date, 'hh:mm')
+      } else {
+        return dateFormat(date, 'yy/MM/dd')
+      }
+    } else {
+      return dateFormat(date, 'yyyy年MM月dd日 hh:mm')
+    }
+  }
+})
 
 Vue.config.productionTip = false
 

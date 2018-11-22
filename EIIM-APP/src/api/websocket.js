@@ -1,11 +1,14 @@
 import store from '../vuex'
+import { Toast } from 'mint-ui'
+
 export default {
   name: 'websocket',
 
   data () {
     return {
       websocket: null,
-      account: null
+      socketStatus: false,
+      account: localStorage.getItem('account-key') ? JSON.parse(localStorage.getItem('account-key')).account : {}
     }
   },
 
@@ -13,21 +16,51 @@ export default {
     this.websocket.close()
   },
 
-  initWebSocket (account) { // 初始化weosocket
-    if (!this.websocket || this.websocket.readyState !== 1) {
+  initWebSocket () { // 初始化weosocket
+    if (this.socketStatus) {
+      console.log('Closing websocket......')
+      this.websocket.close()
+    }
+
+    if (localStorage.getItem('account-key')) {
+      let account = JSON.parse(localStorage.getItem('account-key'))
       this.account = account
+      console.log(this.account)
+      if (!this.websocket || this.websocket.readyState !== 1) {
+        let websocketPrefix = 'ws://'
+        let http = process.env.API_SERVER_ENV
+        console.log(http)
+        if (http.substr(0, 5) === 'https') {
+          websocketPrefix = 'wss://'
+        }
 
-      const wsuri = 'ws://localhost:9997/notify' // ws地址
-      this.websocket = new WebSocket(wsuri)
-      this.websocket.onopen = () => {
-        this.register()
-        console.log('WebSocket连接成功')
+        const wsuri = websocketPrefix + process.env.WEBSOCKET_ENV + '/notify'// ws地址
+        this.websocket = new WebSocket(wsuri)
+        this.websocket.onopen = () => {
+          console.log('WebSocket连接成功')
+          this.socketStatus = true
+          this.register()
+        }
+
+        this.websocket.onerror = this.websocketonerror
+
+        this.websocket.onmessage = (e) => {
+          let data = JSON.parse(e.data)
+          let messageId = data.messageId
+
+          // 聊天信息处理
+          if (messageId === 'chatMessage') {
+            let message = data.message
+            if (message.sender.code === this.account.account.code) {
+              message.owner = 'self'
+            }
+
+            store.dispatch('chatroom/update_chatroom_message', message)
+          }
+        }
+
+        this.websocket.onclose = this.websocketclose
       }
-
-      this.websocket.onerror = this.websocketonerror
-
-      this.websocket.onmessage = this.websocketonmessage
-      this.websocket.onclose = this.websocketclose
     }
   },
 
@@ -35,7 +68,7 @@ export default {
    * 注册
    */
   register () {
-    let accountCode = this.account.accountCode
+    let accountCode = this.account.account.code
     let token = this.account.token
 
     let register = {
@@ -77,37 +110,39 @@ export default {
   },
 
   websocketonerror (e) { // 错误
-    console.log('WebSocket连接发生错误')
+    this.socketStatus = false
+    Toast({message: 'WebSocket连接发生错误', duration: this.GLOBAL.toast.duration})
   },
 
   websocketonmessage (e) { // 数据接收
-    console.log(e)
     let data = JSON.parse(e.data)
     let messageId = data.messageId
 
     // 聊天信息处理
     if (messageId === 'chatMessage') {
       let message = data.message
+      if (message.sender.code === this.account.account.code) {
+        message.owner = 'self'
+      }
       store.dispatch('chatroom/update_chatroom_message', message)
     }
   },
 
   send (content) { // 数据发送
-    let accountCode = this.account.accountCode
+    let accountCode = this.account.account.code
 
     content.deviceId = accountCode + '.pc'
     content.accountCode = accountCode
-
     let message = {
       command: 'sendChatMessage',
       type: 'USER',
       payload: content
     }
-    console.log(message)
     this.websocket.send(JSON.stringify(message))
   },
 
   websocketclose (e) { // 关闭
-    console.log('connection closed (' + e.code + ')')
+    this.socketStatus = false
+    console.log('WebSocket连接关闭')
   }
 }

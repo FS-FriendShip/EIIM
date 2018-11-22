@@ -16,7 +16,9 @@ export default {
   props: {
     content: {
       type: Object,
-      default: {txt: ''}
+      default: () => {
+        return {txt: ''}
+      }
     }
   },
   watch: {
@@ -33,7 +35,7 @@ export default {
   methods: {
     changeTxt: function (e) {
       this.content.txt = this.$el.innerHTML
-      if (e.ctrlKey && (e.keyCode === 13 || e.keyCode === 91) && this.$el.innerHTML.length) {
+      if ((e.keyCode === 13 || e.keyCode === 91) && this.$el.innerHTML.length) {
         this.$emit('send')
         this.$el.innerHTML = ''
       }

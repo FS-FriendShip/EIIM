@@ -7,10 +7,7 @@
 */
 
 #app {
-    /*position: absolute;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;*/
+
 }
 
 #app.lock {
@@ -26,8 +23,7 @@
     top: 0;
     height: 100%;
     width: 100%;
-    /*overflow: hidden;*/
-    /*bottom: 0;*/
+    bottom: 0;
 }
 
 
@@ -66,41 +62,10 @@ body {
     text-align: center;
 }
 
-.app-header.header-hide {
-    margin-top: -45px;
-}
-
 .app-content {
-    overflow-x: hidden;
-    overflow-y: auto;
-    z-index: 1;
-    /*position: absolute;*/
-    /*left: 0;*/
+    overflow: hidden;
     padding-bottom: 49px;
     width: 100%;
-}
-
-.app-footer {
-    bottom: 0;
-    left: 0 !important;
-    width: 100%;
-    position: fixed;
-    z-index: 3;
-}
-
-.app-footer:not(:first-child)::before {
-    content: "";
-    position: absolute;
-    width: 200%;
-    left: 0px;
-    top: 0;
-    transform: scale(.5);
-    transform-origin: 0 0;
-    -webkit-transform: scale(.5);
-    -webkit-transform-origin: 0 0;
-    background-color: #b7b7b7;
-    height: 1px;
-    z-index: 4;
 }
 
 .new-msg-count {

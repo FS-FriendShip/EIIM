@@ -2,9 +2,9 @@
   <div id="app">
     <div class="outter" :class="{'hideLeft':$route.path.split('/').length>2}">
       <!--通用头部-->
-      <header class="app-header">
-        <wx-header :pageName="this.GLOBAL.appName"></wx-header>
-      </header>
+      <!--<header class="app-header">-->
+        <!--<wx-header :pageName="this.GLOBAL.appName"></wx-header>-->
+      <!--</header>-->
 
       <section class="app-content">
         <keep-alive>
@@ -72,14 +72,36 @@ export default {
 
 @import "assets/css/base.css";
 @import "assets/css/common.css";
-@import "assets/css/wx-header.css";
 /*阿里 fonticon*/
-
 @import "assets/css/lib/iconfont.css";
 /*过渡效果需要的动画库*/
 
-@import "assets/css/lib/animate.css";
-/*weui 样式库 非常适合高仿微信*/
+li {
+  list-style:none;
+}
 
-@import "assets/css/lib/weui.min.css";
+.avatar-small {
+  width: 30px;
+  height: 30px;
+}
+
+.avatar-medium {
+  width: 40px;
+  height: 40px;
+}
+
+.avatar-large {
+  width: 50px;
+  height: 50px;
+}
+
+::-webkit-scrollbar {
+  width: 0px;  /* remove scrollbar space */
+  background: transparent;  /* optional: just make scrollbar invisible */
+}
+
+.nav {
+  width:75px!important;
+  background: #4F4F4F;
+}
 </style>

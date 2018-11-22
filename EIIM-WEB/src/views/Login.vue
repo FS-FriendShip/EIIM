@@ -1,28 +1,29 @@
 <template>
-  <div>
-  <el-form ref="LoginForm" :model="login" class="login-container">
-    <div class="banner">
-      <img style='width:100%;height:100px;' src="../assets/rhosoon.png">
-    </div>
+  <el-row type="flex" align="middle" v-bind:style="{height:windowHeight}">
+    <el-col   >
+      <el-form ref="LoginForm" :model="login" class="login-container">
+        <div class="banner">
+          <img style='width:100%;height:100px;' src="../assets/rhosoon.png">
+        </div>
 
-    <el-form-item prop="accountCode"  :rules="[{required: true, message: '用户名不能为空'}]">
-      <el-input v-model="login.accountCode" placeholder="用户名"></el-input>
-    </el-form-item>
+        <el-form-item prop="accountCode"  :rules="[{required: true, message: '用户名不能为空'}]">
+          <el-input v-model="login.accountCode" placeholder="用户名"></el-input>
+        </el-form-item>
 
-    <el-form-item prop="password" :rules="[{required: true, message: '密码不能为空'}]">
-      <el-input type="password"  v-model="login.password" placeholder="密码"></el-input>
-    </el-form-item>
+        <el-form-item prop="password" :rules="[{required: true, message: '密码不能为空'}]">
+          <el-input type="password"  v-model="login.password" placeholder="密码"></el-input>
+        </el-form-item>
 
-    <div v-show="error">
-      <div>{{error}}</div>
-    </div>
+        <div v-show="error">
+          <div>{{error}}</div>
+        </div>
 
-    <el-form-item style="width:100%;">
-      <el-button  style="width:100%;" type="primary" @click="doLogin">登录</el-button>
-    </el-form-item>
-  </el-form>
-
-  </div>
+        <el-form-item style="width:100%;">
+          <el-button  style="width:100%;" type="primary" @click="doLogin">登录</el-button>
+        </el-form-item>
+      </el-form>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
@@ -35,29 +36,18 @@ export default {
         accountCode: '',
         password: ''
       },
-      error: ''
+      error: '',
+      windowHeight: (window.innerHeight) + 'px'
     }
   },
 
   methods: {
-    /**
-     * 文件上传
-     *
-     * */
-    sendFileMessage (params) {
-      this.$store.dispatch('chatroom/api_upload_file', params).then((data) => {
-
-      })
-
-      return false
-    },
-
     doLogin: function () {
-      this.$store.dispatch('account/api_clear_cache')
-      this.$store.dispatch('chatroom/api_clear_cache')
-
       this.$refs['LoginForm'].validate((valid) => {
         if (valid) {
+          this.$store.dispatch('account/api_clear_cache')
+          this.$store.dispatch('chatroom/api_clear_cache')
+
           this.$store.dispatch('account/api_account_login', this.login).then((data) => {
             websocket.initWebSocket()
             this.$router.push({name: 'Chat'})
@@ -99,7 +89,7 @@ export default {
     -moz-border-radius: 5px;
     background-clip: padding-box;
     margin: 160px auto;
-    width: 350px;
+    width: 500px;
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;
@@ -117,8 +107,8 @@ export default {
     color: #505458;
   }
 
-  .login-container .remember {
-    margin: 0px 0px 35px 0px;
+  .login-container .banner {
+    margin-bottom: 40px;
   }
 
 </style>

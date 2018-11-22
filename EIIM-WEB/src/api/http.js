@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
+import router from '../router'
 
 // 创建axios实例 application/x-www-data-urlencoded  application/json
 axios.defaults.timeout = 5000
@@ -13,14 +14,16 @@ var getAccount = function () {
 // http request 拦截器
 axios.interceptors.request.use(
   config => {
-    if (config.url.includes('/v1/upload')) {
-      config.headers = {
-        'Content-Type': 'multipart/form-data'
-      }
-    } else {
-      config.data = JSON.stringify(config.data)
-      config.headers = {
-        'Content-Type': 'application/json'
+    if (!config.url.includes('/v1/download')) {
+      if (config.url.includes('/v1/upload')) {
+        config.headers = {
+          'Content-Type': 'multipart/form-data'
+        }
+      } else {
+        config.data = JSON.stringify(config.data)
+        config.headers = {
+          'Content-Type': 'application/json'
+        }
       }
     }
 
@@ -35,7 +38,7 @@ axios.interceptors.request.use(
     }
 
     if (process.env.NODE_ENV !== 'production') {
-     console.log(config)
+      console.log(config)
     }
     return config
   },
@@ -47,19 +50,26 @@ axios.interceptors.request.use(
 // http response 拦截器
 axios.interceptors.response.use(
   response => {
-    if (process.env.NODE_ENV !== 'production') {
-      console.log(response)
-    }
-    let errorCode = response.data.errorCode
-    if (errorCode === 2) {
-      this.$route.push({
-        path: '/',
-        querry: {redirect: this.$route.currentRoute.fullPath}// 从哪个页面跳转
-      })
-    } else if (errorCode !== 0) {
-      if (response.config.url.indexOf('logout') < 0) {
-        Message.error(response.data.errorMessage)
-        throw new Error(response.data.errorMessage)
+    if (response.config.responseType !== 'blob') {
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(response)
+      }
+
+      let module = response.config.url.split('/')[3]
+      if (module !== 'download') {
+        let errorCode = response.data.errorCode
+        let errorMessage = response.data.errorMessage
+        if (errorCode === 2 || (errorCode !== 0 && errorMessage.indexOf('无效的身份令牌') >= 0)) {
+          router.push({
+            path: '/',
+            querry: {redirect: router.currentRoute.fullPath}// 从哪个页面跳转
+          })
+        } else if (errorCode !== 0) {
+          if (response.config.url.indexOf('logout') < 0) {
+            Message.error(response.data.errorMessage)
+            throw new Error(response.data.errorMessage)
+          }
+        }
       }
     }
 
@@ -144,6 +154,34 @@ export function get (url, params = {}) {
     })
       .then(response => {
         resolve(response.data)
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+/**
+ * 封装get方法
+ * @param url
+ * @param data
+ * @returns {Promise}
+ */
+
+export function download (url, params = {}) {
+  let account = getAccount()
+
+  if (account) {
+    if (url.indexOf('?') <= 0) {
+      url = url + '?accountCode=' + account.account.code
+    } else {
+      url = url + '&accountCode=' + account.account.code
+    }
+  }
+  return new Promise((resolve, reject) => {
+    axios.get(url, {}, {responseType: 'blob'})
+      .then(response => {
+        resolve(response)
       })
       .catch(err => {
         reject(err)

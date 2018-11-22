@@ -155,5 +155,38 @@ export default {
     } else {
       return state.chatrooms.find(room => room.id === roomId).members
     }
+  },
+
+  /**
+   *
+   * @param state
+   * @param getters
+   * @returns {Array}
+   */
+  api_get_files: (state, getters) => {
+    let files = []
+    let sentTime
+
+    let roomId = state.selectedSessionId
+    if (roomId) {
+      let messages = state.chatrooms.find(room => room.id === roomId).messages
+      if (messages) {
+        messages.forEach(message => {
+          if (message.messageType === 'FILE') {
+            sentTime = new Date(message.sentTime)
+            files.push({
+              sentTime: dateFormat(sentTime, 'yyyy年MM月dd日'),
+              author: message.sender.nickname,
+              fileName: message.message.fileName,
+              id: message.message.id,
+              download: process.env.FILE_SERVER_ENV + message.message.id
+            })
+          }
+        })
+      }
+    }
+
+    console.log(files)
+    return files
   }
 }

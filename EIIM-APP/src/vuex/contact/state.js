@@ -2,5 +2,8 @@
  *
  */
 export default {
-  contacts: []
+  contacts: [],
+  selectedContactId: null,
+  orgs: [],
+  selectedOrgId: null
 }

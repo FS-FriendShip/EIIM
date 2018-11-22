@@ -14,7 +14,6 @@ export default new Router({
       name: 'Main',
       component: resolve => require(['@/pages/Main.vue'], resolve)
     },
-
     {
       path: '/show',
       name: 'Login',

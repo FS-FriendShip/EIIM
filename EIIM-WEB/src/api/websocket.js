@@ -28,9 +28,10 @@ export default {
       console.log(this.account)
       if (!this.websocket || this.websocket.readyState !== 1) {
         let websocketPrefix = 'ws://'
-        let http = window.location.href
+        let http = process.env.API_SERVER_ENV
+        console.log(http)
         if (http.substr(0, 5) === 'https') {
-          websocketPrefix = '"wss://"'
+          websocketPrefix = 'wss://'
         }
 
         const wsuri = websocketPrefix + process.env.WEBSOCKET_ENV + '/notify'// ws地址

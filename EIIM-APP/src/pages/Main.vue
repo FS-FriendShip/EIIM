@@ -1,44 +1,68 @@
 <template>
   <div id="wechat">
+    <mt-header  class="app-header" fixed title="若信"></mt-header>
+
     <ul class="wechat-list">
-      <sessionItem v-for="(chatroom, index) in chatroomList" :key="index" :item="chatroom" class="list-row line-bottom"></sessionItem>
+      <mt-cell-swipe v-for="(chatroom, index) in sessions" :key="index" class="list-row line-bottom"
+                     :right="[
+              {
+                  content: '删除',
+                  style: { background: '#ff7900', color: '#fff'},
+                  handler: () => deleteSection(chatroom.id)
+              }
+          ]" @click.native="selectSession(chatroom)">
+        <div slot="title" class="slot_box">
+          <div class="session-avatar">
+            <mt-badge type="error" v-show="chatroom.unread > 0" class="session-badge">{{chatroom.unread}}</mt-badge><img class="avatar-large" :src="chatroom.creator.avatar">
+          </div>
+          <div class="session-content">
+            <div>
+              <span class="title">{{chatroom.name}}</span><span class="sentTime">{{(chatroom.latestMessage?item.latestMessage.sentTime:null) | formatDate('session')}}</span>
+            </div>
+            <div class="subtitle">
+              <span v-html="chatroom.subtitle"></span>
+            </div>
+          </div>
+        </div>
+      </mt-cell-swipe>
     </ul>
   </div>
 </template>
 
 <script>
-import sessionItem from '../components/SessionItem'
 import constant from '../common/global'
 import {mapGetters} from 'vuex'
-import websocket from '../api/websocket'
 
 export default {
   name: 'Main',
   data () {
     return {
       pageName: constant.appName
-      // chatroomList: this.$store.state.chatroom.chatrooms
     }
-  },
-
-  created  () {
-    let account = this.GLOBAL.account
-    if (account === undefined) {
-      this.$router.push({path: '/'})
-      return
-    }
-
-    websocket.initWebSocket(account)
-
-    // 获取聊天室信息
-    this.$store.dispatch('chatroom/api_get_chatrooms', account)
   },
 
   computed: {
-    ...mapGetters({chatroomList: 'chatroom/chatroomsList'})
+    ...mapGetters({sessions: 'chatroom/api_get_chatrooms', search: 'chatroom/api_search_chatroom', userList: 'contact/api_contact_List', findSession: 'chatroom/api_find_chatroom'})
+  },
+
+  created  () {
+    let account = this.GLOBAL.getAccount()
+    // 获取聊天室信息
+    this.$store.dispatch('chatroom/api_get_chatrooms', account).then(() => {
+      this.sessionDialogVisible = true
+
+      let params = {session: this.session, account: account}
+      if (this.session) {
+        this.$store.dispatch('chatroom/api_select_chatroom', params)
+      }
+    })
   },
 
   methods: {
+    selectSession (session) {
+      console.log(session)
+    },
+
     showPersonal: function () {
       this.$router.push({path: 'showPersonal'})
     },
@@ -46,10 +70,6 @@ export default {
     showContact: function () {
       this.$router.push({path: '/contacts'})
     }
-  },
-
-  components: {
-    sessionItem
   },
 
   beforeRouteEnter (to, from, next) {
@@ -60,188 +80,32 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-  .mint-button{
-    width:41px;
-  }
-
-  .icon-setting{
-    background-size:32px 32px;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-image: url(../assets/icon-setting.png)
-  }
-
-  .icon-address-list{
-    background-size:32px 32px;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-image: url(../assets/icon-address-list.png)
-  }
-
   /*@import '../assets/css/wechat.css';*/
   #wechat .wechat-list {
-    position: relative;
     overflow-x: hidden;
-    z-index: 1
   }
 
   #wechat .wechat-list .list-row {
-    height: 64px;
-    position: relative;
-    overflow: hidden
-  }
-
-  #wechat .wechat-list .list-row.item-hide {
-    -webkit-transition: 0.3s;
-    transition: 0.3s;
-    height: 0px
-  }
-
-  #wechat .wechat-list .list-row.item-hide:after {
-    content: "";
-    position: absolute;
-    z-index: 2;
-    top: 1px;
-    bottom: 1px;
-    width: 100%;
-    background: rgba(0,0,0,0.3)
-  }
-
-  #wechat .wechat-list .list-row:last-child:after {
-    content: "";
-    position: absolute;
-    width: 200%;
-    left: 0;
-    z-index: 10;
-    left: 8px;
-    bottom: 0;
-    -webkit-transform: scale(0.5);
-    -ms-transform: scale(0.5);
-    transform: scale(0.5);
-    -webkit-transform-origin: 0 0;
-    -ms-transform-origin: 0 0;
-    transform-origin: 0 0;
-    -webkit-transform: scale(0.5);
-    -webkit-transform-origin: 0 0;
-    background-color: #b7b7b7;
-    height: 1px
-  }
-
-  #wechat .wechat-list .list-row .list-info {
-    position: relative;
-    z-index: 2;
-    left: 0;
-    width: 100%;
-    height: 64px;
-    padding: 8px;
-    background-color: #fff
-  }
-
-  #wechat .wechat-list .list-row .list-info .header-box {
-    position: relative;
-    float: left;
-    width: 48px;
-    height: 48px;
-    margin-right: 10px
-  }
-
-  #wechat .wechat-list .list-row .list-info .header-box .header {
-    height: 100%;
-    border-radius: 5px;
-    display: -webkit-box;
-    display: -ms-flexbox;
+    height: 4rem;
     display: flex;
     display: -webkit-flex;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: row;
-    -ms-flex-direction: row;
-    flex-direction: row;
-    -webkit-flex-wrap: wrap;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    -webkit-box-align: start;
-    -webkit-align-items: flex-start;
-    -ms-flex-align: start;
-    align-items: flex-start;
-    overflow: hidden;
-    background: #dddbdb
+    align-items:center;
   }
 
-  #wechat .wechat-list .list-row .list-info .header-box .header img {
-    width: 10%;
-    height: auto;
-    -webkit-box-flex: 2;
-    -webkit-flex-grow: 2;
-    -ms-flex-positive: 2;
-    flex-grow: 2;
-    border: 0
-  }
-
-  #wechat .wechat-list .list-row .list-info .header-box .header.multi-header img {
-    margin: 1px
-  }
-
-  #wechat .wechat-list .list-row .list-info .desc-box {
-    overflow: hidden
-  }
-
-  #wechat .wechat-list .list-row .list-info .desc-box .desc-time {
-    float: right;
-    color: #b8b8b8
-  }
-
-  #wechat .wechat-list .list-row .list-info .desc-box .desc-author {
-    height: 25px;
-    line-height: 25px;
-    font-size: 16px;
-    color: #000
-  }
-
-  #wechat .wechat-list .list-row .list-info .desc-box .desc-msg {
-    height: 23px;
-    line-height: 23px;
-    font-size: 14px;
-    color: #888
-  }
-
-  #wechat .wechat-list .list-row .list-info .desc-box .desc-msg .desc-mute {
-    float: right;
-    color: #b8b8b8
-  }
-
-  #wechat .wechat-list .list-row .operate-box {
-    position: absolute;
-    z-index: 1;
-    height: 100%;
-    right: 0;
-    top: 0;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex
-  }
-
-  #wechat .wechat-list .list-row .operate-box>div {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
+  #wechat .wechat-list .list-row .slot_box {
     display: flex;
-    -webkit-box-pack: center;
-    -webkit-justify-content: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    -ms-flex-align: center;
-    align-items: center;
-    background-color: #c7c7cc;
-    color: #fff;
-    font-size: 18px;
-    padding: 0 12px
+    display: -webkit-flex;
+    justify-content: flex-start;
   }
 
-  #wechat .wechat-list .list-row .operate-box .operate-del {
-    background-color: #ff3b30
+  #wechat .wechat-list .list-row .slot_box .session-badge{
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    z-index: 100;
+  }
+
+  #wechat .wechat-list .list-row .slot_box .session-content{
+    padding-left: 1rem;
   }
 </style>

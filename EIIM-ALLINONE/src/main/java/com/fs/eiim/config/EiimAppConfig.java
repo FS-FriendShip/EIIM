@@ -15,6 +15,7 @@ import org.springframework.context.annotation.PropertySource;
         "classpath:cache-redis.properties",
         "classpath:redis.properties",
         "classpath:auth.properties",
+        "classpath:cors.properties",
         "classpath:file.properties"
 })
 @Import({

@@ -16,8 +16,15 @@
         :show-file-list="false">
         <i class="iconfont icon-iconset0196"></i>
       </el-upload>
-    </div>
-    <MessageInput class="message-input" ref="select_frame" :content="message" @send="sendTextMessage" placeholder='按Ctrl+Enter发送'></MessageInput>
+
+      <el-popover
+        placement="top-start"
+        trigger="click">
+        <FileList></FileList>
+        <i class="iconfont icon-fujian" slot="reference"></i>
+      </el-popover>
+  </div>
+    <MessageInput class="message-input" ref="select_frame" :content="message" @send="sendTextMessage" placeholder='按Enter发送'></MessageInput>
   </div>
 </template>
 
@@ -25,6 +32,7 @@
 import {mapGetters} from 'vuex'
 import Emotion from './Emotion/index'
 import MessageInput from './MessageInput'
+import FileList from './FileList'
 
 export default {
   name: 'MessageSend',
@@ -39,7 +47,8 @@ export default {
 
   components: {
     Emotion,
-    MessageInput
+    MessageInput,
+    FileList
   },
 
   computed: {

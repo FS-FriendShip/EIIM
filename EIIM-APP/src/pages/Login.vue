@@ -5,33 +5,42 @@
     </div>
 
     <div class="banner">
-      <mt-field label="用户名" placeholder="用户名" v-model="accountCode"></mt-field>
-      <mt-field label="密码" placeholder="密码" type="password" v-model="password"></mt-field>
+      <mt-field label="用户名" placeholder="用户名" v-model="login.accountCode"></mt-field>
+      <mt-field label="密码" placeholder="密码" type="password" v-model="login.password"></mt-field>
     </div>
 
-    <div v-show="error">
-        <div>{{error}}</div>
+    <div class="login-button">
+      <mt-button type="primary" size="normal" @click.native="doLogin">登录</mt-button>
     </div>
-
-    <mt-button type="primary" size="large" @click.native="login">登录</mt-button>
   </div>
 </template>
 
 <script>
+import websocket from '../api/websocket'
+import {Toast} from 'mint-ui'
 export default {
   name: 'Login',
   data () {
     return {
-      accountCode: 'zhanglp',
-      password: '12345678',
-      error: ''
+      login: {
+        accountCode: '13601951704',
+        password: 'ftp123456'
+      }
     }
   },
 
   methods: {
-    login: function () {
-      this.$store.dispatch('account/api_account_login', {accountCode: this.accountCode, password: this.password}).then((data) => {
-        this.GLOBAL.account = data
+    doLogin: function () {
+      if (this.accountCode === '' || this.password === '') {
+        Toast({message: '用户名或密码不能为空', duration: this.GLOBAL.toast.duration})
+        return
+      }
+
+      this.$store.dispatch('account/api_clear_cache')
+      this.$store.dispatch('chatroom/api_clear_cache')
+
+      this.$store.dispatch('account/api_account_login', this.login).then((data) => {
+        websocket.initWebSocket()
         this.$router.push({name: 'Main'})
       })
     }
@@ -45,5 +54,14 @@ export default {
     height: 100px;
     margin-top: 100px;
     margin-bottom: 50px;
+  }
+
+  .login-button {
+    text-align: center;
+    display: block;
+  }
+
+  .login-button button {
+    width: 24rem;
   }
 </style>

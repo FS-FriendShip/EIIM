@@ -1,4 +1,4 @@
-import {post, get, remove, update} from './http'
+import {post, get, remove, update, download} from './http'
 
 export default {
   /**
@@ -30,7 +30,7 @@ export default {
    * @param fileId
    * @returns {Promise}
    */
-  saveAccountProtrait (account, fileId)  {
+  saveAccountProtrait (account, fileId) {
     return get('/v1/accounts/' + account.id + '/avatar?avatarId=' + fileId)
   },
 
@@ -205,6 +205,31 @@ export default {
    */
   uploadFile (file) {
     return post('/v1/upload', file)
-    // return post('/ilog/transfer//leadingInList/P09S', file)
+  },
+
+  /**
+   *
+   * @param file
+   * @returns {Promise}
+   */
+  downloadFile (file) {
+    return download('/v1/download/' + file.id).then(res => {
+      if (!res) {
+        return
+      }
+
+      let url = URL.createObjectURL(new Blob([res.data]))
+      console.log(url)
+      let filename = decodeURI(res.headers['content-disposition'].split('filename=')[1])
+
+      let link = document.createElement('a')
+      link.style.display = 'none'
+      link.href = url
+      link.download = filename
+
+      document.body.appendChild(link)
+      link.click()
+    })
   }
+
 }

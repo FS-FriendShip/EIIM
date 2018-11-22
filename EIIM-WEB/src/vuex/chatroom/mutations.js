@@ -20,7 +20,7 @@ export default {
     let localChatrooms = state.chatrooms
 
     // 添加到vuex
-    if (payload && payload.chatrooms.length > 0) {
+    if (payload && payload.chatrooms && payload.chatrooms.length > 0) {
       let chatrooms = payload.chatrooms
       let accountCode = payload.accountCode
       let found = false

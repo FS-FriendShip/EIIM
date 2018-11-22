@@ -34,13 +34,11 @@ export default {
 
     websocket.initWebSocket()
 
+    // this.$router.push({name: 'Updater'})
+
     if (window.require) {
       let ipc = window.require('electron').ipcRenderer
       ipc.send('checkForUpdate')
-
-      ipc.on('message', (event, text) => {
-        console.log('message', text)
-      })
 
       ipc.on('downloadProgress', (event, progressObj) => {
         this.downloadPercent = progressObj.percent || 0
