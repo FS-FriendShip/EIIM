@@ -8,7 +8,7 @@ export default {
     return {
       websocket: null,
       socketStatus: false,
-      account: localStorage.getItem('account-key') ? JSON.parse(localStorage.getItem('account-key')).account : {}
+      account: null
     }
   },
 
@@ -25,7 +25,6 @@ export default {
     if (localStorage.getItem('account-key')) {
       let account = JSON.parse(localStorage.getItem('account-key'))
       this.account = account
-      console.log(this.account)
       if (!this.websocket || this.websocket.readyState !== 1) {
         let websocketPrefix = 'ws://'
         let http = process.env.API_SERVER_ENV
@@ -129,9 +128,10 @@ export default {
   },
 
   send (content) { // 数据发送
+    console.log(this.account)
     let accountCode = this.account.account.code
 
-    content.deviceId = accountCode + '.pc'
+    content.deviceId = accountCode + '.mobile'
     content.accountCode = accountCode
     let message = {
       command: 'sendChatMessage',

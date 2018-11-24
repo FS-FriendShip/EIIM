@@ -56,14 +56,18 @@
         <img class="avatar-small" src="../assets/users.png"  title="用户管理" @click="showUsers">
       </el-col>
     </el-row>
+
+    <AccountDialog v-on:setAccountDialogVisible="setAccountDialogVisible" :context="context" :show.sync="showAccountDialog"></AccountDialog>
   </div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
+import AccountDialog from '../components/AccountDialog'
 
 export default {
   name: 'NavBar',
+  components: {AccountDialog},
 
   data () {
     return {

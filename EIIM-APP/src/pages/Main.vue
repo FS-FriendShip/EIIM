@@ -1,45 +1,41 @@
 <template>
-  <div id="wechat">
+  <div id="wechat" class="dialogue">
     <mt-header  class="app-header" fixed title="若信"></mt-header>
 
-    <ul class="wechat-list">
-      <mt-cell-swipe v-for="(chatroom, index) in sessions" :key="index" class="list-row line-bottom"
-                     :right="[
-              {
-                  content: '删除',
-                  style: { background: '#ff7900', color: '#fff'},
-                  handler: () => deleteSection(chatroom.id)
-              }
-          ]" @click.native="selectSession(chatroom)">
-        <div slot="title" class="slot_box">
-          <div class="session-avatar">
-            <mt-badge type="error" v-show="chatroom.unread > 0" class="session-badge">{{chatroom.unread}}</mt-badge><img class="avatar-large" :src="chatroom.creator.avatar">
-          </div>
-          <div class="session-content">
-            <div>
-              <span class="title">{{chatroom.name}}</span><span class="sentTime">{{(chatroom.latestMessage?item.latestMessage.sentTime:null) | formatDate('session')}}</span>
+    <section class="message dialogue-section clearfix">
+      <ul class="wechat-list">
+        <mt-cell-swipe v-for="(chatroom, index) in sessions" :key="index" class="list-row line-bottom"
+                       :right="[
+                {
+                    content: '删除',
+                    style: { background: '#ff7900', color: '#fff'},
+                    handler: () => deleteSection(chatroom.id)
+                }
+            ]" @click.native="selectSession(chatroom)">
+          <div slot="title" class="slot_box">
+            <div class="session-avatar">
+              <mt-badge type="error" v-show="chatroom.unread > 0" class="session-badge">{{chatroom.unread}}</mt-badge><img class="avatar-large" :src="chatroom.creator.avatar">
             </div>
-            <div class="subtitle">
-              <span v-html="chatroom.subtitle"></span>
+            <div class="session-content">
+              <div>
+                <span class="title">{{chatroom.name}}</span><span class="sentTime">{{(chatroom.latestMessage?chatroom.latestMessage.sentTime:null) | formatDate('session')}}</span>
+              </div>
+              <div class="subtitle">
+                <span v-html="chatroom.subtitle"></span>
+              </div>
             </div>
           </div>
-        </div>
-      </mt-cell-swipe>
-    </ul>
+        </mt-cell-swipe>
+      </ul>
+    </section>
   </div>
 </template>
 
 <script>
-import constant from '../common/global'
 import {mapGetters} from 'vuex'
 
 export default {
   name: 'Main',
-  data () {
-    return {
-      pageName: constant.appName
-    }
-  },
 
   computed: {
     ...mapGetters({sessions: 'chatroom/api_get_chatrooms', search: 'chatroom/api_search_chatroom', userList: 'contact/api_contact_List', findSession: 'chatroom/api_find_chatroom'})
@@ -48,19 +44,15 @@ export default {
   created  () {
     let account = this.GLOBAL.getAccount()
     // 获取聊天室信息
-    this.$store.dispatch('chatroom/api_get_chatrooms', account).then(() => {
-      this.sessionDialogVisible = true
-
-      let params = {session: this.session, account: account}
-      if (this.session) {
-        this.$store.dispatch('chatroom/api_select_chatroom', params)
-      }
-    })
+    this.$store.dispatch('chatroom/api_get_chatrooms', account)
   },
 
   methods: {
     selectSession (session) {
-      console.log(session)
+      let params = {session: session, account: this.GLOBAL.getAccount()}
+      this.$store.dispatch('chatroom/api_select_chatroom', params).then(data =>
+        this.$router.push({name: 'chatroom', params: {roomId: session.id}})
+      )
     },
 
     showPersonal: function () {
@@ -70,20 +62,17 @@ export default {
     showContact: function () {
       this.$router.push({path: '/contacts'})
     }
-  },
-
-  beforeRouteEnter (to, from, next) {
-    next()
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style lang="less" scoped>
+  @import "../assets/css/dialogue.css";
   /*@import '../assets/css/wechat.css';*/
-  #wechat .wechat-list {
-    overflow-x: hidden;
-  }
+  /*#wechat .wechat-list {*/
+    /*overflow-x: hidden;*/
+  /*}*/
 
   #wechat .wechat-list .list-row {
     height: 4rem;

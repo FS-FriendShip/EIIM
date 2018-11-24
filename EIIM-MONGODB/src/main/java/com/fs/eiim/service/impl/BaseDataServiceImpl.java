@@ -232,9 +232,9 @@ public class BaseDataServiceImpl implements BaseDataService {
                 org.setId(null);
             }
         }
-        org.setParent(parent);
-        org.setManager(manager);
-        org.setEmployees(employees);
+        //org.setParent(parent);
+        //org.setManager(manager);
+        //org.setEmployees(employees);
         try {
             org = accessor.save(org);
             if (parent != null) {

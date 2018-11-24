@@ -40,8 +40,6 @@ export default {
         if (!chatroom.creator.avatar.startsWith('http')) {
           chatroom.creator.avatar = process.env.FILE_SERVER_ENV + chatroom.creator.avatar
         }
-
-        console.log(chatroom.subtitle)
       })
     }
 
@@ -54,6 +52,7 @@ export default {
 
       return b.latestMessage.sentTime - a.latestMessage.sentTime
     })
+
     return chatrooms
   },
 

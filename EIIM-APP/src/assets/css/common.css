@@ -62,6 +62,10 @@ body {
     text-align: center;
 }
 
+.dialogue-section{
+  margin-top:45px;
+ }
+
 .app-content {
     overflow: hidden;
     padding-bottom: 49px;

@@ -23,13 +23,13 @@
 
       <el-main style="background:#fff">
         <el-container>
-          <el-header style="text-align: right; font-size: 12px">
+          <el-header style="height:50px; text-align: right; font-size: 12px">
             <label id="orgName"></label>
             <el-button type="primary" icon="el-icon-plus" circle  @click="showUser">新增用户</el-button>
             <el-button type="danger" icon="iconfont icon-shangchu" circle @click="handleUserDelete">删除用户</el-button>
           </el-header>
           <el-main>
-            <el-table v-if="org" :data="org.employees" tooltip-effect="dark" @row-dblclick="handleUserEdit" @selection-change="handleSelectionChange">>
+            <el-table v-if="org" border height="{height:adminHeight - 50}" :data="org.employees" tooltip-effect="dark" @row-dblclick="handleUserEdit" @selection-change="handleSelectionChange">>
               <el-table-column type="selection" mini-width="5%"></el-table-column>
               <el-table-column prop="fullName" label="姓名" mini-width="10%"></el-table-column>
               <el-table-column prop="title" label="职务" mini-width="20%"></el-table-column>

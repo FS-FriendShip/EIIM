@@ -186,7 +186,6 @@ export default {
       }
     }
 
-    console.log(files)
     return files
   }
 }
