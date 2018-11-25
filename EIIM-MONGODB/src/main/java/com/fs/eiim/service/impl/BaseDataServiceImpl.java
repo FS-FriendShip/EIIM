@@ -177,22 +177,75 @@ public class BaseDataServiceImpl implements BaseDataService {
     @SuppressWarnings("unchecked")
     @Override
     public OrgInfo saveOrgInfo(Org org) {
-        Org checkOrg = accessor.getById(org.getId(), Org.class);
-        if (checkOrg != null) {
-            checkOrg.setCode(org.getCode());
-            checkOrg.setName(org.getName());
-            checkOrg.setType(org.getType());
-            org = checkOrg;
-        } else {
-            throw new UserInterfaceEiimErrorException(
-                    UserInterfaceEiimErrorException.EiimErrors.ORG_NOT_FOUND
-            );
+        Org parent = null;
+        if (org.getParent() != null && !StringUtils.isBlank(org.getParent().getId())) {
+            parent = accessor.getById(org.getParent().getId(), Org.class);
+            if (parent == null) {
+                if (logger.isErrorEnabled()) {
+                    logger.error(String.format("The org[%s] not found.", org.getParent().getId()));
+                }
+                throw new UserInterfaceEiimErrorException(
+                        UserInterfaceEiimErrorException.EiimErrors.ORG_NOT_FOUND
+                );
+            }
         }
-        //org.setParent(parent);
-        //org.setManager(manager);
-        //org.setEmployees(employees);
+
+        Person manager = null;
+        if (org.getManager() != null && !StringUtils.isBlank(org.getManager().getId())) {
+            manager = accessor.getById(org.getManager().getId(), Person.class);
+            if (manager == null) {
+                if (logger.isErrorEnabled()) {
+                    logger.error(String.format("The manager[%s] not found.", org.getManager().getId()));
+                }
+                throw new UserInterfaceEiimErrorException(
+                        UserInterfaceEiimErrorException.EiimErrors.PERSON_NOT_FOUND
+                );
+            }
+        }
+
+        Set<User> employees = null;
+        if (org.getEmployees() != null && org.getEmployees().size() > 0) {
+            employees = new HashSet<>();
+            for (User employee : org.getEmployees()) {
+                User user = accessor.getById(employee.getId(), Person.class);
+                if (user == null) {
+                    if (logger.isErrorEnabled()) {
+                        logger.error(String.format("The person[%s] not found.", employee.getId()));
+                    }
+                    throw new UserInterfaceRbacErrorException(
+                            UserInterfaceRbacErrorException.RbacErrors.USER_NOT_FOUND
+                    );
+                } else {
+                    employees.add(user);
+                }
+            }
+        }
+
+        if (!StringUtils.isBlank(org.getId())) {
+            Org updatedOrg = accessor.getById(org.getId(), Org.class);
+            if (updatedOrg != null) {
+                updatedOrg.setCode(org.getCode());
+                updatedOrg.setName(org.getName());
+                updatedOrg.setType(org.getType());
+
+                org = updatedOrg;
+            } else {
+                throw new UserInterfaceEiimErrorException(
+                        UserInterfaceEiimErrorException.EiimErrors.ORG_NOT_FOUND
+                );
+            }
+        } else {
+            org.setParent(parent);
+            org.setManager(manager);
+            org.setEmployees(employees);
+        }
+
         try {
-            org = accessor.save(checkOrg);
+            org = accessor.save(org);
+            if (parent != null) {
+                parent.getChildren().add(org);
+                accessor.save(parent);
+            }
             return getOrgInfo(org.getId());
         } catch (Exception ex) {
             if (logger.isErrorEnabled()) {
@@ -376,6 +429,7 @@ public class BaseDataServiceImpl implements BaseDataService {
             if (checkedPerson != null) {
                 checkedPerson.setFirstName(person.getFirstName());
                 checkedPerson.setLastName(person.getLastName());
+                checkedPerson.setFullName(person.getFullName());
                 checkedPerson.setTitle(person.getTitle());
                 checkedPerson.setPhone(person.getPhone());
                 checkedPerson.setMobile(person.getMobile());

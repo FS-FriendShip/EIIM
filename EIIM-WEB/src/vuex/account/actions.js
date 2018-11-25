@@ -26,23 +26,8 @@ export default {
   },
 
   api_portrait_set: ({commit}, portrait) => {
-    console.log(portrait)
     return api.saveAccountProtrait(portrait.account, portrait.fileId).then(res => {
       commit(types.UPDATE_ACCOUNT_PORTRAIT, portrait.fileId)
-    })
-  },
-
-  /**
-   *
-   * @param commit
-   * @param account
-   * @returns {*|PromiseLike<T>|Promise<T>}
-   */
-  api_account_save: ({commit}, data) => {
-    return api.saveAccountInfo(data.personId, data.account).then(res => {
-      if (res.errorCode === 0) {
-        return res.data
-      }
     })
   },
 

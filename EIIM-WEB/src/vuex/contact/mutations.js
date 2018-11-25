@@ -14,11 +14,42 @@ export default {
     state.selectedContactId = id
   },
 
-  [types.UPDATE_USER] (state, user) {
-    let orgId = user.orgId
+  [types.UPDATE_USER_ACCOUNT] (state, account) {
+    let orgId = state.selectedOrgId
     let org = state.orgs.find(org => org.id === orgId)
-    let index = org.employees.findIndex(item => item.id === user.id)
-    org.employees.splice(index, 1, user)
+    if (org.employees) {
+      let employees = org.employees
+      let personId = account.person.id
+
+      let person = employees.find(employee => employee.id === personId)
+      if (person) {
+        person.account = account
+      }
+    }
+  },
+
+  /**
+   * 更新用户信息
+   * @param state
+   * @param user
+   */
+  [types.UPDATE_USER] (state, user) {
+    let orgId = user.org.id
+    let org = state.orgs.find(org => org.id === orgId)
+    if (org) {
+      if (!org.employees) org.employees = []
+
+      let employee = org.employees.find(item => item.id === user.id)
+      if (employee) {
+        employee.fullName = user.fullName
+        employee.title = user.title
+        employee.phone = user.phone
+        employee.email = user.email
+        employee.mobile = user.mobile
+      } else {
+        org.employees.splice(0, 0, user)
+      }
+    }
   },
 
   [types.CREATE_USER] (state, user) {
@@ -29,6 +60,19 @@ export default {
     }
 
     org.employees.push(user)
+  },
+
+  [types.DELETE_USER] (state, personId) {
+    let orgId = state.selectedOrgId
+    let org = state.orgs.find(org => org.id === orgId)
+    if (org.employees) {
+      let employees = org.employees
+
+      let index = employees.findIndex(item => item.id === personId)
+      if (index !== -1) {
+        org.employees.splice(index, 1)
+      }
+    }
   },
 
   [types.INIT_ORGS] (state, orgs) {

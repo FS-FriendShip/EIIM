@@ -2,7 +2,7 @@
   <div id="wechat" class="dialogue">
     <mt-header  class="app-header" fixed title="若信"></mt-header>
 
-    <section class="message dialogue-section clearfix">
+    <section v-bind:style="{height:messageHeight}" class="message dialogue-section clearfix">
       <ul class="wechat-list">
         <mt-cell-swipe v-for="(chatroom, index) in sessions" :key="index" class="list-row line-bottom"
                        :right="[
@@ -36,6 +36,11 @@ import {mapGetters} from 'vuex'
 
 export default {
   name: 'Main',
+  data () {
+    return {
+      messageHeight: (window.innerHeight - 45) + 'px'
+    }
+  },
 
   computed: {
     ...mapGetters({sessions: 'chatroom/api_get_chatrooms', search: 'chatroom/api_search_chatroom', userList: 'contact/api_contact_List', findSession: 'chatroom/api_find_chatroom'})

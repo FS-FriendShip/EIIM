@@ -112,7 +112,7 @@ export default {
     saveAccountInfo (formName) {
       this.account.roleCode = this.account.roleCode ? 'Administrator' : 'User'
       if (this.action === 'create') {
-        this.$store.dispatch('account/api_account_save', {personId: this.account.personId,
+        this.$store.dispatch('contact/api_account_save', {personId: this.account.personId,
           account: {
             accountCode: this.account.accountCode,
             password: '111111',
