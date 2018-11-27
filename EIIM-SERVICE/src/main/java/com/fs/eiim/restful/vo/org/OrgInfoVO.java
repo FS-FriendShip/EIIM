@@ -64,6 +64,10 @@ public class OrgInfoVO {
                     employee -> employees.add(PersonInfoVO.valueOf(employee))
             );
             orgInfoVO.employees = employees;
+        } else {
+            if(orgInfoVO.employees != null) {
+                orgInfoVO.employees.clear();
+            }
         }
         return orgInfoVO;
     }

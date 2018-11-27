@@ -1,6 +1,13 @@
 <template>
   <div id="wechat" class="dialogue">
-    <mt-header  class="app-header" fixed title="若信"></mt-header>
+    <mt-header  class="app-header" fixed title="若信">
+      <router-link to="/Main" slot="left">
+        <mt-button icon="back"></mt-button>
+      </router-link>
+      <router-link to="contacts" slot="right">
+        <i class="iconfont icon-add"></i>
+      </router-link>
+    </mt-header>
 
     <section v-bind:style="{height:messageHeight}" class="message dialogue-section clearfix">
       <ul class="wechat-list">

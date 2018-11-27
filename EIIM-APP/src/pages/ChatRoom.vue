@@ -4,6 +4,10 @@
       <router-link to="/Main" slot="left">
         <mt-button icon="back"></mt-button>
       </router-link>
+
+      <router-link to="/Main" slot="right">
+        <mt-button icon="more"></mt-button>
+      </router-link>
     </mt-header>
 
     <section v-bind:style="{height:messageHeight}" class="message dialogue-section clearfix">
@@ -42,23 +46,17 @@
       </ul>
     </section>
 
-    <footer class="dialogue-footer">
+    <footer :class="emotionable?'dialogue-footer dialog-emotion':'dialogue-footer'">
       <div class="component-dialogue-bar-person">
-        <span class="iconfont icon-dialogue-jianpan" v-show="!currentChatWay"></span>
-
-        <div class="chat-way">
-          <textarea rows="1" v-model="message" class="chat-txt" type="text"/>
-        </div>
+        <MessageInput class="message-input" ref="select_frame" :content="message" @hideEmotion="hideEmotion"></MessageInput>
 
         <span class="expression iconfont icon-dialogue-smile" @click="showEmotion()"></span>
         <mt-button size="small"  type="primary" @click="send()">发送</mt-button>
       </div>
 
-      <mt-popup
-        v-model="popupVisible"
-        position="bottom">
-        <emotion @emotion="handleEmotion" :height="200" ></emotion>
-      </mt-popup>
+      <div class="component-emotion">
+        <emotion @emotion="handleEmotion" :height="200"></emotion>
+      </div>
     </footer>
   </div>
 </template>
@@ -66,6 +64,7 @@
 <script>
 import {mapGetters} from 'vuex'
 import Emotion from '../components/Emotion/index'
+import MessageInput from '../components/MessageInput'
 
 export default {
   name: 'ChatRoom',
@@ -74,13 +73,14 @@ export default {
       currentChatWay: true, // ture为键盘打字 false为语音输入
       timer: null,
       roomId: null,
-      message: '',
+      message: {txt: ''},
       messageHeight: (window.innerHeight - 90) + 'px',
-      popupVisible: false
+      emotionable: false
     }
   },
 
   components: {
+    MessageInput,
     Emotion
   },
 
@@ -97,8 +97,12 @@ export default {
       this.emotionable = !this.emotionable
     },
 
+    hideEmotion () {
+      this.emotionable = false
+    },
+
     handleEmotion (i) {
-      this.message += this.emotion(i)
+      this.message.txt += this.emotion(i)
     },
 
     /**
@@ -116,11 +120,11 @@ export default {
     send () {
       this.$store.dispatch('chatroom/api_send_text_message', {
         sessionId: this.roomId,
-        message: this.message,
+        message: this.message.txt,
         user: this.user
       }).then(res => {
         if (res) {
-          this.message = ''
+          this.message.txt = ''
         }
       })
     }
@@ -131,20 +135,39 @@ export default {
 <style lang="less" scoped>
   @import "../assets/css/dialogue.css";
 
-  a:link {
-    font-size: 14px;
-    color: #000000;
-    text-decoration: none;
+  /*a:link {*/
+    /*font-size: 14px;*/
+    /*text-decoration: none;*/
+  /*}*/
+  /*a:visited {*/
+    /*font-size: 14px;*/
+    /*color: #000000;*/
+    /*text-decoration: none;*/
+  /*}*/
+  /*a:hover {*/
+    /*font-size: 14px;*/
+    /*color: #000000;*/
+    /*text-decoration: none;*/
+  /*}*/
+
+  .message-input {
+    padding: 0px 5px;
+    height: 30px;
+    max-height:30px;
+    line-height:30px;
+    width: 80%;
+    border: none;
+    outline: none;
+    font-family: "Micrsofot Yahei";
+    resize: none;
+    overflow-y:auto;
+    overflow-x:hidden;
+    background-color: #fff;
   }
-  a:visited {
-    font-size: 14px;
-    color: #000000;
-    text-decoration: none;
-  }
-  a:hover {
-    font-size: 14px;
-    color: #000000;
-    text-decoration: none;
+
+  .message-input:before {
+    content: attr(placeholder);
+    display: block;
   }
 
   .message {
@@ -181,7 +204,7 @@ export default {
       display: inline-block;
       position: relative;
       padding: 0 10px;
-      max-width: ~'calc(100% - 40px)';
+      max-width: ~'calc(100% - 60px)';
       min-height: 30px;
       line-height: 2.5;
       font-size: 14px;

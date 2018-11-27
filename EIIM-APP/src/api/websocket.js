@@ -128,8 +128,8 @@ export default {
   },
 
   send (content) { // 数据发送
-    console.log(this.account)
-    let accountCode = this.account.account.code
+    let account = JSON.parse(localStorage.getItem('account-key'))
+    let accountCode = account.account.code
 
     content.deviceId = accountCode + '.mobile'
     content.accountCode = accountCode

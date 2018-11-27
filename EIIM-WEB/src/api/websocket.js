@@ -25,16 +25,15 @@ export default {
     if (localStorage.getItem('account-key')) {
       let account = JSON.parse(localStorage.getItem('account-key'))
       this.account = account
-      console.log(this.account)
       if (!this.websocket || this.websocket.readyState !== 1) {
         let websocketPrefix = 'ws://'
         let http = process.env.API_SERVER_ENV
-        console.log(http)
         if (http.substr(0, 5) === 'https') {
           websocketPrefix = 'wss://'
         }
 
         const wsuri = websocketPrefix + process.env.WEBSOCKET_ENV + '/notify'// ws地址
+        console.log(wsuri)
         this.websocket = new WebSocket(wsuri)
         this.websocket.onopen = () => {
           console.log('WebSocket连接成功')

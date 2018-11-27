@@ -134,14 +134,14 @@ body {
     z-index: 10;
 }
 
-a {
-    cursor: pointer;
-}
+/*a {*/
+    /*cursor: pointer;*/
+/*}*/
 
-a:visited,
-a:hover {
-    color: #000;
-}
+/*a:visited,*/
+/*a:hover {*/
+    /*color: #000;*/
+/*}*/
 
 .parentheses {}
 

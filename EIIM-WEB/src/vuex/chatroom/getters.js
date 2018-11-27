@@ -38,6 +38,7 @@ export default {
         }
 
         if (!chatroom.creator.avatar.startsWith('http')) {
+          console.log(process.env.FILE_SERVER_ENV)
           chatroom.creator.avatar = process.env.FILE_SERVER_ENV + chatroom.creator.avatar
         }
       })
