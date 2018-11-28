@@ -7,6 +7,8 @@ export const CREATE_USER = 'CREATE_USER'
 
 export const UPDATE_USER = 'UPDATE_USER'
 
+export const UPDATE_USER_ACCOUNT = 'UPDATE_USER_ACCOUNT'
+
 export const DELETE_USER = 'DELETE_USER'
 
 export const INIT_ORGS = 'INIT_ORGS'

@@ -92,7 +92,13 @@ export default {
    * @returns {Promise<T>}
    */
   api_del_user: ({commit}, personIds) => {
-    return api.delUser(personIds)
+    return api.delUser(personIds).then(res => {
+      if (res.errorCode === 0) {
+        personIds.forEach(personId => {
+          commit(types.DELETE_USER, personId)
+        })
+      }
+    })
   },
 
   /**
@@ -101,7 +107,25 @@ export default {
    * @param org
    */
   api_save_user: ({commit}, user) => {
-    return api.saveUser(user)
+    return api.saveUser(user).then(res => {
+      if (res.errorCode === 0) {
+        commit(types.UPDATE_USER, res.data)
+      }
+    })
+  },
+
+  /**
+   *
+   * @param commit
+   * @param account
+   * @returns {*|PromiseLike<T>|Promise<T>}
+   */
+  api_account_save: ({commit}, data) => {
+    return api.saveAccountInfo(data.personId, data.account).then(res => {
+      if (res.errorCode === 0) {
+        commit(types.UPDATE_USER_ACCOUNT, res.data)
+      }
+    })
   },
 
   /**

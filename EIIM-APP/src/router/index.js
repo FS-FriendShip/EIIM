@@ -22,46 +22,31 @@ export default new Router({
     {
       path: '/chatroom/:roomId',
       name: 'chatroom',
-      components: {
-        'default': resolve => require(['@/pages/Main.vue'], resolve),
-        'subPage': resolve => require(['@/pages/ChatRoom.vue'], resolve)
-      }
+      component: resolve => require(['@/pages/ChatRoom.vue'], resolve)
     },
 
     {
       path: '/contacts',
       name: 'contacts',
-      components: {
-        'default': resolve => require(['@/pages/Main.vue'], resolve),
-        'subPage': resolve => require(['@/pages/Contact.vue'], resolve)
-      }
+      component: resolve => require(['@/pages/Contact.vue'], resolve)
     },
 
     {
       path: '/contact/:id',
       name: 'contact-detail',
-      components: {
-        'default': resolve => require(['@/pages/Main.vue'], resolve),
-        'subPage': resolve => require(['@/pages/ContactDetail.vue'], resolve)
-      }
+      component: resolve => require(['@/pages/ContactDetail.vue'], resolve)
     },
 
     {
       path: '/chatRoomInfo/:roomId',
       name: 'chatRoomInfo',
-      components: {
-        'default': resolve => require(['@/pages/Main.vue'], resolve),
-        'subPage': resolve => require(['@/pages/ChatRoomInfo.vue'], resolve)
-      }
+      component: resolve => require(['@/pages/ChatRoomInfo.vue'], resolve)
     },
 
     {
       path: '/groupChatRoomInfo/:roomId',
       name: 'groupChatRoomInfo',
-      components: {
-        'default': resolve => require(['@/pages/Main.vue'], resolve),
-        'subPage': resolve => require(['@/pages/GroupChatRoomInfo.vue'], resolve)
-      }
+      component: resolve => require(['@/pages/GroupChatRoomInfo.vue'], resolve)
     },
 
     {

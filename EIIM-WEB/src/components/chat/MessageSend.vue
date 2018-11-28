@@ -98,15 +98,22 @@ export default {
     },
 
     sendTextMessage () {
-      this.$store.dispatch('chatroom/api_send_text_message', {
-        sessionId: this.session.id,
-        message: this.message.txt,
-        user: this.user
-      }).then(res => {
-        if (res) {
-          this.message.txt = ''
-        }
-      })
+      let txt = this.message.txt
+      if (txt.endsWith('<div><br></div>')) {
+        txt = txt.substr(0, txt.indexOf('<div><br></div>'))
+      }
+
+      if (txt && txt !== '') {
+        this.$store.dispatch('chatroom/api_send_text_message', {
+          sessionId: this.session.id,
+          message: txt,
+          user: this.user
+        }).then(res => {
+          if (res) {
+            this.message.txt = ''
+          }
+        })
+      }
     }
   },
 

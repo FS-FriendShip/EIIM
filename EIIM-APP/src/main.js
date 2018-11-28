@@ -7,6 +7,7 @@ import store from './vuex'
 import global_ from './common/global'
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
+import './assets/iconfont/iconfont.css'
 import {dateFormat} from './common/utils'
 
 Vue.use(MintUI)

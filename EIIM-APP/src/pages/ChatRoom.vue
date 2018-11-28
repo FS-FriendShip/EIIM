@@ -4,9 +4,13 @@
       <router-link to="/Main" slot="left">
         <mt-button icon="back"></mt-button>
       </router-link>
+
+      <router-link to="/Main" slot="right">
+        <mt-button icon="more"></mt-button>
+      </router-link>
     </mt-header>
 
-    <section class="message dialogue-section clearfix">
+    <section v-bind:style="{height:messageHeight}" class="message dialogue-section clearfix">
       <ul id="message-list" v-if="chatroom">
         <li v-for="item in chatroom.messages" :key="item.id">
           <p v-if="item.showTime" class="time">
@@ -42,15 +46,16 @@
       </ul>
     </section>
 
-    <footer class="dialogue-footer">
+    <footer :class="emotionable?'dialogue-footer dialog-emotion':'dialogue-footer'">
       <div class="component-dialogue-bar-person">
-        <span class="iconfont icon-dialogue-jianpan" v-show="!currentChatWay"></span>
+        <MessageInput class="message-input" ref="select_frame" :content="message" @hideEmotion="hideEmotion"></MessageInput>
 
-        <div class="chat-way">
-          <textarea rows="1" v-model="message" class="chat-txt" type="text"/>
-        </div>
-        <span class="expression iconfont icon-dialogue-smile"></span>
+        <span class="expression iconfont icon-dialogue-smile" @click="showEmotion()"></span>
         <mt-button size="small"  type="primary" @click="send()">发送</mt-button>
+      </div>
+
+      <div class="component-emotion">
+        <emotion @emotion="handleEmotion" :height="200"></emotion>
       </div>
     </footer>
   </div>
@@ -58,6 +63,8 @@
 
 <script>
 import {mapGetters} from 'vuex'
+import Emotion from '../components/Emotion/index'
+import MessageInput from '../components/MessageInput'
 
 export default {
   name: 'ChatRoom',
@@ -66,8 +73,15 @@ export default {
       currentChatWay: true, // ture为键盘打字 false为语音输入
       timer: null,
       roomId: null,
-      message: ''
+      message: {txt: ''},
+      messageHeight: (window.innerHeight - 90) + 'px',
+      emotionable: false
     }
+  },
+
+  components: {
+    MessageInput,
+    Emotion
   },
 
   created  () {
@@ -79,14 +93,38 @@ export default {
   },
 
   methods: {
+    showEmotion () {
+      this.emotionable = !this.emotionable
+    },
+
+    hideEmotion () {
+      this.emotionable = false
+    },
+
+    handleEmotion (i) {
+      this.message.txt += this.emotion(i)
+    },
+
+    /**
+     * 将匹配结果替换表情图片
+     *
+     *
+     * */
+    emotion (res) {
+      let word = res.replace(/#|;/gi, '')
+      const list = ['微笑', '撇嘴', '色', '发呆', '得意', '流泪', '害羞', '闭嘴', '睡', '大哭', '尴尬', '发怒', '调皮', '呲牙', '惊讶', '难过', '酷', '冷汗', '抓狂', '吐', '偷笑', '可爱', '白眼', '傲慢', '饥饿', '困', '惊恐', '流汗', '憨笑', '大兵', '奋斗', '咒骂', '疑问', '嘘', '晕', '折磨', '衰', '骷髅', '敲打', '再见', '擦汗', '抠鼻', '鼓掌', '糗大了', '坏笑', '左哼哼', '右哼哼', '哈欠', '鄙视', '委屈', '快哭了', '阴险', '亲亲', '吓', '可怜', '菜刀', '西瓜', '啤酒', '篮球', '乒乓', '咖啡', '饭', '猪头', '玫瑰', '凋谢', '示爱', '爱心', '心碎', '蛋糕', '闪电', '炸弹', '刀', '足球', '瓢虫', '便便', '月亮', '太阳', '礼物', '拥抱', '强', '弱', '握手', '胜利', '抱拳', '勾引', '拳头', '差劲', '爱你', 'NO', 'OK', '爱情', '飞吻', '跳跳', '发抖', '怄火', '转圈', '磕头', '回头', '跳绳', '挥手', '激动', '街舞', '献吻', '左太极', '右太极']
+      let index = list.indexOf(word)
+      return `<img src="https://res.wx.qq.com/mpres/htmledition/images/icon/emotion/${index}.gif" align="middle">`
+    },
+
     send () {
       this.$store.dispatch('chatroom/api_send_text_message', {
         sessionId: this.roomId,
-        message: this.message,
+        message: this.message.txt,
         user: this.user
       }).then(res => {
         if (res) {
-          this.message = ''
+          this.message.txt = ''
         }
       })
     }
@@ -97,20 +135,39 @@ export default {
 <style lang="less" scoped>
   @import "../assets/css/dialogue.css";
 
-  a:link {
-    font-size: 14px;
-    color: #000000;
-    text-decoration: none;
+  /*a:link {*/
+    /*font-size: 14px;*/
+    /*text-decoration: none;*/
+  /*}*/
+  /*a:visited {*/
+    /*font-size: 14px;*/
+    /*color: #000000;*/
+    /*text-decoration: none;*/
+  /*}*/
+  /*a:hover {*/
+    /*font-size: 14px;*/
+    /*color: #000000;*/
+    /*text-decoration: none;*/
+  /*}*/
+
+  .message-input {
+    padding: 0px 5px;
+    height: 30px;
+    max-height:30px;
+    line-height:30px;
+    width: 80%;
+    border: none;
+    outline: none;
+    font-family: "Micrsofot Yahei";
+    resize: none;
+    overflow-y:auto;
+    overflow-x:hidden;
+    background-color: #fff;
   }
-  a:visited {
-    font-size: 14px;
-    color: #000000;
-    text-decoration: none;
-  }
-  a:hover {
-    font-size: 14px;
-    color: #000000;
-    text-decoration: none;
+
+  .message-input:before {
+    content: attr(placeholder);
+    display: block;
   }
 
   .message {
@@ -147,7 +204,7 @@ export default {
       display: inline-block;
       position: relative;
       padding: 0 10px;
-      max-width: ~'calc(100% - 40px)';
+      max-width: ~'calc(100% - 60px)';
       min-height: 30px;
       line-height: 2.5;
       font-size: 14px;
