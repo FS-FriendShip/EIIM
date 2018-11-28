@@ -42,7 +42,7 @@ project(':EIIM-SERVICE') {
 }
 
 project(':EIIM-MONGODB') {
-    version = '1.0.2'
+    version = '1.0.3'
     description = 'Many entity persist implementation based on mongodb for EIIM.'
 
     dependencies {

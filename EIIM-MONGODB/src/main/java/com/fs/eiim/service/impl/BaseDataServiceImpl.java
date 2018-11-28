@@ -472,7 +472,7 @@ public class BaseDataServiceImpl implements BaseDataService {
             account.setPassword(DigestUtils.md5(accountInfo.getPassword()));
             account.setNickName(person.getFullName());
             account.setAvatar(accountInfo.getAvatar());
-            account.setEiimCode(String.format("EEIM-%d", accessor.count(Account.class)));
+            account.setEiimCode(String.format("EEIM-%s", DigestUtils.uuid()));
             account.setName(person.getFullName());
             account.getRoles().add(roleUser);
             account.setPerson(person);
